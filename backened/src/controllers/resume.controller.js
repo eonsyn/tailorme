@@ -1,18 +1,14 @@
+require('dotenv').config()
 const Resume = require('../models/Resume')
 const Profile = require('../models/Profile')
 const User = require('../models/User')
 const llmAdapter = require('../services/llm.adapter')
 const { Queue } = require('bullmq')
 const { resumeValidation } = require('../utils/validators')
+const env = require("../config/env")
+const resumeQueue = require('../config/resumeQueue') // your queue config
 
-// Initialize job queue
-const resumeQueue = new Queue('resume generation', {
-  connection: {
-    host: 'localhost',
-    port: 6379,
-  },
-})
-
+ 
 const generate = async (req, res, next) => {
   try {
     const { error, value } = resumeValidation.generate.validate(req.body)
