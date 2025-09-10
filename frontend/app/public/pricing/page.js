@@ -1,74 +1,74 @@
-'use client'
+'use client';
 
-import Link from 'next/link'
-import { useAuth } from '@/lib/auth'
-import { Check } from 'lucide-react'
-import Navbar from '@/components/Navbar'
-import Footer from '@/components/Footer'
+import Link from 'next/link';
+import { useAuth } from '@/lib/auth';
+import { Check } from 'lucide-react';
+import Navbar from '@/components/Navbar';
+import Footer from '@/components/Footer';
 
 export default function PricingPage() {
-  const { user } = useAuth()
+  const { user } = useAuth();
 
   const plans = [
-    {
-      name: 'Free',
-      price: '₹0',
-      period: 'forever',
-      credits: '3 resume generations',
-      features: [
-        '3 AI-tailored resumes',
-        'Basic templates',
-        'PDF export',
-        'Email support',
-      ],
-      buttonText: 'Get Started',
-      buttonVariant: 'outline',
-      href: user
-        ? '/protected/dashboard'
-        : '/auth/signup?redirect=/protected/dashboard',
-    },
-    {
-      name: 'Basic',
-      price: '₹299',
-      period: '/month',
-      credits: '25 resume generations',
-      features: [
-        '25 AI-tailored resumes/month',
-        'Premium templates',
-        'PDF & DOCX export',
-        'Cover letter generation',
-        'Priority support',
-        'Interview Q&A prep',
-      ],
-      buttonText: 'Choose Basic',
-      buttonVariant: 'primary',
-      href: user
-        ? '/protected/purchase?plan=Basic'
-        : '/auth/signup?redirect=/protected/purchase?plan=Basic',
-      popular: true,
-    },
-    {
-      name: 'Pro',
-      price: '₹599',
-      period: '/month',
-      credits: 'Unlimited generations',
-      features: [
-        'Unlimited AI-tailored resumes',
-        'All premium templates',
-        'PDF & DOCX export',
-        'Cover letter generation',
-        'Interview Q&A prep',
-        'Priority support',
-        'Analytics dashboard',
-        'Team collaboration',
-      ],
-      buttonText: 'Choose Pro',
-      buttonVariant: 'primary',
-      href: user
-        ? '/protected/purchase?plan=Pro'
-        : '/auth/signup?redirect=/protected/purchase?plan=Pro',
-    },
-  ]
+  {
+    name: 'Free',
+    price: '₹0',
+    period: 'forever',
+    credits: '3 resume generations',
+    features: [
+    '3 AI-tailored resumes',
+    'Basic templates',
+    'PDF export',
+    'Email support'],
+
+    buttonText: 'Get Started',
+    buttonVariant: 'outline',
+    href: user ?
+    '/protected/dashboard' :
+    '/auth/signup?redirect=/protected/dashboard'
+  },
+  {
+    name: 'Basic',
+    price: '₹299',
+    period: '/month',
+    credits: '25 resume generations',
+    features: [
+    '25 AI-tailored resumes/month',
+    'Premium templates',
+    'PDF & DOCX export',
+    'Cover letter generation',
+    'Priority support',
+    'Interview Q&A prep'],
+
+    buttonText: 'Choose Basic',
+    buttonVariant: 'primary',
+    href: user ?
+    '/protected/purchase?plan=Basic' :
+    '/auth/signup?redirect=/protected/purchase?plan=Basic',
+    popular: true
+  },
+  {
+    name: 'Pro',
+    price: '₹599',
+    period: '/month',
+    credits: 'Unlimited generations',
+    features: [
+    'Unlimited AI-tailored resumes',
+    'All premium templates',
+    'PDF & DOCX export',
+    'Cover letter generation',
+    'Interview Q&A prep',
+    'Priority support',
+    'Analytics dashboard',
+    'Team collaboration'],
+
+    buttonText: 'Choose Pro',
+    buttonVariant: 'primary',
+    href: user ?
+    '/protected/purchase?plan=Pro' :
+    '/auth/signup?redirect=/protected/purchase?plan=Pro'
+  }];
+
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -86,20 +86,20 @@ export default function PricingPage() {
           </div>
 
           <div className="grid md:grid-cols-3 gap-8">
-            {plans.map((plan) => (
-              <div
-                key={plan.name}
-                className={`card p-8 relative ${
-                  plan.popular ? 'ring-2 ring-primary-500 shadow-xl' : ''
-                }`}
-              >
-                {plan.popular && (
-                  <div className="absolute -top-4 left-1/2 transform -translate-x-1/2">
+            {plans.map((plan) =>
+            <div
+              key={plan.name}
+              className={`card p-8 relative ${
+              plan.popular ? 'ring-2 ring-primary-500 shadow-xl' : ''}`
+              }>
+
+                {plan.popular &&
+              <div className="absolute -top-4 left-1/2 transform -translate-x-1/2">
                     <span className="bg-primary-500 text-white px-4 py-2 rounded-full text-sm font-medium">
                       Most Popular
                     </span>
                   </div>
-                )}
+              }
 
                 <div className="text-center mb-8">
                   <h3 className="text-2xl font-bold text-gray-900 mb-2">
@@ -115,26 +115,26 @@ export default function PricingPage() {
                 </div>
 
                 <ul className="space-y-4 mb-8">
-                  {plan.features.map((feature, index) => (
-                    <li key={index} className="flex items-center">
+                  {plan.features.map((feature, index) =>
+                <li key={index} className="flex items-center">
                       <Check className="w-5 h-5 text-success-500 mr-3 flex-shrink-0" />
                       <span className="text-gray-700">{feature}</span>
                     </li>
-                  ))}
+                )}
                 </ul>
 
                 <Link
-                  href={plan.href}
-                  className={`btn ${
-                    plan.buttonVariant === 'primary'
-                      ? 'btn-primary'
-                      : 'btn-outline'
-                  } w-full text-center`}
-                >
+                href={plan.href}
+                className={`btn ${
+                plan.buttonVariant === 'primary' ?
+                'btn-primary' :
+                'btn-outline'} w-full text-center`
+                }>
+
                   {plan.buttonText}
                 </Link>
               </div>
-            ))}
+            )}
           </div>
 
           {/* Extra Credits */}
@@ -148,12 +148,12 @@ export default function PricingPage() {
                 <p className="text-2xl font-bold text-primary-600 mb-4">₹199</p>
                 <Link
                   href={
-                    user
-                      ? '/protected/purchase?credits=10'
-                      : '/auth/signup?redirect=/protected/purchase?credits=10'
+                  user ?
+                  '/protected/purchase?credits=10' :
+                  '/auth/signup?redirect=/protected/purchase?credits=10'
                   }
-                  className="btn btn-outline w-full"
-                >
+                  className="btn btn-outline w-full">
+
                   Buy Credits
                 </Link>
               </div>
@@ -162,12 +162,12 @@ export default function PricingPage() {
                 <p className="text-2xl font-bold text-primary-600 mb-4">₹399</p>
                 <Link
                   href={
-                    user
-                      ? '/protected/purchase?credits=25'
-                      : '/auth/signup?redirect=/protected/purchase?credits=25'
+                  user ?
+                  '/protected/purchase?credits=25' :
+                  '/auth/signup?redirect=/protected/purchase?credits=25'
                   }
-                  className="btn btn-outline w-full"
-                >
+                  className="btn btn-outline w-full">
+
                   Buy Credits
                 </Link>
               </div>
@@ -177,6 +177,6 @@ export default function PricingPage() {
       </section>
 
       <Footer />
-    </div>
-  )
+    </div>);
+
 }

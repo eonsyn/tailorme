@@ -1,6 +1,6 @@
-import Link from 'next/link'
-import Navbar from '../components/Navbar'
-import Footer from '../components/Footer'
+import Link from 'next/link';
+import Navbar from '../components/Navbar';
+import Footer from '../components/Footer';
 
 export default function LandingPage() {
   return (
@@ -83,7 +83,7 @@ export default function LandingPage() {
             Ready to Transform Your Job Search?
           </h2>
           <p className="text-xl text-primary-100 mb-8 leading-relaxed">
-            Join thousands of professionals who've landed their dream jobs with AI-tailored resumes.
+            Join thousands of professionals who&apos;ve landed their dream jobs with AI-tailored resumes.
           </p>
           <Link href="/auth/signup" className="bg-white text-primary-600 px-8 py-4 rounded-lg font-semibold text-lg hover:bg-gray-50 transition-colors">
             Start Tailoring Now
@@ -92,6 +92,6 @@ export default function LandingPage() {
       </section>
 
       <Footer />
-    </div>
-  )
+    </div>);
+
 }

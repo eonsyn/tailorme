@@ -1,41 +1,41 @@
-'use client'
+'use client';
 
-import { useEffect, useState } from 'react' 
-import api from '@/lib/api'
-import LoadingSpinner from '../../../components/LoadingSpinner'
+import { useEffect, useState } from 'react';
+import api from '@/lib/api';
+import LoadingSpinner from '../../../components/LoadingSpinner';
 import AddSkills from '@/components/profile/AddSkills';
 import AddExperience from '@/components/profile/AddExperience';
 import AddEducation from '@/components/profile/AddEducation';
 import AddProject from '@/components/profile/AddProject';
 import AddCertificate from '@/components/profile/AddCertificate';
-import AddBasicInfo from '@/components/profile/AddBasicInfo'
+import AddBasicInfo from '@/components/profile/AddBasicInfo';
 export default function ProfilePage() {
-  const [profile, setProfile] = useState(null)
-  const [loading, setLoading] = useState(true) 
+  const [profile, setProfile] = useState(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetchProfile()
-  }, [])
+    fetchProfile();
+  }, []);
 
   const fetchProfile = async () => {
     try {
-      const data = await api.get('/profile')
-      setProfile(data.profile)
+      const data = await api.get('/profile');
+      setProfile(data.profile);
     } catch (error) {
-      console.error('Failed to fetch profile:', error)
+      console.error('Failed to fetch profile:', error);
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
-  }
+  };
 
- 
+
 
   if (loading) {
     return (
       <div className="flex items-center justify-center h-64">
         <LoadingSpinner />
-      </div>
-    )
+      </div>);
+
   }
 
   return (
@@ -46,7 +46,7 @@ export default function ProfilePage() {
       </div>
 
       {/* Basic Information */}
-       <AddBasicInfo setProfile={setProfile} profile={profile}/>
+       <AddBasicInfo setProfile={setProfile} profile={profile} />
 
       {/* Skills */}
       <AddSkills profile={profile} />
@@ -61,6 +61,6 @@ export default function ProfilePage() {
 
       {/* Education */}
       <AddEducation profile={profile} />
-    </div>
-  )
+    </div>);
+
 }

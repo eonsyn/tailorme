@@ -8,9 +8,9 @@ import { useAuth } from '@/lib/auth';
 export default function ReferralPage() {
   const { user } = useAuth();
 
-  const referralLink = user?.username
-    ? `${process.env.NEXT_PUBLIC_BASE_URL || window.location.origin}/auth/signup?ref=${user.username}`
-    : 'Loading...';
+  const referralLink = user?.username ?
+  `${process.env.NEXT_PUBLIC_BASE_URL || window.location.origin}/auth/signup?ref=${user.username}` :
+  'Loading...';
 
   const handleCopy = () => {
     navigator.clipboard.writeText(referralLink);
@@ -36,8 +36,8 @@ export default function ReferralPage() {
             </span>
             <button
               onClick={handleCopy}
-              className="flex items-center gap-2 px-3 sm:px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-all duration-200 ease-in-out transform hover:scale-105 active:scale-95 shadow-md"
-            >
+              className="flex items-center gap-2 px-3 sm:px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-all duration-200 ease-in-out transform hover:scale-105 active:scale-95 shadow-md">
+              
               <Copy size={16} />
               <span className="hidden sm:inline-block">Copy Link</span>
             </button>
@@ -62,6 +62,6 @@ export default function ReferralPage() {
           </div>
         </div>
       </div>
-    </div>
-  );
+    </div>);
+
 }

@@ -1,4 +1,5 @@
-import { AuthProvider } from "@/lib/auth"
+
+import { AuthProvider } from "@/lib/auth";
 export default function AuthLayout({ children }) {
   return (
     <div className="min-h-screen bg-gray-50">
@@ -6,6 +7,6 @@ export default function AuthLayout({ children }) {
         {children}
       </AuthProvider>
       
-    </div>
-  )
+    </div>);
+
 }

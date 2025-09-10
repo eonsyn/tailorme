@@ -1,36 +1,36 @@
-'use client'
+'use client';
 
-import { useEffect, useState } from "react"
-import Link from "next/link"
-import { FileText, User, CreditCard, TrendingUp } from "lucide-react"
-import api from "../../../lib/api"
-import LoadingSpinner from "../../../components/LoadingSpinner"
+import { useEffect, useState } from "react";
+import Link from "next/link";
+import { FileText, User, CreditCard, TrendingUp } from "lucide-react";
+import api from "../../../lib/api";
+import LoadingSpinner from "../../../components/LoadingSpinner";
 
 export default function DashboardPage() {
-  const [stats, setStats] = useState(null)
-  const [loading, setLoading] = useState(true)
+  const [stats, setStats] = useState(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetchDashboardStats()
-  }, [])
+    fetchDashboardStats();
+  }, []);
 
   const fetchDashboardStats = async () => {
     try {
-      const data = await api.get("/dashboard/stats")
-      setStats(data)
+      const data = await api.get("/dashboard/stats");
+      setStats(data);
     } catch (error) {
-      console.error("Failed to fetch dashboard stats:", error)
+      console.error("Failed to fetch dashboard stats:", error);
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
-  }
+  };
 
   if (loading) {
     return (
       <div className="flex items-center justify-center h-64">
         <LoadingSpinner />
-      </div>
-    )
+      </div>);
+
   }
 
   return (
@@ -106,9 +106,9 @@ export default function DashboardPage() {
         <div className="card p-8">
           <h2 className="text-xl font-semibold text-gray-900 mb-4">Complete Your Profile</h2>
           <p className="text-gray-600 mb-6">
-            {stats?.profileCompleteness >= 80 
-              ? "Your profile looks great! Keep it updated for better results."
-              : "Add more details to your profile for better AI-generated resumes."
+            {stats?.profileCompleteness >= 80 ?
+            "Your profile looks great! Keep it updated for better results." :
+            "Add more details to your profile for better AI-generated resumes."
             }
           </p>
           <Link href="/protected/profile" className="btn btn-outline">
@@ -118,12 +118,12 @@ export default function DashboardPage() {
       </div>
 
       {/* Recent Resumes */}
-      {stats?.recentResumes?.length > 0 && (
-        <div className="card p-8">
+      {stats?.recentResumes?.length > 0 &&
+      <div className="card p-8">
           <h2 className="text-xl font-semibold text-gray-900 mb-6">Recent Resumes</h2>
           <div className="space-y-4">
-            {stats.recentResumes.map((resume) => (
-              <div key={resume._id} className="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
+            {stats.recentResumes.map((resume) =>
+          <div key={resume._id} className="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
                 <div>
                   <h3 className="font-medium text-gray-900">{resume.title}</h3>
                   <p className="text-sm text-gray-600">
@@ -134,7 +134,7 @@ export default function DashboardPage() {
                   View
                 </Link>
               </div>
-            ))}
+          )}
           </div>
           <div className="mt-6">
             <Link href="/protected/resume/history" className="text-primary-600 hover:text-primary-700">
@@ -142,7 +142,7 @@ export default function DashboardPage() {
             </Link>
           </div>
         </div>
-      )}
-    </div>
-  )
+      }
+    </div>);
+
 }

@@ -1,44 +1,44 @@
-'use client'
+'use client';
 
-import { useState } from 'react'
-import { useRouter } from 'next/navigation'
-import Link from 'next/link'
-import toast from 'react-hot-toast'
-import { useAuth } from '@/lib/auth' // ✅ use absolute alias if configured
-import LoadingSpinner from '@/components/LoadingSpinner'
+import { useState } from 'react';
+import { useRouter } from 'next/navigation';
+import Link from 'next/link';
+import toast from 'react-hot-toast';
+import { useAuth } from '@/lib/auth'; // ✅ use absolute alias if configured
+import LoadingSpinner from '@/components/LoadingSpinner';
 
 export default function LoginPage() {
-  const [formData, setFormData] = useState({ email: '', password: '' })
-  const [loading, setLoading] = useState(false)
-  const { login, health } = useAuth()
-  const router = useRouter()
+  const [formData, setFormData] = useState({ email: '', password: '' });
+  const [loading, setLoading] = useState(false);
+  const { login, health } = useAuth();
+  const router = useRouter();
 
   const handleChange = (e) => {
     setFormData((prev) => ({
       ...prev,
-      [e.target.name]: e.target.value,
-    }))
-  }
+      [e.target.name]: e.target.value
+    }));
+  };
 
   const handleSubmit = async (e) => {
-    
-    e.preventDefault()
-    setLoading(true)
-   
+
+    e.preventDefault();
+    setLoading(true);
+
 
     try {
-      
-     const res =  await login(formData.email, formData.password)
-      console.log('login response :',res) 
-     toast.success('Welcome back!')
-      router.push('/protected/dashboard')
+
+      const res = await login(formData.email, formData.password);
+      console.log('login response :', res);
+      toast.success('Welcome back!');
+      router.push('/protected/dashboard');
     } catch (error) {
-      console.log('Login error:', error)
-      toast.error(error?.message || 'Login failed')
+      console.log('Login error:', error);
+      toast.error(error?.message || 'Login failed');
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
-  }
+  };
 
   return (
     <div className="min-h-screen bg-gray-50 flex items-center justify-center py-12 px-4">
@@ -71,8 +71,8 @@ export default function LoginPage() {
                 onChange={handleChange}
                 className="input w-full"
                 placeholder="you@company.com"
-                required
-              />
+                required />
+
             </div>
 
             {/* Password */}
@@ -88,8 +88,8 @@ export default function LoginPage() {
                 onChange={handleChange}
                 className="input w-full"
                 placeholder="••••••••"
-                required
-              />
+                required />
+
             </div>
 
             {/* Remember + Forgot */}
@@ -107,8 +107,8 @@ export default function LoginPage() {
             <button
               type="submit"
               disabled={loading}
-              className="btn btn-primary w-full flex items-center justify-center"
-            >
+              className="btn btn-primary w-full flex items-center justify-center">
+
               {loading && <LoadingSpinner size="sm" className="mr-2" />}
               Sign In
             </button>
@@ -123,6 +123,6 @@ export default function LoginPage() {
           </Link>
         </p>
       </div>
-    </div>
-  )
+    </div>);
+
 }
