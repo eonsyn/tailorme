@@ -1,10 +1,10 @@
 'use client'
 
-import { useEffect, useState } from 'react'
-import Link from 'next/link'
-import { FileText, User, CreditCard, TrendingUp } from 'lucide-react'
-import api from '../../../lib/api'
-import LoadingSpinner from '../../../components/LoadingSpinner'
+import { useEffect, useState } from "react"
+import Link from "next/link"
+import { FileText, User, CreditCard, TrendingUp } from "lucide-react"
+import api from "../../../lib/api"
+import LoadingSpinner from "../../../components/LoadingSpinner"
 
 export default function DashboardPage() {
   const [stats, setStats] = useState(null)
@@ -16,10 +16,10 @@ export default function DashboardPage() {
 
   const fetchDashboardStats = async () => {
     try {
-      const data = await api.get('/dashboard/stats')
+      const data = await api.get("/dashboard/stats")
       setStats(data)
     } catch (error) {
-      console.error('Failed to fetch dashboard stats:', error)
+      console.error("Failed to fetch dashboard stats:", error)
     } finally {
       setLoading(false)
     }
@@ -37,7 +37,7 @@ export default function DashboardPage() {
     <div className="space-y-8">
       <div>
         <h1 className="text-3xl font-bold text-gray-900">Dashboard</h1>
-        <p className="text-gray-600 mt-2">Welcome back! Here's your overview.</p>
+        <p className="text-gray-600 mt-2">Welcome back! Here&apos;s your overview.</p>
       </div>
 
       {/* Stats Grid */}
@@ -107,8 +107,8 @@ export default function DashboardPage() {
           <h2 className="text-xl font-semibold text-gray-900 mb-4">Complete Your Profile</h2>
           <p className="text-gray-600 mb-6">
             {stats?.profileCompleteness >= 80 
-              ? 'Your profile looks great! Keep it updated for better results.'
-              : 'Add more details to your profile for better AI-generated resumes.'
+              ? "Your profile looks great! Keep it updated for better results."
+              : "Add more details to your profile for better AI-generated resumes."
             }
           </p>
           <Link href="/protected/profile" className="btn btn-outline">
@@ -138,7 +138,7 @@ export default function DashboardPage() {
           </div>
           <div className="mt-6">
             <Link href="/protected/resume/history" className="text-primary-600 hover:text-primary-700">
-              View All Resumes →
+              View All Resumes &rarr;
             </Link>
           </div>
         </div>
