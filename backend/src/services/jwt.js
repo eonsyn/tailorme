@@ -25,17 +25,17 @@ const setTokenCookies = (res, accessToken, refreshToken) => {
   const cookieOptions = {
     httpOnly: true,
     secure: env.NODE_ENV === 'production',
-    sameSite: 'strict',
+    sameSite: env.NODE_ENV === 'production'? 'none':'lax',
   }
 
   res.cookie('accessToken', accessToken, {
     ...cookieOptions,
-    maxAge: 7 * 24 * 60 * 60 * 1000, // 15 minutes
+    maxAge: 7 * 24 * 60 * 60 * 1000,  
   })
 
   res.cookie('refreshToken', refreshToken, {
     ...cookieOptions,
-    maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
+    maxAge: 7 * 24 * 60 * 60 * 1000,  
   })
 }
 
@@ -44,7 +44,7 @@ const setAccessTokenCookie = (res, accessToken) => {
     httpOnly: true,
     secure: env.NODE_ENV === 'production',
     sameSite: 'strict',
-    maxAge: 7 * 24 * 60 * 60 * 1000, // 15 minutes
+    maxAge: 7 * 24 * 60 * 60 * 1000,  
   })
 }
 
