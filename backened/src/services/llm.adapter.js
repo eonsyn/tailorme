@@ -22,6 +22,7 @@ class LLMAdapter {
   }
 
   async tailorResume(profile, jobDescription, templateId) {
+    console.log("hi i am call here 1")
     if (this.provider === "mock") {
       return this.mockTailorResume(profile, jobDescription)
     }
@@ -119,6 +120,7 @@ class LLMAdapter {
   }
 
   async geminiTailorResume(profile, jobDescription, templateId) {
+    console.log("hi i am call here gemini")
     try {
       const prompt = this.buildTailoringPrompt(profile, jobDescription, templateId)
 

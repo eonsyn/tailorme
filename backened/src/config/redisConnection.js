@@ -1,9 +1,8 @@
 require("dotenv").config();
-const { resumeQueue, Worker } = require('../config/redis');
-const LLMAdapter = require('../services/llm.adapter');
+const { resumeQueue, Worker } = require("./redis");
+const LLMAdapter = require("../services/llm.adapter"); // ✅ instance not destructured
 
-console.log("🔄 Resume worker starting...");
-
+// Create worker to process jobs
 const resumeWorker = new Worker(
   "resumeQueue",
   async (job) => {
@@ -22,7 +21,7 @@ const resumeWorker = new Worker(
   }
 );
 
-// listeners
+// Worker event listeners
 resumeWorker.on("completed", (job) => {
   console.log(`🎉 Job ${job.id} completed with result:`, job.returnvalue);
 });
@@ -31,4 +30,17 @@ resumeWorker.on("failed", (job, err) => {
   console.error(`💥 Job ${job.id} failed: ${err.message}`);
 });
 
-module.exports = { resumeWorker };
+// Add dummy job to queue
+(async () => {
+  const dummyJob = await resumeQueue.add("tailorResume", {
+    userId: "user123",
+    jobDescription: "Full Stack Developer at Google",
+    profile: {
+      name: "Aryan Singh",
+      education: "B.Tech CSE (AI/ML)",
+      skills: ["React", "Node.js", "Machine Learning"],
+    },
+  });
+
+  console.log("🚀 Dummy job added to queue with ID:", dummyJob.id);
+})();

@@ -10,7 +10,9 @@ module.exports = {
   
   // Redis
   REDIS_URL: process.env.REDIS_URL || 'redis://localhost:6379',
-  
+  REDIS_HOST:process.env.REDIS_HOST,
+  REDIS_PORT: process.env.REDIS_PORT,
+  REDIS_PASSWORD: process.env.REDIS_PASSWORD,
   // JWT
   JWT_SECRET: process.env.JWT_SECRET || 'fallback-jwt-secret',
   JWT_REFRESH_SECRET: process.env.JWT_REFRESH_SECRET || 'fallback-refresh-secret',

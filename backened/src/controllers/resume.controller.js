@@ -1,101 +1,74 @@
 require('dotenv').config()
 const Resume = require('../models/Resume')
 const Profile = require('../models/Profile')
-const User = require('../models/User')
-const llmAdapter = require('../services/llm.adapter')
-const { Queue } = require('bullmq')
-const { resumeValidation } = require('../utils/validators')
-const env = require("../config/env")
-const resumeQueue = require('../config/resumeQueue') // your queue config
+const User = require('../models/User')  
+const { resumeValidation } = require('../utils/validators') 
+const {resumeQueue}=require('../queues/resumeQueue')
 
- 
 const generate = async (req, res, next) => {
   try {
-    const { error, value } = resumeValidation.generate.validate(req.body)
+    const { error, value } = resumeValidation.generate.validate(req.body);
     if (error) {
-      return res.status(400).json({
-        success: false,
-        message: error.details[0].message,
-      })
+      return res.status(400).json({ success: false, message: error.details[0].message });
     }
 
-    const { jobDescription } = value
-
-    // Check user credits
-    const user = await User.findById(req.user.userId)
-    if (user.credits <= 0) {
-      return res.status(402).json({
-        success: false,
-        message: 'Insufficient credits.',
-      })
-    }
-
-    // Get user profile
-    const profile = await Profile.findOne({ user: req.user.userId })
+    const { jobDescription } = value;
+    const user = await User.findById(req.user.userId);
+if(user.credits<=0){console.log("credit is low")}
+    const profile = await Profile.findOne({ user: req.user.userId });
     if (!profile) {
-      return res.status(400).json({
-        success: false,
-        message: 'Please complete your profile first',
-      })
+      return res.status(400).json({ success: false, message: "Please complete your profile first" });
     }
 
-    // Add job to queue
-    const job = await resumeQueue.add('tailorResume', {
+    // 🟢 push full profile JSON (not just ID)
+    const job = await resumeQueue.add("tailorResume", {
       userId: req.user.userId,
-      profile,
+      profile: profile.toObject(), // convert Mongoose doc → plain JSON
       jobDescription,
-      })
-
-    // Deduct credit
-    
-      user.credits -= 1
-      await user.save()
-    
+    },{
+    removeOnComplete: { age: 300 }, // ⏳ auto-remove after 300s (5 mins)
+    removeOnFail: { age: 300 },     // ⏳ failed jobs also auto-remove
+  });
 
     res.json({
       success: true,
-      message: 'Resume generation started',
+      message: "Resume generation started",
       jobId: job.id,
-    })
+    });
   } catch (error) {
-    next(error)
+    next(error);
   }
-}
+};
+
 
 const getJobStatus = async (req, res, next) => {
   try {
-    const { jobId } = req.params
-    const job = await resumeQueue.getJob(jobId)
+    const { jobId } = req.params;
+    const job = await resumeQueue.getJob(jobId);
 
     if (!job) {
-      return res.status(404).json({
-        success: false,
-        message: 'Ops! Try Again.',
-      })
+      return res.status(404).json({ success: false, message: "Job not found" });
     }
 
-    const status = await job.getState()
-    
-    let response = {
-      success: true,
-      status,
-      progress: job.progress,
+    const state = await job.getState();
+    const progress = job.progress;
+    let response = { success: true, state, progress };
+
+    if (state === "completed") {
+      response.result = job.returnvalue; // ✅ resume result
+    } else if (state === "failed") {
+      response.error = job.failedReason;
     }
 
-    if (status === 'completed') {
-      response.result = job.returnvalue
-    } else if (status === 'failed') {
-      response.error = job.failedReason
-    }
-
-    res.json(response)
+    res.json(response);
   } catch (error) {
-    next(error)
+    next(error);
   }
-}
+};
+
 
 const saveResume = async (req, res, next) => {
-   
+
   try {
     const { title, content } = req.body
 

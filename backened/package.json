@@ -28,7 +28,7 @@
     "pdfkit": "^0.17.2",
     "puppeteer": "^24.19.0",
     "razorpay": "^2.9.2",
-    "redis": "^4.6.10"
+    "redis": "^4.7.1"
   },
   "devDependencies": {
     "jest": "^29.7.0",
