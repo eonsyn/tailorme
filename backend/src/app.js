@@ -1,5 +1,5 @@
 const express = require('express')
-const cors = require('cors')
+// const cors = require('cors')
 const helmet = require('helmet')
 const cookieParser = require('cookie-parser')
 const rateLimit = require("express-rate-limit");
@@ -11,10 +11,10 @@ const app = express()
 
 // Security middleware
 app.use(helmet())
-app.use(cors({
-  origin: process.env.FRONTEND_URL || 'http://localhost:3000',
-  credentials: true,
-}))
+// app.use(cors({
+//   origin: process.env.FRONTEND_URL || 'http://localhost:3000',
+//   credentials: true,
+// }))
 
 // Rate limiting
 const limiter = rateLimit({
