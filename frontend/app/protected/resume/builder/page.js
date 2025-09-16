@@ -151,7 +151,7 @@ export default function ResumeBuilderPage() {
           >
             {generating ? (
               <span className="flex items-center">
-                <Loader2 className="animate-spin mr-2" />
+                < LoadingSpinner className="animate-spin mr-2" />
                 Generating Resume...
               </span>
             ) : (
@@ -193,7 +193,7 @@ export default function ResumeBuilderPage() {
           <div className="min-h-96 border-2 border-dashed border-border rounded-lg flex items-center justify-center p-4">
             {generating ? (
               <div className="text-center">
-                <Loader2 className="animate-spin w-8 h-8 mx-auto text-primary" />
+                <LoadingSpinner className="animate-spin w-8 h-8 mx-auto text-primary" />
                 <p className="text-muted-foreground mt-4">Tailoring your resume... {progress}%</p>
                 <p className="text-sm text-muted-foreground mt-2">This usually takes 30-60 seconds</p>
               </div>
