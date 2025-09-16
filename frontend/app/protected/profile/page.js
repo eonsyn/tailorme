@@ -39,28 +39,38 @@ export default function ProfilePage() {
   }
 
   return (
-    <div className="space-y-8">
-      <div>
-        <h1 className="text-3xl font-bold text-gray-900">Profile</h1>
-        <p className="text-gray-600 mt-2">Manage your professional information</p>
-      </div>
+   <div className="space-y-8">
+  {/* Header Section */}
+  <div>
+    <h1 className="text-3xl font-bold text-foreground">
+      Profile
+    </h1>
+    <p className="text-muted-foreground mt-2">
+      Manage your professional information and credentials
+    </p>
+  </div>
 
-      {/* Basic Information */}
-       <AddBasicInfo setProfile={setProfile} profile={profile} />
+  {/* Profile Sections */}
+  <div className="space-y-6 md:space-y-8">
+    {/* Basic Information */}
+    <AddBasicInfo setProfile={setProfile} profile={profile} />
 
-      {/* Skills */}
-      <AddSkills profile={profile} />
+    {/* Experience */}
+    <AddExperience profile={profile} />
 
+    {/* Education */}
+    <AddEducation profile={profile} />
+    
+    {/* Skills */}
+    <AddSkills profile={profile} />
 
-      {/* Experience */}
-      <AddExperience profile={profile} />
-      {/*Project*/}
+    {/* Projects */}
+    <AddProject profile={profile} />
 
-      <AddCertificate profile={profile} />
-      <AddProject profile={profile} />
-
-      {/* Education */}
-      <AddEducation profile={profile} />
-    </div>);
+    {/* Certificates */}
+    <AddCertificate profile={profile} />
+  </div>
+</div>
+    );
 
 }

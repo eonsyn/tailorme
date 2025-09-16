@@ -1,12 +1,13 @@
-import React, { useState, useEffect } from 'react'
-import { Plus, Trash2, Edit, Check, X } from 'lucide-react'
-import toast from 'react-hot-toast'
-import api from '@/lib/api'
+import React, { useState, useEffect } from 'react';
+import { Plus, Trash2, Edit, Check, X, Loader2 } from 'lucide-react';
+import toast from 'react-hot-toast';
+import api from '@/lib/api';
 
 function AddProject({ profile }) {
-  const [projects, setProjects] = useState([])
-  const [editingIndex, setEditingIndex] = useState(null)
-  const [showForm, setShowForm] = useState(false)
+  const [projects, setProjects] = useState([]);
+  const [editingIndex, setEditingIndex] = useState(null);
+  const [showForm, setShowForm] = useState(false);
+  const [isSaving, setIsSaving] = useState(false);
   const [formData, setFormData] = useState({
     name: '',
     description: '',
@@ -15,31 +16,35 @@ function AddProject({ profile }) {
     githubUrl: '',
     startDate: '',
     endDate: '',
-  })
+  });
 
   useEffect(() => {
-    setProjects(profile?.projects || [])
-  }, [profile])
+    setProjects(profile?.projects || []);
+  }, [profile]);
 
   const handleChange = (e) => {
-    const { name, value } = e.target
-    setFormData((prev) => ({ ...prev, [name]: value }))
-  }
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
+  };
 
   const handleSubmit = async (e) => {
-    e.preventDefault()
+    e.preventDefault();
+    setIsSaving(true);
     try {
-      const payload = { ...formData, technologies: formData.technologies.split(',').map(t => t.trim()) }
+      const payload = {
+        ...formData,
+        technologies: formData.technologies.split(',').map(t => t.trim()).filter(t => t),
+      };
 
       if (editingIndex !== null) {
-        const projToUpdate = projects[editingIndex]
-        const { project } = await api.put(`/profile/project/${projToUpdate._id}`, payload)
-        setProjects(prev => prev.map((p, i) => (i === editingIndex ? project : p)))
-        toast.success('Project updated!')
+        const projToUpdate = projects[editingIndex];
+        const { project } = await api.put(`/profile/project/${projToUpdate._id}`, payload);
+        setProjects(prev => prev.map((p, i) => (i === editingIndex ? project : p)));
+        toast.success('Project updated!');
       } else {
-        const { project } = await api.post('/profile/project', payload)
-        setProjects(prev => [...prev, project])
-        toast.success('Project added!')
+        const { project } = await api.post('/profile/project', payload);
+        setProjects(prev => [...prev, project]);
+        toast.success('Project added!');
       }
 
       setFormData({
@@ -50,35 +55,37 @@ function AddProject({ profile }) {
         githubUrl: '',
         startDate: '',
         endDate: '',
-      })
-      setEditingIndex(null)
-      setShowForm(false)
+      });
+      setEditingIndex(null);
+      setShowForm(false);
     } catch (err) {
-      console.error(err)
-      toast.error('Failed to save project')
+      console.error(err);
+      toast.error('Failed to save project');
+    } finally {
+      setIsSaving(false);
     }
-  }
+  };
 
   const handleEdit = (index) => {
-    setEditingIndex(index)
-    const proj = projects[index]
+    setEditingIndex(index);
+    const proj = projects[index];
     setFormData({
       ...proj,
       technologies: proj.technologies.join(', '),
-    })
-    setShowForm(true)
-  }
+    });
+    setShowForm(true);
+  };
 
   const handleDelete = async (id) => {
     try {
-      await api.delete(`/profile/project/${id}`)
-      setProjects(prev => prev.filter(p => p._id !== id))
-      toast.success('Project deleted!')
+      await api.delete(`/profile/project/${id}`);
+      setProjects(prev => prev.filter(p => p._id !== id));
+      toast.success('Project deleted!');
     } catch (err) {
-      console.error(err)
-      toast.error('Failed to delete project')
+      console.error(err);
+      toast.error('Failed to delete project');
     }
-  }
+  };
 
   const handleCancel = () => {
     setFormData({
@@ -89,21 +96,21 @@ function AddProject({ profile }) {
       githubUrl: '',
       startDate: '',
       endDate: '',
-    })
-    setEditingIndex(null)
-    setShowForm(false)
-  }
+    });
+    setEditingIndex(null);
+    setShowForm(false);
+  };
 
   return (
     <div className="card p-8">
       <div className="flex justify-between items-center mb-6">
-        <h2 className="text-xl font-semibold text-gray-900">Projects</h2>
+        <h2 className="text-xl font-semibold text-foreground">Projects</h2>
         {!showForm && (
           <button
             className="btn btn-outline flex items-center"
             onClick={() => {
-              setShowForm(true)
-              setEditingIndex(null)
+              setShowForm(true);
+              setEditingIndex(null);
               setFormData({
                 name: '',
                 description: '',
@@ -112,7 +119,7 @@ function AddProject({ profile }) {
                 githubUrl: '',
                 startDate: '',
                 endDate: '',
-              })
+              });
             }}
           >
             <Plus className="w-4 h-4 mr-2" />
@@ -139,22 +146,28 @@ function AddProject({ profile }) {
               onChange={handleChange}
               className="input"
             />
-            <input
-              name="startDate"
-              type="month"
-              placeholder="Start Date"
-              value={formData.startDate}
-              onChange={handleChange}
-              className="input"
-            />
-            <input
-              name="endDate"
-              type="month"
-              placeholder="End Date"
-              value={formData.endDate}
-              onChange={handleChange}
-              className="input"
-            />
+            <div className="relative">
+              <label htmlFor="startDate" className="input-label absolute -top-2 left-3 bg-card px-1 text-xs text-muted-foreground">Start Date</label>
+              <input
+                name="startDate"
+                type="month"
+                id="startDate"
+                value={formData.startDate}
+                onChange={handleChange}
+                className="input"
+              />
+            </div>
+            <div className="relative">
+              <label htmlFor="endDate" className="input-label absolute -top-2 left-3 bg-card px-1 text-xs text-muted-foreground">End Date</label>
+              <input
+                name="endDate"
+                type="month"
+                id="endDate"
+                value={formData.endDate}
+                onChange={handleChange}
+                className="input"
+              />
+            </div>
             <input
               name="url"
               type="url"
@@ -181,58 +194,93 @@ function AddProject({ profile }) {
             rows={3}
           />
           <div className="flex gap-2">
-            <button type="submit" className="btn btn-primary flex items-center">
-              <Check className="w-4 h-4 mr-2" />
-              {editingIndex !== null ? 'Update Project' : 'Add Project'}
+            <button
+              type="submit"
+              disabled={isSaving}
+              className="btn btn-primary flex items-center justify-center gap-2"
+            >
+              {isSaving ? (
+                <>
+                  <Loader2 className="animate-spin w-4 h-4" />
+                  <span>Saving...</span>
+                </>
+              ) : (
+                <>
+                  <Check className="w-4 h-4" />
+                  <span>{editingIndex !== null ? 'Update Project' : 'Add Project'}</span>
+                </>
+              )}
             </button>
-            <button type="button" onClick={handleCancel} className="btn btn-ghost flex items-center">
-              <X className="w-4 h-4 mr-2" />
+            <button
+              type="button"
+              onClick={handleCancel}
+              className="btn btn-secondary flex items-center gap-2"
+            >
+              <X className="w-4 h-4" />
               Cancel
             </button>
           </div>
         </form>
       )}
 
-      <div className="space-y-6">
+      <div className="space-y-4">
         {projects.length > 0 ? (
-          projects.map((proj, index) => (
-            <div key={proj._id} className="border border-gray-200 rounded-lg p-6">
+          projects.map((proj) => (
+            <div key={proj._id} className="card p-6 border border-border">
               <div className="flex justify-between items-start mb-4">
                 <div>
-                  <h3 className="text-lg font-semibold text-gray-900">{proj.name}</h3>
-                  <p className="text-primary-600 font-medium">{proj.technologies.join(', ')}</p>
-                  <p className="text-sm text-gray-500">
+                  <h3 className="text-lg font-semibold text-foreground">{proj.name}</h3>
+                  {proj.technologies && proj.technologies.length > 0 && (
+                    <p className="text-sm text-muted-foreground font-medium flex flex-wrap gap-2 mt-1">
+                      {proj.technologies.map((tech, i) => (
+                        <span key={i} className="bg-muted px-2 py-0.5 rounded-full text-xs font-semibold">
+                          {tech}
+                        </span>
+                      ))}
+                    </p>
+                  )}
+                  <p className="text-sm text-muted-foreground mt-2">
                     {proj.startDate} - {proj.endDate || 'Present'}
                   </p>
                 </div>
                 <div className="flex gap-2">
                   <button
                     type="button"
-                    onClick={() => handleEdit(index)}
-                    className="text-gray-400 hover:text-gray-600"
+                    onClick={() => handleEdit(projects.indexOf(proj))}
+                    className="btn-icon text-muted-foreground hover:text-foreground transition-colors"
                   >
                     <Edit className="w-5 h-5" />
                   </button>
                   <button
                     type="button"
                     onClick={() => handleDelete(proj._id)}
-                    className="text-error-500 hover:text-error-600"
+                    className="btn-icon text-destructive hover:text-destructive-foreground transition-colors"
                   >
                     <Trash2 className="w-5 h-5" />
                   </button>
                 </div>
               </div>
-              <p className="text-gray-700">{proj.description}</p>
-              {proj.url && <a href={proj.url} target="_blank" className="text-blue-600">Live Demo</a>}
-              {proj.githubUrl && <a href={proj.githubUrl} target="_blank" className="text-blue-600 ml-4">GitHub</a>}
+              {proj.description && <p className="text-muted-foreground mt-2">{proj.description}</p>}
+              <div className="flex gap-4 mt-4">
+                {proj.url && (
+                  <a href={proj.url} target="_blank" rel="noopener noreferrer" className="text-primary hover:text-primary-foreground underline transition-colors">
+                    Live Demo
+                  </a>
+                )}
+                {proj.githubUrl && (
+                  <a href={proj.githubUrl} target="_blank" rel="noopener noreferrer" className="text-primary hover:text-primary-foreground underline transition-colors">
+                    GitHub
+                  </a>
+                )}
+              </div>
             </div>
           ))
         ) : (
-          <p className="text-gray-500">No projects added yet</p>
+          <p className="text-muted-foreground text-center">No projects added yet.</p>
         )}
       </div>
     </div>
-  )
+  );
 }
 
-export default AddProject
+export default AddProject;

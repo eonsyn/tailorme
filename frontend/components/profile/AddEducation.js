@@ -1,12 +1,13 @@
-import React, { useState, useEffect } from 'react'
-import { Plus, Trash2, Edit, Check, X } from 'lucide-react'
-import toast from 'react-hot-toast'
-import api from '@/lib/api'
+import React, { useState, useEffect } from 'react';
+import { Plus, Trash2, Edit, Check, X, Loader2 } from 'lucide-react';
+import toast from 'react-hot-toast';
+import api from '@/lib/api';
 
 function AddEducation({ profile }) {
-  const [education, setEducation] = useState([])
-  const [editingIndex, setEditingIndex] = useState(null)
-  const [showForm, setShowForm] = useState(false)
+  const [education, setEducation] = useState([]);
+  const [editingIndex, setEditingIndex] = useState(null);
+  const [showForm, setShowForm] = useState(false);
+  const [isSaving, setIsSaving] = useState(false);
   const [formData, setFormData] = useState({
     degree: '',
     institution: '',
@@ -15,36 +16,46 @@ function AddEducation({ profile }) {
     endYear: '',
     gpa: '',
     description: '',
-  })
+  });
 
   // Load initial data
   useEffect(() => {
-    setEducation(profile?.education || [])
-  }, [profile])
+    setEducation(profile?.education || []);
+  }, [profile]);
 
   const handleChange = (e) => {
-    const { name, value } = e.target
-    setFormData(prev => ({ ...prev, [name]: value }))
-  }
+    const { name, value } = e.target;
+    setFormData(prev => ({ ...prev, [name]: value }));
+  };
 
   const handleSubmit = async (e) => {
-    e.preventDefault()
+    e.preventDefault();
+    setIsSaving(true);
     try {
       if (editingIndex !== null) {
         // Update flow
-        const eduToUpdate = education[editingIndex]
-        const res = await api.put(`/profile/education/${eduToUpdate._id}`, formData)
-        if(!res.success) throw res
-        const updatedEdu = res.profile.education.find(e => e._id === eduToUpdate._id)
-        setEducation(prev => prev.map((edu, i) => i === editingIndex ? updatedEdu : edu))
-        toast.success("Education updated!")
-        setEditingIndex(null)
+        const eduToUpdate = education[editingIndex];
+        const res = await api.put(`/profile/education/${eduToUpdate._id}`, formData);
+        
+        // Check if the response is successful and contains the profile data
+        if (res.profile && Array.isArray(res.profile.education)) {
+          setEducation(res.profile.education);
+          toast.success("Education updated!");
+        } else {
+          throw new Error("Invalid response from server");
+        }
+        setEditingIndex(null);
       } else {
         // Add flow
-        const { data } = await api.post("/profile/education", formData)
-        const newEdu = data.profile.education[data.profile.education.length - 1]
-        setEducation(prev => [...prev, newEdu])
-        toast.success("Education added!")
+        const res = await api.post("/profile/education", formData);
+
+        // Check for success and new data
+        if (res.profile && Array.isArray(res.profile.education)) {
+          setEducation(res.profile.education);
+          toast.success("Education added!");
+        } else {
+          throw new Error("Invalid response from server");
+        }
       }
 
       setFormData({
@@ -55,30 +66,32 @@ function AddEducation({ profile }) {
         endYear: '',
         gpa: '',
         description: '',
-      })
-      setShowForm(false)
+      });
+      setShowForm(false);
     } catch (err) {
-      console.error(err)
-      toast.error("Failed to save education")
+      console.error(err);
+      toast.error("Failed to save education");
+    } finally {
+      setIsSaving(false);
     }
-  }
+  };
 
   const handleEdit = (index) => {
-    setEditingIndex(index)
-    setFormData(education[index])
-    setShowForm(true)
-  }
+    setEditingIndex(index);
+    setFormData(education[index]);
+    setShowForm(true);
+  };
 
   const handleDelete = async (id) => {
     try {
-      await api.delete(`/profile/education/${id}`)
-      setEducation(prev => prev.filter(edu => edu._id !== id))
-      toast.success("Education deleted!")
+      await api.delete(`/profile/education/${id}`);
+      setEducation(prev => prev.filter(edu => edu._id !== id));
+      toast.success("Education deleted!");
     } catch (err) {
-      console.error(err)
-      toast.error("Failed to delete education")
+      console.error(err);
+      toast.error("Failed to delete education");
     }
-  }
+  };
 
   const handleCancel = () => {
     setFormData({
@@ -89,21 +102,21 @@ function AddEducation({ profile }) {
       endYear: '',
       gpa: '',
       description: '',
-    })
-    setEditingIndex(null)
-    setShowForm(false)
-  }
+    });
+    setEditingIndex(null);
+    setShowForm(false);
+  };
 
   return (
     <div className="card p-8">
       <div className="flex justify-between items-center mb-6">
-        <h2 className="text-xl font-semibold text-gray-900">Education</h2>
+        <h2 className="text-xl font-semibold text-foreground">Education</h2>
         {!showForm && (
           <button
             className="btn btn-outline flex items-center"
             onClick={() => {
-              setShowForm(true)
-              setEditingIndex(null)
+              setShowForm(true);
+              setEditingIndex(null);
               setFormData({
                 degree: '',
                 institution: '',
@@ -112,7 +125,7 @@ function AddEducation({ profile }) {
                 endYear: '',
                 gpa: '',
                 description: '',
-              })
+              });
             }}
           >
             <Plus className="w-4 h-4 mr-2" />
@@ -133,47 +146,72 @@ function AddEducation({ profile }) {
           </div>
           <textarea name="description" placeholder="Description" value={formData.description} onChange={handleChange} className="input resize-none" rows={3} />
           <div className="flex gap-2">
-            <button type="submit" className="btn btn-primary flex items-center">
-              <Check className="w-4 h-4 mr-2" />
-              {editingIndex !== null ? 'Update Education' : 'Add Education'}
+            <button
+              type="submit"
+              disabled={isSaving}
+              className="btn btn-primary flex items-center justify-center gap-2"
+            >
+              {isSaving ? (
+                <>
+                  <Loader2 className="animate-spin w-4 h-4" />
+                  <span>Saving...</span>
+                </>
+              ) : (
+                <>
+                  <Check className="w-4 h-4" />
+                  <span>{editingIndex !== null ? 'Update Education' : 'Add Education'}</span>
+                </>
+              )}
             </button>
-            <button type="button" onClick={handleCancel} className="btn btn-ghost flex items-center">
-              <X className="w-4 h-4 mr-2" />
+            <button
+              type="button"
+              onClick={handleCancel}
+              className="btn btn-secondary flex items-center gap-2"
+            >
+              <X className="w-4 h-4" />
               Cancel
             </button>
           </div>
         </form>
       )}
 
-      <div className="space-y-6">
+      <div className="space-y-4">
         {education.length > 0 ? (
           education.map((edu, index) => (
-            <div key={edu._id || index} className="border border-gray-200 rounded-lg p-6">
+            <div key={edu._id || index} className="card p-6 border border-border">
               <div className="flex justify-between items-start">
                 <div>
-                  <h3 className="text-lg font-semibold text-gray-900">{edu.degree}</h3>
-                  <p className="text-primary-600 font-medium">{edu.institution}</p>
-                  <p className="text-sm text-gray-500">{edu.startYear} - {edu.endYear}</p>
-                  {edu.gpa && <p className="text-sm text-gray-600">GPA: {edu.gpa}</p>}
+                  <h3 className="text-lg font-semibold text-foreground">{edu.degree}</h3>
+                  <p className="text-primary font-medium">{edu.institution}</p>
+                  <p className="text-sm text-muted-foreground">{edu.startYear} - {edu.endYear}</p>
+                  {edu.gpa && <p className="text-sm text-foreground">GPA: {edu.gpa}</p>}
                 </div>
                 <div className="flex gap-2">
-                  <button type="button" onClick={() => handleEdit(index)} className="text-gray-400 hover:text-gray-600">
+                  <button
+                    type="button"
+                    onClick={() => handleEdit(index)}
+                    className="btn-icon text-muted-foreground hover:text-foreground transition-colors"
+                  >
                     <Edit className="w-5 h-5" />
                   </button>
-                  <button type="button" onClick={() => handleDelete(edu._id)} className="text-error-500 hover:text-error-600">
+                  <button
+                    type="button"
+                    onClick={() => handleDelete(edu._id)}
+                    className="btn-icon text-destructive hover:text-destructive-foreground transition-colors"
+                  >
                     <Trash2 className="w-5 h-5" />
                   </button>
                 </div>
               </div>
-              {edu.description && <p className="text-gray-700 mt-2">{edu.description}</p>}
+              {edu.description && <p className="text-muted-foreground mt-2">{edu.description}</p>}
             </div>
           ))
         ) : (
-          <p className="text-gray-500">No education added yet</p>
+          <p className="text-muted-foreground text-center">No education added yet.</p>
         )}
       </div>
     </div>
-  )
+  );
 }
 
-export default AddEducation
+export default AddEducation;

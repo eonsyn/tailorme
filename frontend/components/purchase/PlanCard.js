@@ -1,6 +1,7 @@
 'use client'
 
 import React from 'react'
+import { Check, Loader2 } from 'lucide-react'
 
 export default function PlanCard({
   title,
@@ -12,30 +13,34 @@ export default function PlanCard({
   loading = false,
   onPurchase,
 }) {
+  const isCreditCard = type === 'Credit'
+  const isPlanActive = isActive && type === 'Plan'
+
   return (
     <div
-      className={`card p-6 rounded-2xl shadow-md flex flex-col justify-between transition hover:shadow-lg ${
+      className={`card p-6 flex flex-col justify-between transition-all duration-300 hover:shadow-lg ${
         isActive ? 'ring-2 ring-primary-500' : ''
       }`}
     >
       <div className="text-center mb-6">
-        <h2 className="text-xl font-semibold mb-2">{title}</h2>
-        <p className="text-2xl font-bold text-primary-600 mb-2">
+        <h2 className="text-xl font-semibold mb-2 text-foreground">{title}</h2>
+        <p className="text-4xl font-extrabold text-primary mb-2">
           {price === 0 ? 'Free' : `₹${price}`}
         </p>
-        {isActive && type === 'Plan' && (
-          <span className="text-green-600 font-medium">Active</span>
+        {isPlanActive && (
+          <span className="text-success-600 font-medium">Active</span>
         )}
-        {type === 'Credit' && credits !== undefined && (
-          <p className="text-gray-600 mt-1">{credits} credits available</p>
+        {isCreditCard && credits !== undefined && (
+          <p className="text-muted-foreground mt-1 text-sm">{credits} credits available</p>
         )}
       </div>
 
       {type === 'Plan' && features.length > 0 && (
         <ul className="space-y-2 mb-6 text-left">
           {features.map((feature, idx) => (
-            <li key={idx} className="text-gray-700 text-sm flex items-center gap-2">
-              <span className="text-primary-500">✔</span> {feature}
+            <li key={idx} className="text-foreground text-sm flex items-center gap-2">
+              <Check className="w-4 h-4 text-primary" />
+              <span>{feature}</span>
             </li>
           ))}
         </ul>
@@ -43,22 +48,29 @@ export default function PlanCard({
 
       <button
         onClick={onPurchase}
-        disabled={loading || (isActive && type === 'Plan')}
-        className={`w-full py-2 rounded-md font-medium ${
+        disabled={loading || isPlanActive}
+        className={`btn w-full ${
           loading
-            ? 'bg-gray-300 text-gray-600 cursor-not-allowed'
-            : type === 'Plan'
-            ? 'bg-primary-600 text-white hover:bg-primary-700'
-            : 'border border-primary-600 text-primary-600 hover:bg-primary-50'
+            ? 'btn-secondary cursor-not-allowed animate-pulse'
+            : isPlanActive
+            ? 'btn-secondary cursor-not-allowed'
+            : isCreditCard
+            ? 'btn-outline'
+            : 'btn-primary'
         }`}
       >
-        {loading
-          ? 'Processing...'
-          : isActive && type === 'Plan'
-          ? 'Active'
-          : type === 'Plan'
-          ? `Buy ${title}`
-          : `Buy ${price} Credits`}
+        {loading ? (
+          <span className="flex items-center gap-2">
+            <Loader2 className="animate-spin w-4 h-4" />
+            Processing...
+          </span>
+        ) : isPlanActive ? (
+          'Active'
+        ) : isCreditCard ? (
+          `Buy ₹${price}`
+        ) : (
+          `Buy ${title}`
+        )}
       </button>
     </div>
   )

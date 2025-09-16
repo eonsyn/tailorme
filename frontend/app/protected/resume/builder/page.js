@@ -92,136 +92,126 @@ export default function ResumeBuilderPage() {
     <div className="space-y-8">
       {/* Top Heading (hidden on print) */}
       <div className="no-print">
-        <h1 className="text-3xl font-bold text-gray-900">Resume Builder</h1>
-        <p className="text-gray-600 mt-2">Create a tailored resume for any job description</p>
+        <h1 className="text-3xl font-bold text-foreground">Resume Builder</h1>
+        <p className="text-muted-foreground mt-2">
+          Create a tailored resume for any job description
+        </p>
       </div>
 
       <div className="grid lg:grid-cols-2 gap-8">
         {/* Input Section (hidden on print) */}
         <div className="space-y-6 no-print">
           <div className="card p-8 relative">
-            <h2 className="text-xl font-semibold text-gray-900 mb-4">Job Description</h2>
+            <h2 className="text-xl font-semibold text-foreground mb-4">Job Description</h2>
             <textarea
               value={jobDescription}
               onChange={(e) => {
                 const input = e.target.value
-                // Count non-space characters
                 const nonSpaceLength = input.replace(/\s+/g, '').length
-                // Only update state if <= 30
                 if (nonSpaceLength <= 1500) {
                   setJobDescription(input)
                 }
               }}
               placeholder="Paste the job description here..."
               rows={12}
-              className="input resize-none"
+              className="input resize-none text-foreground"
             />
-
-            <span className="absolute bottom-3 right-3 text-sm text-gray-500">
+            <span className="absolute bottom-3 right-3 text-sm text-muted-foreground">
               {jobDescription.replace(/\s+/g, '').length}/1500
             </span>
-
-
-
           </div>
 
           <div className="card p-8">
-            <h2 className="text-xl font-semibold text-gray-900 mb-4">Choose Template</h2>
+            <h2 className="text-xl font-semibold text-foreground mb-4">Choose Template</h2>
             <div className="grid grid-cols-3 gap-4">
-              {templates.map((templ) =>
+              {templates.map((templ) => (
                 <button
                   key={templ.id}
                   onClick={() => {
-                    setTemplate(() => templ.component);
-                    setSelectedTemplate(templ.id);
+                    setTemplate(templ.component)
+                    setSelectedTemplate(templ.id)
                   }}
-                  className={`p-4 border-2 rounded-lg transition-colors ${selectedTemplate === templ.id ?
-                      'border-primary-500 bg-primary-50' :
-                      'border-gray-200 hover:border-gray-300'}`
-                  }>
-
-                  <div className="aspect-[3/4] bg-gray-100 rounded mb-2"></div>
-                  <p className="text-sm font-medium text-gray-900">{templ.name}</p>
+                  className={`p-4 rounded-lg transition-colors border-2 ${
+                    selectedTemplate === templ.id
+                      ? 'border-primary bg-primary/10 text-primary'
+                      : 'border-border hover:border-ring'
+                  }`}
+                >
+                  <div className="aspect-[3/4] bg-muted rounded-md mb-2 border border-border"></div>
+                  <p className="text-sm font-medium text-foreground">{templ.name}</p>
                 </button>
-              )}
+              ))}
             </div>
           </div>
 
           <button
             onClick={handleGenerate}
             disabled={generating || !jobDescription.trim()}
-            className="btn btn-primary w-full flex items-center justify-center">
-
-            {generating ?
-              <LoadingSpinner size="sm" className="mr-2" /> :
-
-              <Coins className="w-5 h-5 mr-2" />
-            }
-            {generating ? 'Generating Resume...' : ' 2 credit Generate Tailored Resume'}
+            className="btn btn-primary w-full"
+          >
+            {generating ? (
+              <span className="flex items-center">
+                <Loader2 className="animate-spin mr-2" />
+                Generating Resume...
+              </span>
+            ) : (
+              <span className="flex items-center">
+                <Coins className="w-5 h-5 mr-2" />2 credits to Generate
+              </span>
+            )}
           </button>
 
           {/* Progress Bar */}
-          {generating &&
-            <div className="w-full bg-gray-200 rounded-full h-3 mt-4">
+          {generating && (
+            <div className="w-full bg-muted rounded-full h-3 mt-4">
               <div
-                className="bg-primary-500 h-3 rounded-full transition-all duration-500"
-                style={{ width: `${progress}%` }}>
-              </div>
+                className="bg-primary h-3 rounded-full transition-all duration-500"
+                style={{ width: `${progress}%` }}
+              ></div>
             </div>
-          }
+          )}
         </div>
 
         {/* Preview Section */}
         <div className="card p-8">
           <div className="flex justify-between items-center mb-6 no-print">
-            <h2 className="text-xl font-semibold text-gray-900">Preview</h2>
-            {generatedResume &&
+            <h2 className="text-xl font-semibold text-foreground">Preview</h2>
+            {generatedResume && (
               <div className="flex space-x-2">
-                <button
-                  onClick={handleSaveResume}
-                  className="btn btn-outline flex items-center">
-
+                <button onClick={handleSaveResume} className="btn btn-secondary flex items-center">
                   <Eye className="w-4 h-4 mr-2" />
                   Save
                 </button>
-                <button
-                  onClick={handleExport}
-                  className="btn btn-primary flex items-center">
-
+                <button onClick={handleExport} className="btn btn-primary flex items-center">
                   <Download className="w-4 h-4 mr-2" />
                   Export / Print
                 </button>
               </div>
-            }
+            )}
           </div>
 
-          <div className="min-h-96 border-2 border-dashed border-gray-300 rounded-lg flex items-center justify-center">
-            {generating ?
+          <div className="min-h-96 border-2 border-dashed border-border rounded-lg flex items-center justify-center p-4">
+            {generating ? (
               <div className="text-center">
-                <LoadingSpinner />
-                <p className="text-gray-500 mt-4">Tailoring your resume... {progress}%</p>
-                <p className="text-sm text-gray-400 mt-2">This usually takes 30-60 seconds</p>
-              </div> :
-              generatedResume ?
-                <Template data={generatedResume} /> :
-
-                <div className="text-center text-gray-500">
-                  <Wand2 className="w-12 h-12 mx-auto mb-4 text-gray-300" />
-                  <p>Your tailored resume will appear here</p>
-                </div>
-            }
+                <Loader2 className="animate-spin w-8 h-8 mx-auto text-primary" />
+                <p className="text-muted-foreground mt-4">Tailoring your resume... {progress}%</p>
+                <p className="text-sm text-muted-foreground mt-2">This usually takes 30-60 seconds</p>
+              </div>
+            ) : generatedResume ? (
+              // If you're using a dynamic component, this part is fine.
+              // Just make sure it receives the 'generatedResume' data
+              // as a prop.
+              <Template data={generatedResume} />
+            ) : (
+              <div className="text-center text-muted-foreground">
+                <Wand2 className="w-12 h-12 mx-auto mb-4 text-muted" />
+                <p>Your tailored resume will appear here</p>
+              </div>
+            )}
           </div>
         </div>
       </div>
-
-      {/* CSS for print */}
-      <style jsx global>{`
-        @media print {
-          .no-print {
-            display: none !important;
-          }
-        }
-      `}</style>
-    </div>);
+    </div>
+    );
 
 }

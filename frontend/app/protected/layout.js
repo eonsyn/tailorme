@@ -6,7 +6,7 @@ export default function ProtectedLayout({ children }) {
   return (
     <AuthProvider>
       <AuthGuard>
-        <div className="min-h-screen bg-gray-50">
+        <div className="min-h-screen bg-background">
           <DashboardNavbar />
           <main className="max-w-7xl mx-auto py-6 px-4">
             {children}

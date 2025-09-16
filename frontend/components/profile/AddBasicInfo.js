@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import toast from "react-hot-toast";
 import api from "@/lib/api";
-import LoadingSpinner from "../LoadingSpinner";
+import { Loader2, Save } from "lucide-react";
 
 function AddBasicInfo({ profile, setProfile }) {
   const [saving, setSaving] = useState(false);
@@ -18,7 +18,7 @@ function AddBasicInfo({ profile, setProfile }) {
         { network: "GitHub", url: formData.get("github") },
         { network: "Portfolio", url: formData.get("portfolio") },
         { network: "Twitter", url: formData.get("twitter") },
-      ].filter((s) => s.url); // keep only filled ones
+      ].filter((s) => s.url);
 
       const basicInfo = {
         name: formData.get("name"),
@@ -42,19 +42,14 @@ function AddBasicInfo({ profile, setProfile }) {
 
   return (
     <div className="card p-8">
-      <h2 className="text-xl font-semibold text-gray-900 mb-6">
+      <h2 className="text-xl font-semibold text-foreground mb-6">
         Basic Information
       </h2>
 
-      <form
-        onSubmit={handleBasicInfoSubmit}
-        className="grid md:grid-cols-3 gap-6"
-      >
+      <form onSubmit={handleBasicInfoSubmit} className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
         {/* Full Name */}
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">
-            Full Name
-          </label>
+        <div className="md:col-span-1 lg:col-span-1">
+          <label className="input-label">Full Name</label>
           <input
             type="text"
             name="name"
@@ -65,10 +60,8 @@ function AddBasicInfo({ profile, setProfile }) {
         </div>
 
         {/* Email */}
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-2">
-            Email
-          </label>
+        <div className="md:col-span-1 lg:col-span-1">
+          <label className="input-label">Email</label>
           <input
             type="email"
             name="email"
@@ -79,10 +72,8 @@ function AddBasicInfo({ profile, setProfile }) {
         </div>
 
         {/* Phone */}
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-2">
-            Phone
-          </label>
+        <div className="md:col-span-1 lg:col-span-1">
+          <label className="input-label">Phone</label>
           <input
             type="tel"
             name="phone"
@@ -91,22 +82,9 @@ function AddBasicInfo({ profile, setProfile }) {
           />
         </div>
 
-        {/* Location */}
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-2">
-            Location
-          </label>
-          <input
-            type="text"
-            name="location"
-            defaultValue={profile?.location || ""}
-            className="input"
-            placeholder="City, State"
-          />
-           <div className="md:col-span-2 mt-2">
-          <label className="block text-sm font-medium text-gray-700 mb-2">
-            Professional Title
-          </label>
+        {/* Professional Title */}
+        <div className="md:col-span-1 lg:col-span-2">
+          <label className="input-label">Professional Title</label>
           <input
             type="text"
             name="title"
@@ -115,88 +93,81 @@ function AddBasicInfo({ profile, setProfile }) {
             placeholder="e.g., Senior Software Engineer"
           />
         </div>
+
+        {/* Location */}
+        <div className="md:col-span-1 lg:col-span-1">
+          <label className="input-label">Location</label>
+          <input
+            type="text"
+            name="location"
+            defaultValue={profile?.location || ""}
+            className="input"
+            placeholder="City, State"
+          />
         </div>
 
         {/* Social Links */}
-        <div className="md:col-span-2">
-           
-
-          <div className="grid gap-4">
-            {/* LinkedIn + GitHub */}
-            <div className="grid md:grid-cols-2 gap-3">
-              <div>
-                <label className="block text-sm font-medium text-gray-600 mb-1">
-                  LinkedIn
-                </label>
-                <input
-                  type="url"
-                  name="linkedin"
-                  defaultValue={
-                    profile?.social?.find((s) => s.network === "LinkedIn")?.url ||
-                    ""
-                  }
-                  className="input w-full"
-                  placeholder="https://linkedin.com/in/username"
-                />
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-600 mb-1">
-                  GitHub
-                </label>
-                <input
-                  type="url"
-                  name="github"
-                  defaultValue={
-                    profile?.social?.find((s) => s.network === "GitHub")?.url ||
-                    ""
-                  }
-                  className="input w-full"
-                  placeholder="https://github.com/username"
-                />
-              </div>
+        <div className="md:col-span-2 lg:col-span-3">
+          <h3 className="text-lg font-medium text-foreground mb-4">Social Links</h3>
+          <div className="grid md:grid-cols-2 gap-4">
+            {/* LinkedIn */}
+            <div>
+              <label className="input-label">LinkedIn</label>
+              <input
+                type="url"
+                name="linkedin"
+                defaultValue={
+                  profile?.social?.find((s) => s.network === "LinkedIn")?.url || ""
+                }
+                className="input"
+                placeholder="https://linkedin.com/in/username"
+              />
             </div>
-
-            {/* Portfolio + Twitter */}
-            <div className="grid md:grid-cols-2 gap-3">
-              <div>
-                <label className="block text-sm font-medium text-gray-600 mb-1">
-                  Portfolio
-                </label>
-                <input
-                  type="url"
-                  name="portfolio"
-                  defaultValue={
-                    profile?.social?.find((s) => s.network === "Portfolio")?.url ||
-                    ""
-                  }
-                  className="input w-full"
-                  placeholder="https://yourportfolio.com"
-                />
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-600 mb-1">
-                  Twitter
-                </label>
-                <input
-                  type="url"
-                  name="twitter"
-                  defaultValue={
-                    profile?.social?.find((s) => s.network === "Twitter")?.url ||
-                    ""
-                  }
-                  className="input w-full"
-                  placeholder="https://twitter.com/username"
-                />
-              </div>
+            {/* GitHub */}
+            <div>
+              <label className="input-label">GitHub</label>
+              <input
+                type="url"
+                name="github"
+                defaultValue={
+                  profile?.social?.find((s) => s.network === "GitHub")?.url || ""
+                }
+                className="input"
+                placeholder="https://github.com/username"
+              />
+            </div>
+            {/* Portfolio */}
+            <div>
+              <label className="input-label">Portfolio</label>
+              <input
+                type="url"
+                name="portfolio"
+                defaultValue={
+                  profile?.social?.find((s) => s.network === "Portfolio")?.url || ""
+                }
+                className="input"
+                placeholder="https://yourportfolio.com"
+              />
+            </div>
+            {/* Twitter */}
+            <div>
+              <label className="input-label">Twitter</label>
+              <input
+                type="url"
+                name="twitter"
+                defaultValue={
+                  profile?.social?.find((s) => s.network === "Twitter")?.url || ""
+                }
+                className="input"
+                placeholder="https://twitter.com/username"
+              />
             </div>
           </div>
         </div>
 
-         {/* Summary */}
-        <div className="md:col-span-2">
-          <label className="block text-sm font-medium text-gray-700 mb-2">
-            Professional Summary
-          </label>
+        {/* Professional Summary */}
+        <div className="md:col-span-2 lg:col-span-3">
+          <label className="input-label">Professional Summary</label>
           <textarea
             name="summary"
             defaultValue={profile?.summary || ""}
@@ -207,16 +178,23 @@ function AddBasicInfo({ profile, setProfile }) {
         </div>
 
         {/* Save Button */}
-        <div className="md:col-span-2">
+        <div className="md:col-span-2 lg:col-span-3 mt-4">
           <button
             type="submit"
             disabled={saving}
-            className="btn btn-primary flex items-center"
+            className="btn btn-primary w-full md:w-auto flex items-center justify-center gap-2"
           >
             {saving ? (
-              <LoadingSpinner size="sm" className="mr-2" />
-            ) : null}
-            Save Changes
+              <>
+                <Loader2 className="animate-spin w-4 h-4" />
+                <span>Saving...</span>
+              </>
+            ) : (
+              <>
+                <Save className="w-4 h-4" />
+                <span>Save Changes</span>
+              </>
+            )}
           </button>
         </div>
       </form>

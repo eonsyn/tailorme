@@ -88,45 +88,50 @@ export default function PurchasePage() {
     console.log(user);
   };
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center bg-gray-50 px-4 py-12">
-      <Script src="https://checkout.razorpay.com/v1/checkout.js" />
+    <div className="min-h-screen flex flex-col items-center bg-background text-foreground px-4   transition-colors duration-300">
+  <Script src="https://checkout.razorpay.com/v1/checkout.js" />
 
-      {/* Toggle Buttons Bar */}
-      <div className="flex w-full max-w-lg mb-8 border rounded-full bg-white shadow">
-        <button
-          onClick={() => setOpenHist(true)}
-          className={`flex-1 py-2 px-4 rounded-full transition 
-            ${openHist ? "bg-blue-600 text-white" : "text-gray-600 hover:bg-gray-100"}`}>
-          
-          History
-        </button>
-        <button
-          onClick={() => setOpenHist(false)}
-          className={`flex-1 py-2 px-4 rounded-full transition 
-            ${!openHist ? "bg-blue-600 text-white" : "text-gray-600 hover:bg-gray-100"}`}>
-          
-          Buy Credit
-        </button>
-      </div>
+  {/* Toggle Buttons Bar */}
+  <div className="flex w-full max-w-lg mb-8 p-1 rounded-full border border-border shadow-sm bg-card">
+    <button
+      onClick={() => setOpenHist(true)}
+      className={`flex-1 py-2 px-4 rounded-full font-medium transition-all ${
+        openHist
+          ? "bg-primary text-primary-foreground"
+          : "text-muted-foreground hover:bg-muted"
+      }`}
+    >
+      History
+    </button>
+    <button
+      onClick={() => setOpenHist(false)}
+      className={`flex-1 py-2 px-4 rounded-full font-medium transition-all ${
+        !openHist
+          ? "bg-primary text-primary-foreground"
+          : "text-muted-foreground hover:bg-muted"
+      }`}
+    >
+      Buy Credit
+    </button>
+  </div>
 
-      {/* Content */}
-      {openHist ?
-      <PaymentHist payments={user.payments} /> :
+  {/* Content */}
+  {openHist ? (
+    <div className="w-full max-w-6xl">
+      <PaymentHist payments={user.payments} />
+    </div>
+  ) : (
+    <div className="w-full max-w-6xl flex flex-col items-center">
+      <h1 className="text-4xl font-extrabold mb-8 text-center text-foreground">
+        Buy Credits
+      </h1>
 
-      <>
-          <h1
-          onClick={printuser}
-          className="text-3xl font-bold mb-8 text-center">
-          
-            Buy Credits
-          </h1>
+      <p className="mb-8 text-lg text-center text-muted-foreground">
+        Available Credits: <strong className="text-primary">{userData?.credits || 0}</strong>
+      </p>
 
-          <p className="mb-6 text-gray-600">
-            Available Credits: <strong>{userData?.credits || 0}</strong>
-          </p>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 w-full max-w-6xl">
-            {creditPlans.map((plan) =>
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 w-full">
+        {creditPlans.map((plan) => (
           <PlanCard
             key={plan.key}
             title={plan.title}
@@ -134,12 +139,13 @@ export default function PurchasePage() {
             type="Credit"
             credits={plan.credits}
             loading={loadingPlan === plan.key}
-            onPurchase={() => handlePayment(plan.key)} />
-
-          )}
-          </div>
-        </>
-      }
-    </div>);
+            onPurchase={() => handlePayment(plan.key)}
+          />
+        ))}
+      </div>
+    </div>
+  )}
+</div>
+);
 
 }

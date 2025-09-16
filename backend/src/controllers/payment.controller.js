@@ -3,6 +3,7 @@ const crypto = require("crypto");
 const env = require("../config/env");
 const User = require("../models/User");
 const nodemailer = require("nodemailer");
+const paymentSuccessTemplate = require('../../public/paymentSuccessTemplate')
 
 // 🎯 Credit Packs
 const CREDIT_PLANS = {
@@ -83,19 +84,12 @@ const verifyPayment = async (req, res) => {
       port: env.SMTP_PORT,
       secure: false,
       auth: { user: env.SMTP_USER, pass: env.SMTP_PASS },
-    });
-
+    }); 
     await transporter.sendMail({
       from: `"Tailor Me" <${env.SMTP_USER}>`,
       to: user.email,
       subject: "Credits Purchased - Tailor Me",
-      html: `
-        <h2>Hi ${user.name},</h2>
-        <p>  Your payment for the <strong>${plan.toUpperCase()}</strong> pack was successful!</p>
-        <p>We’ve added <strong>${credits} credits</strong> to your account.</p>
-        <p>You now have a total of <strong>${user.credits}</strong> credits available.</p>
-        <p>Happy tailoring! ✨</p>
-      `,
+      html:paymentSuccessTemplate(user, plan, credits,price),
     });
 
     res.json({ success: true, message: `  ${credits} credits added to your account!` });

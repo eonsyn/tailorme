@@ -1,54 +1,62 @@
-import React, { useState, useEffect } from 'react'
-import { Plus, Trash2 } from 'lucide-react'
-import toast from 'react-hot-toast'
-import api from '@/lib/api'
+import React, { useState, useEffect } from 'react';
+import { Plus, Trash2, Loader2, Check, X } from 'lucide-react';
+import toast from 'react-hot-toast';
+import api from '@/lib/api';
 
 function AddSkills({ profile }) {
-  const [skills, setSkills] = useState([])
-  const [showForm, setShowForm] = useState(false) // toggle input visibility
+  const [skills, setSkills] = useState([]);
+  const [showForm, setShowForm] = useState(false);
+  const [isSaving, setIsSaving] = useState(false);
 
   // Add Skill
   const handleAddSkill = async (e) => {
-    e.preventDefault()
+    e.preventDefault();
+    setIsSaving(true);
     try {
-      const formData = new FormData(e.target)
-      const skill = formData.get('skill')?.trim()
+      const formData = new FormData(e.target);
+      const skill = formData.get('skill')?.trim();
 
-      if (!skill) return toast.error('Skill cannot be empty')
+      if (!skill) {
+        toast.error('Skill cannot be empty');
+        setIsSaving(false);
+        return;
+      }
 
-      await api.post('/profile/skills', { skill })
+      await api.post('/profile/skills', { skill });
 
-      setSkills((prev) => [...prev, skill])
-      e.target.reset()
-      setShowForm(false) // hide form again after adding
-      toast.success('Skill added!')
+      setSkills((prev) => [...prev, skill]);
+      e.target.reset();
+      setShowForm(false);
+      toast.success('Skill added!');
     } catch (err) {
-      console.error(err)
-      toast.error('Failed to add skill')
+      console.error(err);
+      toast.error('Failed to add skill');
+    } finally {
+      setIsSaving(false);
     }
-  }
+  };
 
   // Delete Skill
   const handleDeleteSkill = async (skillName) => {
     try {
-      await api.delete(`/profile/skills/${skillName}`)
-      setSkills((prev) => prev.filter((s) => s !== skillName))
-      toast.success('Skill removed!')
+      await api.delete(`/profile/skills/${skillName}`);
+      setSkills((prev) => prev.filter((s) => s !== skillName));
+      toast.success('Skill removed!');
     } catch (err) {
-      console.error(err)
-      toast.error('Failed to delete skill')
+      console.error(err);
+      toast.error('Failed to delete skill');
     }
-  }
+  };
 
   // Initialize skills from profile
   useEffect(() => {
-    setSkills(profile?.skills || [])
-  }, [profile])
+    setSkills(profile?.skills || []);
+  }, [profile]);
 
   return (
     <div className="card p-8">
       <div className="flex justify-between items-center mb-6">
-        <h2 className="text-xl font-semibold text-gray-900">Skills</h2>
+        <h2 className="text-xl font-semibold text-foreground">Skills</h2>
 
         {!showForm ? (
           <button
@@ -63,47 +71,53 @@ function AddSkills({ profile }) {
             <input
               name="skill"
               type="text"
-              className="border rounded px-2 py-1"
+              className="input w-full md:w-auto"
               placeholder="Enter a skill"
               autoFocus
             />
-            <button type="submit" className="btn btn-outline">
+            <button type="submit" className="btn btn-primary flex items-center justify-center gap-2" disabled={isSaving}>
+              {isSaving ? (
+                <Loader2 className="animate-spin w-4 h-4" />
+              ) : (
+                <Check className="w-4 h-4" />
+              )}
               Save
             </button>
             <button
               type="button"
               onClick={() => setShowForm(false)}
-              className="btn btn-ghost text-gray-600"
+              className="btn btn-secondary flex items-center justify-center gap-2"
             >
+              <X className="w-4 h-4" />
               Cancel
             </button>
           </form>
         )}
       </div>
 
-      <div className="flex flex-wrap gap-4 transition-all ">
+      <div className="flex flex-wrap gap-4 transition-all">
         {skills.length > 0 ? (
           skills.map((skill, index) => (
             <div
               key={index}
-              className="flex gap-1 items-center justify-between p-3 bg-gray-50 rounded-lg"
+              className="badge badge-lg relative flex items-center"
             >
-              <span className="text-gray-900">{skill}</span>
+              <span className="text-sm font-medium">{skill}</span>
               <button
                 type="button"
                 onClick={() => handleDeleteSkill(skill)}
-                className="text-error-500 cursor-pointer hover:text-error-600"
+                className="ml-2 text-destructive hover:text-destructive-foreground transition-colors"
               >
                 <Trash2 className="w-4 h-4" />
               </button>
             </div>
           ))
         ) : (
-          <p className="text-gray-500 col-span-3">No skills added yet</p>
+          <p className="text-muted-foreground text-center w-full">No skills added yet.</p>
         )}
       </div>
     </div>
-  )
+  );
 }
 
-export default AddSkills
+export default AddSkills;

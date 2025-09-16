@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { Plus, Trash2, Edit, Check, X } from 'lucide-react'
+import { Plus, Trash2, Edit, Check, X, Loader2 } from 'lucide-react'
 import toast from 'react-hot-toast'
 import api from '@/lib/api'
 
@@ -7,6 +7,7 @@ function AddCertificate({ profile }) {
   const [certificates, setCertificates] = useState([])
   const [editingIndex, setEditingIndex] = useState(null)
   const [showForm, setShowForm] = useState(false)
+  const [isSaving, setIsSaving] = useState(false)
   const [formData, setFormData] = useState({
     name: '',
     issuer: '',
@@ -28,6 +29,7 @@ function AddCertificate({ profile }) {
 
   const handleSubmit = async (e) => {
     e.preventDefault()
+    setIsSaving(true)
     try {
       if (editingIndex !== null) {
         const certToUpdate = certificates[editingIndex]
@@ -36,12 +38,12 @@ function AddCertificate({ profile }) {
           formData
         )
         setCertificates((prev) =>
-          prev.map((c, i) => (i === editingIndex ?  certification : c))
+          prev.map((c, i) => (i === editingIndex ? certification : c))
         )
         toast.success('Certificate updated!')
       } else {
         const { certification } = await api.post('/profile/certification', formData)
-        setCertificates((prev) => [...prev,  certification])
+        setCertificates((prev) => [...prev, certification])
         toast.success('Certificate added!')
       }
 
@@ -58,6 +60,8 @@ function AddCertificate({ profile }) {
     } catch (err) {
       console.error(err)
       toast.error('Failed to save certificate')
+    } finally {
+      setIsSaving(false)
     }
   }
 
@@ -94,7 +98,7 @@ function AddCertificate({ profile }) {
   return (
     <div className="card p-8">
       <div className="flex justify-between items-center mb-6">
-        <h2 className="text-xl font-semibold text-gray-900">Certifications</h2>
+        <h2 className="text-xl font-semibold text-foreground">Certifications</h2>
         {!showForm && (
           <button
             className="btn btn-outline flex items-center"
@@ -170,36 +174,49 @@ function AddCertificate({ profile }) {
             />
           </div>
           <div className="flex gap-2">
-            <button type="submit" className="btn btn-primary flex items-center">
-              <Check className="w-4 h-4 mr-2" />
-              {editingIndex !== null ? 'Update Certificate' : 'Add Certificate'}
+            <button
+              type="submit"
+              disabled={isSaving}
+              className="btn btn-primary flex items-center justify-center gap-2"
+            >
+              {isSaving ? (
+                <>
+                  <Loader2 className="animate-spin w-4 h-4" />
+                  <span>Saving...</span>
+                </>
+              ) : (
+                <>
+                  <Check className="w-4 h-4" />
+                  <span>{editingIndex !== null ? 'Update Certificate' : 'Add Certificate'}</span>
+                </>
+              )}
             </button>
             <button
               type="button"
               onClick={handleCancel}
-              className="btn btn-ghost flex items-center"
+              className="btn btn-secondary flex items-center gap-2"
             >
-              <X className="w-4 h-4 mr-2" />
+              <X className="w-4 h-4" />
               Cancel
             </button>
           </div>
         </form>
       )}
 
-      <div className="space-y-6">
+      <div className="space-y-4">
         {certificates.length > 0 ? (
           certificates.map((cert, index) => (
-            <div key={cert._id} className="border border-gray-200 rounded-lg p-6">
+            <div key={cert._id} className="card p-6 border border-border">
               <div className="flex justify-between items-start mb-4">
                 <div>
-                  <h3 className="text-lg font-semibold text-gray-900">{cert.name}</h3>
-                  <p className="text-primary-600 font-medium">{cert.issuer}</p>
-                  <p className="text-sm text-gray-500">
+                  <h3 className="text-lg font-semibold text-foreground">{cert.name}</h3>
+                  <p className="text-primary font-medium">{cert.issuer}</p>
+                  <p className="text-sm text-muted-foreground">
                     {cert.date} {cert.expirationDate ? `- ${cert.expirationDate}` : ''}
                   </p>
-                  {cert.credentialId && <p className="text-gray-700">ID: {cert.credentialId}</p>}
+                  {cert.credentialId && <p className="text-foreground text-sm mt-1">ID: {cert.credentialId}</p>}
                   {cert.url && (
-                    <a href={cert.url} target="_blank" className="text-blue-600">
+                    <a href={cert.url} target="_blank" rel="noopener noreferrer" className="text-primary hover:text-primary-foreground underline transition-colors mt-1 inline-block">
                       View Certificate
                     </a>
                   )}
@@ -208,14 +225,14 @@ function AddCertificate({ profile }) {
                   <button
                     type="button"
                     onClick={() => handleEdit(index)}
-                    className="text-gray-400 hover:text-gray-600"
+                    className="btn-icon text-muted-foreground hover:text-foreground transition-colors"
                   >
                     <Edit className="w-5 h-5" />
                   </button>
                   <button
                     type="button"
                     onClick={() => handleDelete(cert._id)}
-                    className="text-error-500 hover:text-error-600"
+                    className="btn-icon text-destructive hover:text-destructive-foreground transition-colors"
                   >
                     <Trash2 className="w-5 h-5" />
                   </button>
@@ -224,7 +241,7 @@ function AddCertificate({ profile }) {
             </div>
           ))
         ) : (
-          <p className="text-gray-500">No certificates added yet</p>
+          <p className="text-muted-foreground text-center">No certificates added yet.</p>
         )}
       </div>
     </div>

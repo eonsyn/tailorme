@@ -11,10 +11,10 @@ import {
 
 function PaymentHist({ payments }) {
   return (
-    <div className="p-6 border rounded-xl shadow bg-white w-full max-w-3xl">
-      <h1 className="text-xl font-bold mb-5 flex items-center gap-2">
-        <FileText className="w-5 h-5 text-blue-600" />
-        Recent 5 Payment History
+    <div className="  p-6 w-full bg-background max-w-3xl">
+      <h1 className="text-2xl font-bold mb-6 flex items-center gap-3 text-foreground">
+        <FileText className="w-6 h-6 text-primary" />
+        Recent Payment History
       </h1>
 
       {payments && payments.length > 0 ? (
@@ -22,65 +22,65 @@ function PaymentHist({ payments }) {
           {payments.map((payment, idx) => (
             <li
               key={payment._id || idx}
-              className="p-4 border rounded-lg bg-gray-50 hover:bg-gray-100 transition"
+              className="bg-background/60 p-4 transition-colors duration-200"
             >
               {/* Top Row: Plan + Date */}
-              <div className="flex justify-between items-center">
-                <span className="font-semibold capitalize text-blue-600">
+              <div className="flex justify-between items-center mb-2">
+                <span className="font-semibold text-lg capitalize text-primary">
                   {payment.plan}
                 </span>
-                <span className="text-sm text-gray-500 flex items-center gap-1">
+                <span className="text-sm text-muted-foreground flex items-center gap-1">
                   <Clock className="w-4 h-4" />
                   {new Date(payment.createdAt).toLocaleString()}
                 </span>
               </div>
 
-              {/* Payment Info */}
-              <div className="mt-3 space-y-1 text-sm text-gray-700">
-                <p className="flex items-center gap-2">
-                  <CreditCard className="w-4 h-4 text-gray-500" />
-                  Payment ID: <span className="font-medium">{payment.paymentId}</span>
-                </p>
-                <p className="flex items-center gap-2">
-                  <FileText className="w-4 h-4 text-gray-500" />
-                  Order ID: <span className="font-medium">{payment.orderId}</span>
-                </p>
-                <p className="flex items-center gap-2">
-                  <Wallet className="w-4 h-4 text-green-600" />
-                  Amount:{" "}
+              {/* Payment Info Grid */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-y-2 text-sm text-foreground">
+                <div className="flex items-center gap-2">
+                  <CreditCard className="w-4 h-4 text-muted-foreground" />
+                  <span>Payment ID:</span> <span className="font-medium">{payment.paymentId}</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <FileText className="w-4 h-4 text-muted-foreground" />
+                  <span>Order ID:</span> <span className="font-medium">{payment.orderId}</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <Wallet className="w-4 h-4 text-success-600" />
+                  <span>Amount:</span>
                   <span className="font-medium">
-                    {payment.amount/100} {payment.currency}
+                    {payment.amount / 100} {payment.currency}
                   </span>
-                </p>
+                </div>
                 {payment.credit && (
-                  <p className="flex items-center gap-2">
-                    <Coins className="w-4 h-4 text-yellow-600" />
-                    Credits: <span className="font-medium">{payment.credit}</span>
-                  </p>
+                  <div className="flex items-center gap-2">
+                    <Coins className="w-4 h-4 text-accent-500" />
+                    <span>Credits:</span> <span className="font-medium">{payment.credit}</span>
+                  </div>
                 )}
-                <p className="flex items-center gap-2">
+                <div className="flex items-center gap-2">
                   {payment.status === "success" ? (
-                    <CheckCircle2 className="w-4 h-4 text-green-600" />
+                    <CheckCircle2 className="w-4 h-4 text-success-600" />
                   ) : (
-                    <XCircle className="w-4 h-4 text-red-600" />
+                    <XCircle className="w-4 h-4 text-destructive" />
                   )}
-                  Status:{" "}
+                  <span>Status:</span>
                   <span
-                    className={
-                      payment.status === "success"
-                        ? "text-green-600 font-medium"
-                        : "text-red-600 font-medium"
-                    }
+                    className={`font-medium ${
+                      payment.status === "success" ? "text-success-600" : "text-destructive"
+                    }`}
                   >
                     {payment.status}
                   </span>
-                </p>
+                </div>
               </div>
             </li>
           ))}
         </ul>
       ) : (
-        <p className="text-gray-500">No payment history found.</p>
+        <p className="text-center text-muted-foreground py-12">
+          No payment history found. Start by purchasing some credits!
+        </p>
       )}
     </div>
   )

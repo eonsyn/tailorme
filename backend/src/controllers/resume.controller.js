@@ -14,7 +14,9 @@ const generate = async (req, res, next) => {
 
     const { jobDescription } = value;
     const user = await User.findById(req.user.userId);
-if(user.credits<=0){console.log("credit is low")}
+if(user.credits<=0){
+  user.credits -=2;
+}
     const profile = await Profile.findOne({ user: req.user.userId });
     if (!profile) {
       return res.status(400).json({ success: false, message: "Please complete your profile first" });
