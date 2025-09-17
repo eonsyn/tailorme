@@ -1,4 +1,3 @@
-//contactus page.js 
 // src/app/contactus/page.js
 'use client';
 
@@ -59,7 +58,7 @@ export default function ContactUsPage() {
         <div className="text-center">
           <h1 className="text-3xl font-bold text-foreground">Get in Touch</h1>
           <p className="text-muted-foreground mt-2">
-            We'd love to hear from you! Send us a message and we'll get back to you as soon as possible.
+            We&apos;d love to hear from you! Send us a message and we&apos;ll get back to you as soon as possible.
           </p>
         </div>
 
