@@ -71,9 +71,8 @@ export default function PricingPage() {
 
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      <Navbar />
-
+    < >
+     
       <section className="py-20 px-4">
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-16">
@@ -177,6 +176,6 @@ export default function PricingPage() {
       </section>
 
       <Footer />
-    </div>);
+    </ >);
 
 }

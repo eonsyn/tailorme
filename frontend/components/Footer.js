@@ -1,55 +1,79 @@
-import React from 'react';
-import { Mail, Github, Twitter } from 'lucide-react';
+import React from "react";
+import Link from "next/link";
+import { Mail, Github, Twitter } from "lucide-react";
+
+const footerLinks = [
+  {
+    title: "Product",
+    links: [
+      { label: "Resume Builder", href: "/protected/resume-builder" },
+      { label: "Cover Letters", href: "/protected/cover-letters" },
+      { label: "Interview Prep", href: "/protected/interview-prep" },
+      { label: "Templates", href: "/protected/templates" },
+    ],
+  },
+  {
+    title: "Company",
+    links: [
+      { label: "About Us", href: "/public/aboutus" },
+      { label: "Privacy Policy", href: "/public/privacy-policy" },
+      { label: "Terms of Service", href: "/public/terms" },
+      { label: "Contact", href: "/public/contactus" },
+    ],
+  },
+  {
+    title: "Support",
+    links: [
+      { label: "Help Center", href: "/help" },
+      { label: "Tutorials", href: "/tutorials" },
+      { label: "FAQ", href: "/faq" },
+      { label: "Community", href: "/community" },
+    ],
+  },
+];
 
 export default function Footer() {
   return (
-    <footer className="bg-card border-t-1 text-card-foreground py-12">
+    <footer className="bg-card border-t text-card-foreground py-12">
       <div className="container mx-auto px-4">
         <div className="grid md:grid-cols-4 gap-8">
+          {/* Logo + Description */}
           <div>
             <div className="flex items-center space-x-2 mb-4">
-              {/* Using a custom component or a standard logo for the icon would be better */}
               <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center">
-                <span className="text-primary-foreground font-bold text-lg">T</span>
+                <span className="text-primary-foreground font-bold text-lg">
+                  T
+                </span>
               </div>
               <span className="text-xl font-bold">TailorMe</span>
             </div>
             <p className="text-muted-foreground leading-relaxed">
-              AI-powered resume tailoring platform helping professionals land their dream jobs.
+              AI-powered resume tailoring platform helping professionals land
+              their dream jobs.
             </p>
           </div>
 
-          <div>
-            <h3 className="text-lg font-semibold mb-4">Product</h3>
-            <ul className="space-y-2 text-muted-foreground">
-              <li><a href="#" className="hover:text-foreground transition-colors">Resume Builder</a></li>
-              <li><a href="#" className="hover:text-foreground transition-colors">Cover Letters</a></li>
-              <li><a href="#" className="hover:text-foreground transition-colors">Interview Prep</a></li>
-              <li><a href="#" className="hover:text-foreground transition-colors">Templates</a></li>
-            </ul>
-          </div>
-
-          <div>
-            <h3 className="text-lg font-semibold mb-4">Company</h3>
-            <ul className="space-y-2 text-muted-foreground">
-              <li><a href="#" className="hover:text-foreground transition-colors">About Us</a></li>
-              <li><a href="#" className="hover:text-foreground transition-colors">Privacy Policy</a></li>
-              <li><a href="#" className="hover:text-foreground transition-colors">Terms of Service</a></li>
-              <li><a href="#" className="hover:text-foreground transition-colors">Contact</a></li>
-            </ul>
-          </div>
-
-          <div>
-            <h3 className="text-lg font-semibold mb-4">Support</h3>
-            <ul className="space-y-2 text-muted-foreground">
-              <li><a href="#" className="hover:text-foreground transition-colors">Help Center</a></li>
-              <li><a href="#" className="hover:text-foreground transition-colors">Tutorials</a></li>
-              <li><a href="#" className="hover:text-foreground transition-colors">FAQ</a></li>
-              <li><a href="#" className="hover:text-foreground transition-colors">Community</a></li>
-            </ul>
-          </div>
+          {/* Dynamic Links */}
+          {footerLinks.map((section) => (
+            <div key={section.title}>
+              <h3 className="text-lg font-semibold mb-4">{section.title}</h3>
+              <ul className="space-y-2 text-muted-foreground">
+                {section.links.map((link) => (
+                  <li key={link.label}>
+                    <Link
+                      href={link.href}
+                      className="hover:text-foreground transition-colors"
+                    >
+                      {link.label}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))}
         </div>
 
+        {/* Bottom Section */}
         <div className="border-t border-border mt-8 pt-8 text-center text-muted-foreground">
           <p>&copy; 2025 TailorMe. All rights reserved.</p>
         </div>
