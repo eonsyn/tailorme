@@ -1,15 +1,25 @@
+/*
+ * This file contains global styles for your Next.js application.
+ * It's structured to use Tailwind CSS best practices, including custom
+ * properties for colors, responsive variants, and layered styles.
+ */
+
 /* Core imports for Tailwind CSS v4 */
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
 @import "tailwindcss";
 @import "tw-animate-css";
 
-/* A custom variant for dark mode, using Tailwind's new syntax */
+/*
+ * The `@custom-variant` creates a "dark" variant that applies when
+ * the parent element has the `.dark` class. This is the modern
+ * Tailwind way to handle dark mode.
+ */
 @custom-variant dark (&:is(.dark *));
 
 /*
-  The :root selector defines CSS custom properties (variables).
-  These are your color themes and radii.
-*/
+ * The `:root` selector defines CSS custom properties (variables) for the
+ * light mode color theme and radii. These are the default values.
+ */
 :root {
   /* Radii */
   --radius: 0.625rem;
@@ -48,10 +58,9 @@
 }
 
 /*
-  The .dark class overwrites the CSS custom properties for dark mode.
-  Tailwind's new @custom-variant simplifies this, but it's good to keep
-  this for a manual toggle.
-*/
+ * The `.dark` class overrides the custom properties with dark mode values.
+ * You should add this class to the `<html>` element to activate dark mode.
+ */
 .dark {
   --color-background: oklch(0.145 0 0);
   --color-foreground: oklch(0.985 0 0);
@@ -82,51 +91,89 @@
 }
 
 /*
-  @layer base adds global styles. This is where you set the default
-  background, text, and border colors based on the CSS variables.
-*/
-@layer base {
-  * {
-    /* Use CSS variables for consistent border and outline colors */
-    border-color: var(--color-border);
-    outline-color: var(--color-ring);
-  }
+ * The `@theme inline` block maps your custom variables to standard
+ * Tailwind classes, allowing you to use classes like `bg-primary`
+ * directly in your JSX.
+ */
+@theme inline {
+  --color-background: var(--color-background);
+  --color-foreground: var(--color-foreground);
+  --color-card: var(--color-card);
+  --color-card-foreground: var(--color-card-foreground);
+  --color-popover: var(--color-popover);
+  --color-popover-foreground: var(--color-popover-foreground);
+  --color-primary: var(--color-primary);
+  --color-primary-foreground: var(--color-primary-foreground);
+  --color-secondary: var(--color-secondary);
+  --color-secondary-foreground: var(--color-secondary-foreground);
+  --color-muted: var(--color-muted);
+  --color-muted-foreground: var(--color-muted-foreground);
+  --color-accent: var(--color-accent);
+  --color-accent-foreground: var(--color-accent-foreground);
+  --color-destructive: var(--color-destructive);
+  --color-border: var(--color-border);
+  --color-input: var(--color-input);
+  --color-ring: var(--color-ring);
+  --color-sidebar: var(--color-sidebar);
+  --color-sidebar-foreground: var(--color-sidebar-foreground);
+  --color-sidebar-primary: var(--color-sidebar-primary);
+  --color-sidebar-primary-foreground: var(--color-sidebar-primary-foreground);
+  --color-sidebar-accent: var(--color-sidebar-accent);
+  --color-sidebar-accent-foreground: var(--color-sidebar-accent-foreground);
+  --color-sidebar-border: var(--color-sidebar-border);
+  --color-sidebar-ring: var(--color-sidebar-ring);
+}
 
+/*
+ * @layer base adds global styles. This sets the default background and
+ * text colors for your application.
+ */
+@layer base {
   body {
+    /* Use the Inter font family from the Google Fonts import */
+    font-family: 'Inter', sans-serif;
     /* Set the default background and text colors from the variables */
-    @apply bg-[var(--color-background)] text-[var(--color-foreground)] antialiased;
+    @apply bg-[var(--color-background)] text-[var(--color-foreground)] antialiased transition-all ease-in duration-2;
+  }
+  button{
+    @apply cursor-pointer
   }
 }
 
 /*
-  @layer components is for reusable UI components.
-  This approach keeps your styles organized and is a core part of
-  Tailwind's philosophy.
-*/
+ * @layer components is for reusable UI components. This keeps your styles
+ * organized and is a core part of Tailwind's philosophy.
+ */
 @layer components {
   .btn {
-    @apply inline-flex items-center justify-center rounded-lg px-6 py-3 font-medium text-base transition-all duration-200 ease-in-out focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-ring)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--color-background)];
+    /* Base styles for all buttons */
+    @apply inline-flex items-center justify-center rounded-lg px-6 py-3 font-medium text-base border transition-all duration-200 ease-in-out focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-ring)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--color-background)];
   }
 
   .btn-primary {
+    /* Primary button styles */
     @apply bg-[var(--color-primary)] text-[var(--color-primary-foreground)] hover:bg-[var(--color-primary-foreground)] hover:text-[var(--color-primary)] disabled:opacity-50 disabled:cursor-not-allowed;
   }
 
   .btn-secondary {
+    /* Secondary button styles */
     @apply bg-[var(--color-secondary)] text-[var(--color-secondary-foreground)] hover:bg-[var(--color-muted)] hover:text-[var(--color-muted-foreground)] disabled:opacity-50 disabled:cursor-not-allowed;
   }
 
   .btn-outline {
+    /* Outline button styles */
     @apply bg-transparent border-2 hover:bg-[var(--color-primary)] hover:text-[var(--color-primary-foreground)] text-[var(--color-primary)] border-[var(--color-primary)] disabled:opacity-50 disabled:cursor-not-allowed;
   }
 
   .input,
   .textarea {
-    @apply w-full rounded-md border-2 bg-[var(--color-input)] px-4 py-3 placeholder:text-[var(--color-muted-foreground)] focus-visible:outline-none focus-visible:border-transparent focus-visible:ring-2 focus-visible:ring-[var(--color-ring)];
+    /* Input and textarea styles */
+    @apply w-full rounded-md border-2 border-[var(--color-input)] bg-[var(--color-input)] px-4 py-3 placeholder:text-[var(--color-muted-foreground)] focus-visible:outline-none focus-visible:border-transparent focus-visible:ring-2 focus-visible:ring-[var(--color-ring)];
   }
 
   .card {
-    @apply rounded-xl bg-[var(--color-card)] text-[var(--color-card-foreground)] shadow-md border-[var(--color-border)];
+    /* Card styles */
+    @apply rounded-xl bg-[var(--color-card)] text-[var(--color-card-foreground)] shadow-md border border-[var(--color-border)];
   }
 }
 

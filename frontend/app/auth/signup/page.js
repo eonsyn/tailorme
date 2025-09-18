@@ -7,6 +7,7 @@ import toast from 'react-hot-toast';
 import { useAuth } from '@/lib/auth';
 import LoadingSpinner from '@/components/LoadingSpinner';
 import FingerprintJS from '@fingerprintjs/fingerprintjs';
+// import { Search } from "lucide-react"; 
 
 // This is the component that uses the client-side hook `useSearchParams`
 // It's separated from the default export and will be rendered inside a Suspense boundary.
@@ -23,6 +24,47 @@ function SignupFormContent() {
   useEffect(() => {
     handleprint();
   }, []);
+  // const handleGoogleSignup = async () => {
+  //   try {
+  //     /* 1. Launch Google OAuth popup */
+  //     const googleAuth = window.google.accounts.oauth2.initTokenClient({
+  //       client_id: process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID,
+  //       scope: "profile email",
+  //       callback: async (response) => {
+  //         if (response.access_token) {
+  //           // 2. Send token to your Node.js API
+  //           const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/auth/google`, {
+  //             method: "POST",
+  //             headers: { "Content-Type": "application/json" },
+  //             body: JSON.stringify({ token: response.access_token, deviceFingerprint }),
+  //           });
+
+  //           if (!res.ok) throw new Error("Google signup failed");
+  //           const data = await res.json();
+
+  //           // 3. Store token/session via your useAuth hook
+  //           await signup(
+  //             data.user.email,
+  //             null, // no password for Google
+  //             data.user.name,
+  //             data.user.username,
+  //             null,
+  //             deviceFingerprint,
+  //             data.token // <- your API-issued JWT
+  //           );
+
+  //           toast.success("Signed up with Google!");
+  //           router.push("/protected/dashboard");
+  //         }
+  //       },
+  //     });
+
+  //     googleAuth.requestAccessToken();
+  //   } catch (err) {
+  //     console.error(err);
+  //     toast.error("Google signup failed");
+  //   }
+  // };
 
   const handleprint = async () => {
     try {
@@ -238,6 +280,16 @@ function SignupFormContent() {
           </button>
         </form>
       </div>
+      {/* <div className="mt-6">
+        <button
+          type="button"
+          onClick={handleGoogleSignup}
+          className="btn btn-outline w-full flex items-center justify-center gap-2"
+        >
+          {/* <Search className="w-5 h-5" /> */}
+          Sign up with Google
+        </button>
+      </div> */}
 
       {/* Login Link */}
       <p className="text-center mt-6 text-gray-600">

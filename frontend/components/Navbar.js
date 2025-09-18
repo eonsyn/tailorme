@@ -36,13 +36,16 @@ export default function Navbar() {
           {/* Logo and Name */}
           <Link href="/" className="flex items-center space-x-2">
             <div className="w-8 h-8 bg-primary rounded-md flex items-center justify-center">
-              <span className="text-primary-foreground font-bold text-lg">T</span>
+              <span className="text-secondary font-bold text-lg">T</span>
             </div>
             <span className="text-xl font-bold text-foreground">TailorMe</span>
           </Link>
 
           {/* Desktop Navigation */}
           <div className="hidden md:flex items-center space-x-8">
+            <Link href="/public/pricing" className="text-muted-foreground hover:text-primary transition-colors">
+              Pricing
+            </Link>
             <Link href="/public/pricing" className="text-muted-foreground hover:text-primary transition-colors">
               Pricing
             </Link>
@@ -54,8 +57,9 @@ export default function Navbar() {
             </Link>
             <button
               onClick={toggleTheme}
-              className="p-2 rounded-full text-foreground hover:bg-muted focus:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+              className="p-2 rounded-full text-foreground hover:bg-muted focus:outline-none focus-visible:ring-2 border-1 transition  focus-visible:ring-ring"
               aria-label="Toggle dark/light mode"
+               
             >
               {theme === 'dark' ? <Moon className="w-5 h-5" /> : <Sun className="w-5 h-5" />}
             </button>
