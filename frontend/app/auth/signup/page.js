@@ -280,16 +280,7 @@ function SignupFormContent() {
           </button>
         </form>
       </div>
-      {/* <div className="mt-6">
-        <button
-          type="button"
-          onClick={handleGoogleSignup}
-          className="btn btn-outline w-full flex items-center justify-center gap-2"
-        >
-          {/* <Search className="w-5 h-5" /> */}
-          Sign up with Google
-        </button>
-      </div> */}
+       
 
       {/* Login Link */}
       <p className="text-center mt-6 text-gray-600">
