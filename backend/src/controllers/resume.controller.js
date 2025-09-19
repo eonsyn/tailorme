@@ -1,9 +1,9 @@
-require('dotenv').config()
-const Resume = require('../models/Resume')
-const Profile = require('../models/Profile')
-const User = require('../models/User')  
-const { resumeValidation } = require('../utils/validators') 
-const {resumeQueue}=require('../queues/resumeQueue')
+require('dotenv').config();
+const Resume = require('../models/Resume');
+const Profile = require('../models/Profile');
+const User = require('../models/User');
+const { resumeValidation } = require('../utils/validators');
+const LLMAdapter = require('../services/llm.adapter');
 
 const generate = async (req, res, next) => {
   try {
@@ -13,29 +13,67 @@ const generate = async (req, res, next) => {
     }
 
     const { jobDescription } = value;
+
+    // 🔹 check user credits
     const user = await User.findById(req.user.userId);
-if(user.credits<=0){
-  user.credits -=2;
-}
+    if (!user) {
+      return res.status(404).json({ success: false, message: "User not found" });
+    }
+    if (user.credits <= 0) {
+      return res.status(400).json({ success: false, message: "Not enough credits" });
+    }
+
     const profile = await Profile.findOne({ user: req.user.userId });
     if (!profile) {
       return res.status(400).json({ success: false, message: "Please complete your profile first" });
     }
 
-    // 🟢 push full profile JSON (not just ID)
-    const job = await resumeQueue.add("tailorResume", {
-      userId: req.user.userId,
-      profile: profile.toObject(), // convert Mongoose doc → plain JSON
-      jobDescription,
-    },{
-    removeOnComplete: { age: 300 }, // ⏳ auto-remove after 300s (5 mins)
-    removeOnFail: { age: 300 },     // ⏳ failed jobs also auto-remove
-  });
+    // 🔹 Directly call LLM adapter (no queue)
+    const tailoredResume = await LLMAdapter.tailorResume(profile.toObject(), jobDescription);
+
+    // 🔹 Deduct credits
+    user.credits -= 2;
+    await user.save();
+
+    // 🔹 Optionally save resume to DB
+    const resume = new Resume({
+      user: req.user.userId,
+      title: `Generated Resume - ${new Date().toLocaleString()}`,
+      content: tailoredResume,
+    });
+    await resume.save();
 
     res.json({
       success: true,
-      message: "Resume generation started",
-      jobId: job.id,
+      message: "Resume generated successfully",
+      resume: tailoredResume,
+      resumeId: resume._id,
+    });
+
+  } catch (error) {
+    console.error("Error generating resume:", error);
+    next(error);
+  }
+};
+
+const updateResume = async (req, res, next) => {
+  try {
+    const { resumeId } = req.params;
+    const { title, content } = req.body;
+
+    const resume = await Resume.findOne({ _id: resumeId, user: req.user.userId });
+    if (!resume) {
+      return res.status(404).json({ success: false, message: "Resume not found" });
+    }
+
+    resume.title = title || resume.title;
+    resume.content = content || resume.content;
+    await resume.save();
+
+    res.json({
+      success: true,
+      message: "Resume updated successfully",
+      resume,
     });
   } catch (error) {
     next(error);
@@ -43,67 +81,18 @@ if(user.credits<=0){
 };
 
 
-const getJobStatus = async (req, res, next) => {
-  try {
-    const { jobId } = req.params;
-    const job = await resumeQueue.getJob(jobId);
-
-    if (!job) {
-      return res.status(404).json({ success: false, message: "Job not found" });
-    }
-
-    const state = await job.getState();
-    const progress = job.progress;
-    let response = { success: true, state, progress };
-
-    if (state === "completed") {
-      response.result = job.returnvalue; // ✅ resume result
-    } else if (state === "failed") {
-      response.error = job.failedReason;
-    }
-
-    res.json(response);
-  } catch (error) {
-    next(error);
-  }
-};
-
-
-const saveResume = async (req, res, next) => {
-
-  try {
-    const { title, content } = req.body
-
-    const resume = new Resume({
-      user: req.user.userId,
-      title,
-      content,
-    })
-
-    await resume.save()
-
-    res.json({
-      success: true,
-      message: 'Resume saved successfully',
-      resume,
-    })
-  } catch (error) {
-    next(error)
-  }
-}
-
 const getResumeHistory = async (req, res, next) => {
   try {
-    const page = parseInt(req.query.page) || 1
-    const limit = parseInt(req.query.limit) || 10
-    const skip = (page - 1) * limit
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 10;
+    const skip = (page - 1) * limit;
 
     const resumes = await Resume.find({ user: req.user.userId })
       .sort({ createdAt: -1 })
       .skip(skip)
-      .limit(limit)
+      .limit(limit);
 
-    const total = await Resume.countDocuments({ user: req.user.userId })
+    const total = await Resume.countDocuments({ user: req.user.userId });
 
     res.json({
       success: true,
@@ -114,15 +103,14 @@ const getResumeHistory = async (req, res, next) => {
         total,
         pages: Math.ceil(total / limit),
       },
-    })
+    });
   } catch (error) {
-    next(error)
+    next(error);
   }
-}
+};
 
 module.exports = {
   generate,
-  getJobStatus,
-  saveResume,
+  updateResume,
   getResumeHistory,
-}
+};

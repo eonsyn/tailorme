@@ -120,7 +120,7 @@ class LLMAdapter {
   }
 
   async geminiTailorResume(profile, jobDescription, templateId) {
-    console.log("hi i am call here gemini")
+     
     try {
       const prompt = this.buildTailoringPrompt(profile, jobDescription, templateId)
 

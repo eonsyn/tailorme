@@ -1,20 +1,20 @@
-import { Construction } from "lucide-react";
+import dbConnect from '@/lib/dbConnect';
+import Post from '@/models/Post';
+import PostCard from '@/components/blog/PostCard';
 
-export default function Page() {
-  return (
-    <main className="flex min-h-screen items-center justify-center p-6">
-      <div className="card max-w-md w-full text-center p-8 space-y-4">
-        <div className="flex flex-col items-center gap-3">
-          <Construction className="w-12 h-12 text-[var(--color-primary)] animate-bounce" />
-          <h1 className="text-3xl font-bold text-[var(--color-primary)]">
-            Blog Page
-          </h1>
-        </div>
-        <p className="text-lg text-[var(--color-muted-foreground)]">
-          🚧 This page is currently under construction 🚧
-        </p>
-        <button className="btn btn-primary mt-4">Go Back Home</button>
-      </div>
-    </main>
-  );
+
+export default async function Home() {
+await dbConnect();
+const posts = await Post.find({ published: true }).sort({ publishedAt: -1 }).lean();
+
+
+return (
+<div>
+<h2>Latest Posts</h2>
+{posts.length === 0 && <p>No posts yet — write one!</p>}
+{posts.map(p => (
+<PostCard key={p._id} post={p} />
+))}
+</div>
+);
 }

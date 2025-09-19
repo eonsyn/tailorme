@@ -6,10 +6,10 @@ function BasicTemp({ data }) {
   const { name, title, contact, summary, skills, experience, education, projects } = data;
 
   return (
-    <div className="max-w-4xl mx-auto bg-white shadow-lg rounded-2xl p-8 font-sans text-gray-800">
+    <div id='print-area' className= " w-full bg-white p-8 font-sans text-gray-800">
       {/* Header */}
       <div className="text-center border-b pb-6 mb-6">
-        <h1 className="text-3xl font-bold text-gray-900">{name}</h1>
+        <h1 className="text-3xl uppercase font-bold text-gray-900">{name}</h1>
         <p className="text-lg text-gray-600">{title}</p>
         <div className="flex justify-center gap-6 mt-3 text-sm text-gray-500">
           <span>{contact.email}</span>

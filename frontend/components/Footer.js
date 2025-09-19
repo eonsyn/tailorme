@@ -34,7 +34,7 @@ const footerLinks = [
 
 export default function Footer() {
   return (
-    <footer className="bg-card border-t text-card-foreground py-12">
+    <footer className="no-print bg-card border-t text-card-foreground py-12">
       <div className="container mx-auto px-4">
         <div className="grid md:grid-cols-4 gap-8">
           {/* Logo + Description */}

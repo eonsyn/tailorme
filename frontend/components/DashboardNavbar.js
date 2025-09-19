@@ -45,7 +45,7 @@ export default function DashboardNavbar() {
   const isActive = (href) => pathname === href
 
   return (
-    <nav id='notprint' className="bg-card/90 backdrop-blur-sm border-b border-border sticky top-0 z-50 transition-colors">
+    <nav id='notprint' className="no-print bg-card/90 backdrop-blur-sm border-b border-border sticky top-0 z-50 transition-colors">
       <div className="max-w-7xl mx-auto px-4">
         <div className="flex justify-between items-center h-16">
           {/* Logo and Name */}
@@ -64,18 +64,17 @@ export default function DashboardNavbar() {
                 <Link
                   key={item.name}
                   href={item.href}
-                  className={`flex items-center space-x-1 px-3 py-2 rounded-md text-sm font-medium transition-colors ${
-                    isActive(item.href)
+                  className={`flex items-center space-x-1 px-3 py-2 rounded-md text-sm font-medium transition-colors ${isActive(item.href)
                       ? 'bg-primary/10 text-primary hover:bg-primary/20'
-                      : 'text-muted-foreground hover:text-primary-foreground hover:bg-muted'
-                  }`}
+                      : 'text-muted-foreground  hover:bg-muted'
+                    }`}
                 >
                   <Icon className="w-4 h-4" />
                   <span>{item.name}</span>
                 </Link>
               )
             })}
-            
+
             {/* Theme Toggle and User Menu */}
             <div className="flex items-center space-x-4">
               <button
@@ -98,17 +97,31 @@ export default function DashboardNavbar() {
                 </button>
 
                 {open && (
-                  <div id="user-menu" className="absolute top-12 right-0 bg-card shadow-lg rounded-md border border-border py-2 w-40 transition-all duration-200">
-                    <div className="px-4 py-2 text-sm text-muted-foreground">
-                      Hi, {user?.name}
-                    </div>
-                    <button
-                      onClick={logout}
-                      className="w-full text-left px-4 py-2 text-destructive hover:bg-destructive/10"
-                    >
-                      Logout
-                    </button>
-                  </div>
+                  <div
+  id="user-menu"
+  className="absolute top-12 right-0 bg-card shadow-xl rounded-2xl border border-border py-3 w-52 transition-all duration-200 z-50"
+>
+  {/* User Info */}
+  <div className="px-4 flex flex-col items-start gap-2 pb-3 border-b border-border">
+    <p className="text-sm text-muted-foreground">
+      Hello, <span className="font-medium">{user?.name}</span>
+    </p>
+
+    <div className="w-full flex items-center justify-between bg-muted/10 px-3 py-1 rounded-lg border border-border">
+      <span className="text-sm text-muted-foreground">Credits</span>
+      <span className="font-semibold text-primary text-sm">{user?.credits || 0}</span>
+    </div>
+  </div>
+
+  {/* Logout Button */}
+  <button
+    onClick={logout}
+    className="w-full mt-2 px-4 py-2 text-sm text-destructive hover:bg-destructive/10 rounded-lg transition-colors"
+  >
+    Logout
+  </button>
+</div>
+
                 )}
               </div>
             </div>
@@ -143,11 +156,10 @@ export default function DashboardNavbar() {
                   key={item.name}
                   href={item.href}
                   onClick={() => setIsOpen(false)}
-                  className={`flex items-center space-x-2 px-4 py-2 rounded-md transition-colors ${
-                    isActive(item.href)
+                  className={`flex items-center space-x-2 px-4 py-2 rounded-md transition-colors ${isActive(item.href)
                       ? 'bg-primary/10 text-primary'
                       : 'text-muted-foreground hover:text-primary-foreground hover:bg-muted'
-                  }`}
+                    }`}
                 >
                   <Icon className="w-5 h-5" />
                   <span>{item.name}</span>

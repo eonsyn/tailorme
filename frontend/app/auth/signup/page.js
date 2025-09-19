@@ -7,73 +7,28 @@ import toast from 'react-hot-toast';
 import { useAuth } from '@/lib/auth';
 import LoadingSpinner from '@/components/LoadingSpinner';
 import FingerprintJS from '@fingerprintjs/fingerprintjs';
-// import { Search } from "lucide-react"; 
 
-// This is the component that uses the client-side hook `useSearchParams`
-// It's separated from the default export and will be rendered inside a Suspense boundary.
 function SignupFormContent() {
   const searchParams = useSearchParams();
   const referralCodeFromUrl = searchParams.get('ref') || '';
 
   const [loading, setLoading] = useState(false);
-  const [deviceFingerprint, setdeviceFingerprint] = useState("");
+  const [deviceFingerprint, setDeviceFingerprint] = useState('');
   const [showReferral, setShowReferral] = useState(!!referralCodeFromUrl);
   const { signup } = useAuth();
   const router = useRouter();
 
   useEffect(() => {
-    handleprint();
+    handlePrint();
   }, []);
-  // const handleGoogleSignup = async () => {
-  //   try {
-  //     /* 1. Launch Google OAuth popup */
-  //     const googleAuth = window.google.accounts.oauth2.initTokenClient({
-  //       client_id: process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID,
-  //       scope: "profile email",
-  //       callback: async (response) => {
-  //         if (response.access_token) {
-  //           // 2. Send token to your Node.js API
-  //           const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/auth/google`, {
-  //             method: "POST",
-  //             headers: { "Content-Type": "application/json" },
-  //             body: JSON.stringify({ token: response.access_token, deviceFingerprint }),
-  //           });
 
-  //           if (!res.ok) throw new Error("Google signup failed");
-  //           const data = await res.json();
-
-  //           // 3. Store token/session via your useAuth hook
-  //           await signup(
-  //             data.user.email,
-  //             null, // no password for Google
-  //             data.user.name,
-  //             data.user.username,
-  //             null,
-  //             deviceFingerprint,
-  //             data.token // <- your API-issued JWT
-  //           );
-
-  //           toast.success("Signed up with Google!");
-  //           router.push("/protected/dashboard");
-  //         }
-  //       },
-  //     });
-
-  //     googleAuth.requestAccessToken();
-  //   } catch (err) {
-  //     console.error(err);
-  //     toast.error("Google signup failed");
-  //   }
-  // };
-
-  const handleprint = async () => {
+  const handlePrint = async () => {
     try {
       const fp = await FingerprintJS.load();
       const result = await fp.get();
-      const deviceprint = result.visitorId;
-      setdeviceFingerprint(deviceprint);
+      setDeviceFingerprint(result.visitorId);
     } catch (error) {
-      console.error("Error generating fingerprint:", error);
+      console.error('Error generating fingerprint:', error);
     }
   };
 
@@ -83,14 +38,14 @@ function SignupFormContent() {
     password: '',
     username: '',
     confirmPassword: '',
-    referralCode: referralCodeFromUrl
+    referralCode: referralCodeFromUrl,
   });
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({
       ...prev,
-      [name]: value
+      [name]: value,
     }));
   };
 
@@ -131,28 +86,22 @@ function SignupFormContent() {
     <div className="max-w-md w-full">
       {/* Logo + Heading */}
       <div className="text-center mb-8">
-        <Link
-          href="/"
-          className="flex items-center justify-center space-x-2 mb-6">
-          <div className="w-10 h-10 bg-primary-600 rounded-lg flex items-center justify-center">
-            <span className="text-white font-bold text-xl">T</span>
+        <Link href="/" className="flex items-center justify-center gap-2 mb-6">
+          <div className="w-10 h-10 bg-primary rounded-lg flex items-center justify-center">
+            <span className="text-primary-foreground font-bold text-xl">T</span>
           </div>
-          <span className="text-2xl font-bold text-gray-900">TailorMe</span>
+          <span className="text-2xl font-bold text-foreground">TailorMe</span>
         </Link>
-        <h1 className="text-3xl font-bold text-gray-900">
-          Create your account
-        </h1>
-        <p className="text-gray-600 mt-2">Start tailoring resumes with AI</p>
+        <h1 className="text-3xl font-bold text-foreground">Create your account</h1>
+        <p className="text-muted-foreground mt-2">Start tailoring resumes with AI</p>
       </div>
 
       {/* Signup Card */}
-      <div className="card p-8 shadow rounded-lg bg-white">
+      <div className="card p-8">
         <form onSubmit={handleSubmit} className="space-y-6">
-          {/* Name */}
+          {/* Full Name */}
           <div>
-            <label
-              htmlFor="name"
-              className="block text-sm font-medium text-gray-700 mb-2">
+            <label htmlFor="name" className="block text-sm font-medium text-foreground mb-2">
               Full Name
             </label>
             <input
@@ -161,16 +110,15 @@ function SignupFormContent() {
               name="name"
               value={formData.name}
               onChange={handleChange}
-              className="input w-full"
+              className="input"
               placeholder="John Doe"
-              required />
+              required
+            />
           </div>
 
           {/* Username */}
           <div>
-            <label
-              htmlFor="username"
-              className="block text-sm font-medium text-gray-700 mb-2">
+            <label htmlFor="username" className="block text-sm font-medium text-foreground mb-2">
               Username
             </label>
             <input
@@ -179,20 +127,19 @@ function SignupFormContent() {
               name="username"
               value={formData.username}
               onChange={(e) => {
-                const value = e.target.value.replace(/\s+/g, ''); // remove spaces
+                const value = e.target.value.replace(/\s+/g, '');
                 setFormData((prev) => ({ ...prev, username: value }));
               }}
-              className="input w-full"
+              className="input"
               placeholder="your-unique-username"
-              required />
-            <p className="text-xs text-gray-500 mt-1">No spaces allowed</p>
+              required
+            />
+            <p className="text-xs text-muted-foreground mt-1">No spaces allowed</p>
           </div>
 
           {/* Email */}
           <div>
-            <label
-              htmlFor="email"
-              className="block text-sm font-medium text-gray-700 mb-2">
+            <label htmlFor="email" className="block text-sm font-medium text-foreground mb-2">
               Email Address
             </label>
             <input
@@ -201,16 +148,15 @@ function SignupFormContent() {
               name="email"
               value={formData.email}
               onChange={handleChange}
-              className="input w-full"
+              className="input"
               placeholder="you@company.com"
-              required />
+              required
+            />
           </div>
 
           {/* Password */}
           <div>
-            <label
-              htmlFor="password"
-              className="block text-sm font-medium text-gray-700 mb-2">
+            <label htmlFor="password" className="block text-sm font-medium text-foreground mb-2">
               Password
             </label>
             <input
@@ -219,17 +165,16 @@ function SignupFormContent() {
               name="password"
               value={formData.password}
               onChange={handleChange}
-              className="input w-full"
+              className="input"
               placeholder="••••••••"
               minLength={6}
-              required />
+              required
+            />
           </div>
 
           {/* Confirm Password */}
           <div>
-            <label
-              htmlFor="confirmPassword"
-              className="block text-sm font-medium text-gray-700 mb-2">
+            <label htmlFor="confirmPassword" className="block text-sm font-medium text-foreground mb-2">
               Confirm Password
             </label>
             <input
@@ -238,18 +183,17 @@ function SignupFormContent() {
               name="confirmPassword"
               value={formData.confirmPassword}
               onChange={handleChange}
-              className="input w-full"
+              className="input"
               placeholder="••••••••"
               minLength={6}
-              required />
+              required
+            />
           </div>
 
           {/* Referral Code */}
-          {showReferral ?
+          {showReferral ? (
             <div>
-              <label
-                htmlFor="referralCode"
-                className="block text-sm font-medium text-gray-700 mb-2">
+              <label htmlFor="referralCode" className="block text-sm font-medium text-foreground mb-2">
                 Referral Code
               </label>
               <input
@@ -258,36 +202,29 @@ function SignupFormContent() {
                 name="referralCode"
                 value={formData.referralCode}
                 onChange={handleChange}
-                className="input w-full bg-gray-50"
+                className="input bg-muted"
                 placeholder="Enter referral code (optional)"
-                readOnly={!!referralCodeFromUrl} />
-            </div> :
-            <button
-              type="button"
-              onClick={() => setShowReferral(true)}
-              className="text-sm text-primary-600 hover:text-primary-700">
+                readOnly={!!referralCodeFromUrl}
+              />
+            </div>
+          ) : (
+            <button type="button" onClick={() => setShowReferral(true)} className="link text-sm">
               Have a referral code?
             </button>
-          }
+          )}
 
           {/* Submit */}
-          <button
-            type="submit"
-            disabled={loading}
-            className="btn btn-primary w-full flex items-center justify-center">
+          <button type="submit" disabled={loading} className="btn btn-primary w-full flex items-center justify-center">
             {loading && <LoadingSpinner size="sm" className="mr-2" />}
             Create Account
           </button>
         </form>
       </div>
-       
 
       {/* Login Link */}
-      <p className="text-center mt-6 text-gray-600">
+      <p className="text-center mt-6 text-muted-foreground">
         Already have an account?{' '}
-        <Link
-          href="/auth/login"
-          className="text-primary-600 hover:text-primary-700 font-medium">
+        <Link href="/auth/login" className="link">
           Sign in
         </Link>
       </p>
@@ -295,10 +232,9 @@ function SignupFormContent() {
   );
 }
 
-// The main page component that wraps the content in a Suspense boundary
 export default function SignupPage() {
   return (
-    <div className="min-h-screen bg-gray-50 flex items-center justify-center py-12 px-4">
+    <div className="min-h-screen bg-background flex items-center justify-center py-12 px-4">
       <Suspense fallback={<div className="text-center">Loading...</div>}>
         <SignupFormContent />
       </Suspense>

@@ -138,6 +138,8 @@
   button{
     @apply cursor-pointer
   }
+  
+
 }
 
 /*
@@ -178,8 +180,32 @@
 }
 
 /* Print-specific styles to hide non-essential elements */
+/* Hide browser print headers & footers */
+@page {
+  margin: 0;
+}
+
+/* Ensure only resume content prints */
 @media print {
-  #notprint {
-    display: none;
+  body * {
+    -webkit-print-color-adjust: exact !important; /* Safari/Chrome */
+    print-color-adjust: exact !important;        /* Firefox/Edge */
+    color-adjust: exact !important;              /* Legacy */
+  }
+  #print-area, #print-area * {
+    visibility: visible; /* show only print-area */
+  }
+   .no-print {
+    display: none !important;
+  }
+
+  #print-area {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+  }
+   #print-area * {
+    page-break-inside: avoid;
   }
 }

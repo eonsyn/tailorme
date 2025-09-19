@@ -1,62 +1,64 @@
 'use client'
 
 import React from 'react'
-import { Check, Loader2 } from 'lucide-react'
+import { Check, Loader2, Star } from 'lucide-react'
 
 export default function PlanCard({
   title,
   price,
-  type,
-  features = [],
   credits,
-  isActive = false,
   loading = false,
   onPurchase,
+  highlight = false, // Standard Pack highlight
+  originalPrice,     // show old price for strike-through
 }) {
-  const isCreditCard = type === 'Credit'
-  const isPlanActive = isActive && type === 'Plan'
+  // Calculate value: ₹1 = how many credits
+  const valuePerRupee = (credits / price).toFixed(1)
 
   return (
     <div
-      className={`card p-6 flex flex-col justify-between transition-all duration-300 hover:shadow-lg ${
-        isActive ? 'ring-2 ring-primary-500' : ''
+      className={`relative card p-6 flex flex-col justify-between rounded-2xl border transition-all duration-300 ${
+        highlight
+          ? 'border-primary ring-2 ring-primary/60 scale-105 z-10 shadow-2xl'
+          : 'border-border hover:shadow-lg'
       }`}
     >
-      <div className="text-center mb-6">
-        <h2 className="text-xl font-semibold mb-2 text-foreground">{title}</h2>
-        <p className="text-4xl font-extrabold text-primary mb-2">
-          {price === 0 ? 'Free' : `₹${price}`}
-        </p>
-        {isPlanActive && (
-          <span className="text-success-600 font-medium">Active</span>
-        )}
-        {isCreditCard && credits !== undefined && (
-          <p className="text-muted-foreground mt-1 text-sm">{credits} credits available</p>
-        )}
-      </div>
-
-      {type === 'Plan' && features.length > 0 && (
-        <ul className="space-y-2 mb-6 text-left">
-          {features.map((feature, idx) => (
-            <li key={idx} className="text-foreground text-sm flex items-center gap-2">
-              <Check className="w-4 h-4 text-primary" />
-              <span>{feature}</span>
-            </li>
-          ))}
-        </ul>
+      {/* Popular Badge */}
+      {highlight && (
+        <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-primary text-secondary  px-4 py-1 rounded-full text-xs font-semibold flex items-center gap-1 shadow-md">
+          <Star className="w-3 h-3" /> Most Popular
+        </div>
       )}
 
+      {/* Title + Pricing */}
+      <div className="text-center mb-6">
+        <h2 className="text-xl font-bold mb-2 text-foreground">{title}</h2>
+
+        <div className="flex items-center justify-center gap-2 mb-2">
+          {originalPrice && (
+            <span className="text-muted-foreground line-through text-lg">
+              ₹{originalPrice}
+            </span>
+          )}
+          <p className="text-4xl font-extrabold text-primary">₹{price}</p>
+        </div>
+
+        <p className="text-muted-foreground text-sm">
+          {credits} Credits{' '}
+          <span className="font-medium">({valuePerRupee} credits / ₹1)</span>
+        </p>
+      </div>
+
+      {/* CTA Button */}
       <button
         onClick={onPurchase}
-        disabled={loading || isPlanActive}
-        className={`btn w-full ${
+        disabled={loading}
+        className={`btn w-full rounded-lg text-lg font-semibold transition-all ${
           loading
             ? 'btn-secondary cursor-not-allowed animate-pulse'
-            : isPlanActive
-            ? 'btn-secondary cursor-not-allowed'
-            : isCreditCard
-            ? 'btn-outline'
-            : 'btn-primary'
+            : highlight
+            ? 'btn-primary shadow-lg hover:shadow-xl'
+            : 'btn-outline hover:shadow-md'
         }`}
       >
         {loading ? (
@@ -64,12 +66,8 @@ export default function PlanCard({
             <Loader2 className="animate-spin w-4 h-4" />
             Processing...
           </span>
-        ) : isPlanActive ? (
-          'Active'
-        ) : isCreditCard ? (
-          `Buy ₹${price}`
         ) : (
-          `Buy ${title}`
+          `Buy Now`
         )}
       </button>
     </div>

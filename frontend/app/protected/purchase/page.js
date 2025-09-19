@@ -80,13 +80,12 @@ export default function PurchasePage() {
 
   // Credit packs (sync with backend CREDIT_PLANS)
   const creditPlans = [
-  { key: "basic", title: "Basic Pack", price: 20, credits: 30 },
-  { key: "standard", title: "Standard Pack", price: 40, credits: 100 },
-  { key: "premium", title: "Premium Pack", price: 100, credits: 250 }];
+  { key: "basic", title: "Basic Pack", price: 20, originalPrice: 30, credits: 30 },
+  { key: "standard", title: "Standard Pack", price: 40, originalPrice: 80, credits: 100, highlight: true }, // 🔥 push this
+  { key: "premium", title: "Premium Pack", price: 100, originalPrice: 200, credits: 250 },
+]
 
-  const printuser = () => {
-    console.log(user);
-  };
+
   return (
     <div className="min-h-screen flex flex-col items-center bg-background text-foreground px-4   transition-colors duration-300">
   <Script src="https://checkout.razorpay.com/v1/checkout.js" />
@@ -122,28 +121,33 @@ export default function PurchasePage() {
     </div>
   ) : (
     <div className="w-full max-w-6xl flex flex-col items-center">
-      <h1 className="text-4xl font-extrabold mb-8 text-center text-foreground">
-        Buy Credits
-      </h1>
+  
+  {/* User Credit Card */}
+  <div className="mb-8 p-4 rounded-xl border border-border shadow-sm w-full max-w-sm flex items-center justify-center bg-card">
+    <p className="text-lg text-center">
+      Your Credits:{' '}
+      <span className="font-semibold text-primary text-xl">{userData?.credits || 0}</span>
+    </p>
+  </div>
 
-      <p className="mb-8 text-lg text-center text-muted-foreground">
-        Available Credits: <strong className="text-primary">{userData?.credits || 0}</strong>
-      </p>
+  {/* Credit Plans Grid */}
+  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 w-full">
+    {creditPlans.map((plan) => (
+      <PlanCard
+        key={plan.key}
+        title={plan.title}
+        price={plan.price}
+        highlight={plan.highlight}
+        type="Credit"
+        originalPrice={plan.originalPrice}
+        credits={plan.credits}
+        loading={loadingPlan === plan.key}
+        onPurchase={() => handlePayment(plan.key)}
+      />
+    ))}
+  </div>
+</div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 w-full">
-        {creditPlans.map((plan) => (
-          <PlanCard
-            key={plan.key}
-            title={plan.title}
-            price={plan.price}
-            type="Credit"
-            credits={plan.credits}
-            loading={loadingPlan === plan.key}
-            onPurchase={() => handlePayment(plan.key)}
-          />
-        ))}
-      </div>
-    </div>
   )}
 </div>
 );

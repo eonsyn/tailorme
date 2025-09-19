@@ -2,10 +2,10 @@ import React from "react";
 
 export default function ModernTemp({ data }) {
   return (
-    <div className="max-w-4xl mx-auto bg-white shadow-xl rounded-2xl overflow-hidden border border-gray-200 font-sans">
+    <div id='print-area' className= " w-full   bg-white   font-sans">
       {/* Header */}
       <div className="bg-gradient-to-r from-blue-600 to-indigo-600 text-white p-6">
-        <h1 className="text-3xl font-bold">{data.name}</h1>
+        <h1 className="text-3xl uppercase font-bold">{data.name}</h1>
         <p className="text-lg opacity-90">{data.title}</p>
       </div>
 
