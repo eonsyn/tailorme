@@ -43,8 +43,8 @@ export default function Navbar() {
 
           {/* Desktop Navigation */}
           <div className="hidden md:flex items-center space-x-8">
-            <Link href="/public/pricing" className="text-muted-foreground hover:text-primary transition-colors">
-              Pricing
+            <Link href="/blog" className="text-muted-foreground hover:text-primary transition-colors">
+              blogs
             </Link>
             <Link href="/public/pricing" className="text-muted-foreground hover:text-primary transition-colors">
               Pricing
