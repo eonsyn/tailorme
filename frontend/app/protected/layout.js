@@ -12,7 +12,7 @@ export default function ProtectedLayout({ children }) {
             {children}
           </main>
         </div>
-         <Footer />
+        
       </AuthGuard>
     </AuthProvider>);
 

@@ -7,7 +7,7 @@ export default function AuthLayout({ children }) {
       <AuthProvider>
         {children}
       </AuthProvider>
-      <Footer/>
+       
     </div>);
 
 }
