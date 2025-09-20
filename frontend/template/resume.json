@@ -1,110 +1,83 @@
 {
-  "basics": {
-    "name": "John Doe",
-    "label": "Programmer",
-    "image": "",
-    "email": "john@gmail.com",
-    "phone": "(912) 555-4321",
-    "url": "https://johndoe.com",
-    "summary": "A summary of John Doe…",
-    "location": {
-      "address": "2712 Broadway St",
-      "postalCode": "CA 94115",
-      "city": "San Francisco",
-      "countryCode": "US",
-      "region": "California"
-    },
-    "profiles": [{
-      "network": "Twitter",
-      "username": "john",
-      "url": "https://twitter.com/john"
-    }]
+  "name": "Aryan Singh",
+  "title": "Full Stack Developer",
+  "contact": {
+    "email": "gn@gmail.com",
+    "phone": "+91 9876543210",
+    "location": "Lucknow, India"
   },
-  "work": [{
-    "name": "Company",
-    "position": "President",
-    "url": "https://company.com",
-    "startDate": "2013-01-01",
-    "endDate": "2014-01-01",
-    "summary": "Description…",
-    "highlights": [
-      "Started the company"
-    ]
-  }],
-  "volunteer": [{
-    "organization": "Organization",
-    "position": "Volunteer",
-    "url": "https://organization.com/",
-    "startDate": "2012-01-01",
-    "endDate": "2013-01-01",
-    "summary": "Description…",
-    "highlights": [
-      "Awarded 'Volunteer of the Month'"
-    ]
-  }],
-  "education": [{
-    "institution": "University",
-    "url": "https://institution.com/",
-    "area": "Software Development",
-    "studyType": "Bachelor",
-    "startDate": "2011-01-01",
-    "endDate": "2013-01-01",
-    "score": "4.0",
-    "courses": [
-      "DB1101 - Basic SQL"
-    ]
-  }],
-  "awards": [{
-    "title": "Award",
-    "date": "2014-11-01",
-    "awarder": "Company",
-    "summary": "There is no spoon."
-  }],
-  "certificates": [{
-    "name": "Certificate",
-    "date": "2021-11-07",
-    "issuer": "Company",
-    "url": "https://certificate.com"
-  }],
-  "publications": [{
-    "name": "Publication",
-    "publisher": "Company",
-    "releaseDate": "2014-10-01",
-    "url": "https://publication.com",
-    "summary": "Description…"
-  }],
-  "skills": [{
-    "name": "Web Development",
-    "level": "Master",
-    "keywords": [
-      "HTML",
-      "CSS",
-      "JavaScript"
-    ]
-  }],
-  "languages": [{
-    "language": "English",
-    "fluency": "Native speaker"
-  }],
-  "interests": [{
-    "name": "Wildlife",
-    "keywords": [
-      "Ferrets",
-      "Unicorns"
-    ]
-  }],
-  "references": [{
-    "name": "Jane Doe",
-    "reference": "Reference…"
-  }],
-  "projects": [{
-    "name": "Project",
-    "startDate": "2019-01-01",
-    "endDate": "2021-01-01",
-    "description": "Description...",
-    "highlights": [
-      "Won award at AIHacks 2016"
-    ],
-    "url": "https://project.com/"
-  }]
+  "summary": "Passionate full-stack developer with experience building scalable web applications using React, Next.js, and Node.js. ",
+  "skills": [
+    "JavaScript",
+    "React",
+    "Next.js",
+    "Node.js",
+    "MongoDB" 
+  ],
+  "experience": [
+    {
+      "title": "Frontend Developer",
+      "company": "Tech Innovators Pvt Ltd",
+      "location": "Remote",
+      "startDate": "Jan 2023",
+      "endDate": "Present",
+      "description": "Developed responsive web applications with React and Tailwind CSS, improving load speed by 30%.",
+      "achievements": [
+        "Built a reusable component library for internal projects.",
+        "Collaborated with backend team to optimize REST API usage."
+      ]
+    },
+    {
+      "title": "Web Developer Intern",
+      "company": "Startup Hub",
+      "location": "Noida",
+      "startDate": "Jun 2022",
+      "endDate": "Dec 2022",
+      "description": "Assisted in developing e-commerce platform and implemented payment gateway integration.",
+      "achievements": [
+        "Increased site performance by 15% through code optimization."
+      ]
+    }
+  ],
+  "education": [
+    {
+      "degree": "B.Tech in Information Technology",
+      "institution": "ABES Engineering College",
+      "startYear": "2021",
+      "endYear": "2025",
+      "gpa": "8.2/10"
+    },
+    {
+      "degree": "Diploma in Computer Science",
+      "institution": "Lucknow Polytechnic",
+      "startYear": "2018",
+      "endYear": "2021",
+      "gpa": "8.5/10"
+    }
+  ],
+  "projects": [
+    {
+      "name": "TailorMe",
+      "link": "https://tailor0me.vercel.app/",
+      "description": "AI-powered platform that generates tailored resumes for job applications by analyzing job descriptions.",
+      "technologies": [
+        "Next.js",
+        "React",
+        "MongoDB",
+        "Tailwind CSS",
+        "Gemini AI"
+      ]
+    },
+    {
+      "name": "JobPrepSpace",
+      "link": "https://github.com/aryansingh-0",
+      "description": "Full-stack platform to prepare students for competitive exams with question generators and test papers.",
+      "technologies": [
+        "Node.js",
+        "React",
+        "Express",
+        "MongoDB"
+      ]
+    }
+  ]
 }

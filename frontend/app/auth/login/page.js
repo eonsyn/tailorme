@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import toast from 'react-hot-toast';
@@ -10,8 +10,13 @@ import BackgroundImage from '@/components/BackgroundImage';
 export default function LoginPage() {
   const [formData, setFormData] = useState({ email: '', password: '' });
   const [loading, setLoading] = useState(false);
-  const { login } = useAuth();
+  const { login, user } = useAuth();
   const router = useRouter();
+useEffect(() => {
+ if(user){
+  console.log("hi i cam asdfs ")
+ }
+}, [])
 
   const handleChange = (e) => {
     setFormData((prev) => ({
@@ -35,6 +40,9 @@ export default function LoginPage() {
       setLoading(false);
     }
   };
+  const handle = ()=>{
+    console.log("hi")
+  }
 
   return (
    <div className="min-h-screen relative  flex items-center justify-center py-12 px-4">
@@ -46,9 +54,9 @@ export default function LoginPage() {
         <div className="w-10 h-10 bg-primary rounded-lg flex items-center justify-center">
           <span className="text-primary-foreground font-bold text-xl">T</span>
         </div>
-        <span className="text-2xl font-bold text-foreground">TailorMe</span>
+        <span  className="text-2xl font-bold text-foreground">TailorMe</span>
       </Link>
-      <h1 className="text-3xl font-bold text-foreground">Welcome back</h1>
+      <h1 onClick={handle} className="text-3xl font-bold text-foreground">Welcome back</h1>
        
     </div>
 

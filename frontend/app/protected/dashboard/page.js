@@ -109,8 +109,8 @@ export default function DashboardPage() {
 
         <div className="card p-6">
           <div className="flex items-center">
-            <div className="w-12 h-12 bg-secondary/10 rounded-lg flex items-center justify-center">
-              <CreditCard className="w-6 h-6 text-secondary" />
+            <div className="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center">
+              <CreditCard className="w-6 h-6 " />
             </div>
             <div className="ml-4">
               <p className="text-sm font-medium text-muted-foreground">Credits Remaining</p>
@@ -121,8 +121,8 @@ export default function DashboardPage() {
 
         <div className="card p-6">
           <div className="flex items-center">
-            <div className="w-12 h-12 bg-accent/10 rounded-lg flex items-center justify-center">
-              <User className="w-6 h-6 text-accent" />
+            <div className="w-12 h-12 bg-primary/10  rounded-lg flex items-center justify-center">
+              <User className="w-6 h-6  " />
             </div>
             <div className="ml-4">
               <p className="text-sm font-medium text-muted-foreground">Profile Complete</p>
@@ -133,8 +133,8 @@ export default function DashboardPage() {
 
         <div className="card p-6">
           <div className="flex items-center">
-            <div className="w-12 h-12 bg-success/10 rounded-lg flex items-center justify-center">
-              <TrendingUp className="w-6 h-6 text-success" />
+            <div className="w-12 h-12 bg-primary/10  rounded-lg flex items-center justify-center">
+              <TrendingUp className="w-6 h-6 " />
             </div>
             <div className="ml-4">
               <p className="text-sm font-medium text-muted-foreground">This Month</p>

@@ -65,7 +65,7 @@ export default function PricingPage() {
 
       <div className="max-w-6xl relative w-full text-center mb-16">
         <h1 className="text-4xl md:text-6xl font-bold mb-6">Choose Your Plan</h1>
-        <p className="text-xl text-gray-600 max-w-2xl mx-auto">
+        <p className="text-xl  max-w-2xl mx-auto">
           Purchase credit packs for generating AI-tailored resumes.
         </p>
       </div>

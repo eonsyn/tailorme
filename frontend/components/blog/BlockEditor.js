@@ -169,7 +169,7 @@ export default function BlockEditor({
 
                 {/* Custom Options Menu */}
                 {isopitonOpen && (
-                    <div className="block ml-1.5 transition-all ease-in-out duration-100   rounded  p-2 space-y-2">
+                    <div className="block text-black ml-1.5 transition-all ease-in-out duration-100   rounded  p-2 space-y-2">
                         {['paragraph', 'blockquote', 'heading', 'code', 'list', 'image', 'insert', 'table'].map((type, i) => (
                             <span
                                 key={type}
@@ -178,7 +178,7 @@ export default function BlockEditor({
                                     setAutoFocusField(index);
                                     setisopitonOpen(false);
                                 }}
-                                className={block.type === type ? ("cursor-pointer bg-highlight duration-100 ease-in-out transition-all shadow  text-white    mx-1 px-2 py-1 rounded capitalize opacity-0 animate-fade-in") : ("cursor-pointer hover:bg-highlight duration-100 ease-in-out transition-all shadow hover:text-white  bg-gray-100 mx-1 px-2 py-1 rounded capitalize opacity-0 animate-fade-in")}
+                                className={block.type === type ? ("cursor-pointer   duration-100 ease-in-out transition-all shadow  btn-primary   mx-1 px-2 py-1 rounded capitalize animate-fade-in") : ("cursor-pointer btn btn-secondary duration-100 ease-in-out transition-all shadow    bg-gray-100 mx-1 px-2 py-1 rounded capitalize   animate-fade-in")}
                                 style={{
                                     animationDelay: `${i * 0.05}s`,
                                     animationFillMode: 'forwards',
@@ -193,7 +193,7 @@ export default function BlockEditor({
                     <div className='h-full flex  items-center'>
                         <span
 
-                            className="cursor-pointer  bg-highlight duration-100 ease-in-out transition-all  mx-1 px-2 py-1 rounded capitalize text-white opacity-0 animate-fade-in"
+                            className="cursor-pointer    duration-100 ease-in-out transition-all  mx-1 px-2 py-1 rounded capitalize btn-primary btn    animate-fade-in"
 
                         >
                             {block.type}

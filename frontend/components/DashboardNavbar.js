@@ -37,8 +37,8 @@ export default function DashboardNavbar() {
   const navigation = [
     { name: 'Dashboard', href: '/protected/dashboard', icon: User },
     { name: 'Profile', href: '/protected/profile', icon: User },
-    { name: 'Resume Builder', href: '/protected/resume/builder', icon: FileText },
-    { name: 'Plan Purchase', href: '/protected/purchase', icon: CreditCard },
+    { name: 'Build Resume', href: '/protected/resume/builder', icon: FileText },
+    { name: 'Credits', href: '/protected/purchase', icon: CreditCard },
     { name: 'Referrals', href: '/protected/referral', icon: Gift },
   ]
 
@@ -57,7 +57,7 @@ export default function DashboardNavbar() {
           </Link>
 
           {/* Desktop Navigation */}
-          <div className="hidden md:flex items-center space-x-8">
+          <div className="hidden md:flex items-center space-x-3">
             {navigation.map((item) => {
               const Icon = item.icon
               return (
@@ -65,8 +65,8 @@ export default function DashboardNavbar() {
                   key={item.name}
                   href={item.href}
                   className={`flex items-center space-x-1 px-3 py-2 rounded-md text-sm font-medium transition-colors ${isActive(item.href)
-                      ? 'bg-primary/10 text-primary hover:bg-primary/20'
-                      : 'text-muted-foreground  hover:bg-muted'
+                    ? 'bg-primary/10 text-primary hover:bg-primary/20'
+                    : 'text-muted-foreground  hover:bg-muted'
                     }`}
                 >
                   <Icon className="w-4 h-4" />
@@ -98,29 +98,29 @@ export default function DashboardNavbar() {
 
                 {open && (
                   <div
-  id="user-menu"
-  className="absolute top-12 right-0 bg-card shadow-xl rounded-2xl border border-border py-3 w-52 transition-all duration-200 z-50"
->
-  {/* User Info */}
-  <div className="px-4 flex flex-col items-start gap-2 pb-3 border-b border-border">
-    <p className="text-sm text-muted-foreground">
-      Hello, <span className="font-medium">{user?.name}</span>
-    </p>
+                    id="user-menu"
+                    className="absolute top-12 right-0 bg-card shadow-xl rounded-2xl border border-border py-3 w-52 transition-all duration-200 z-50"
+                  >
+                    {/* User Info */}
+                    <div className="px-4 flex flex-col items-start gap-2 pb-3 border-b border-border">
+                      <p className="text-sm text-muted-foreground">
+                        Hello, <span className="font-medium">{user?.name}</span>
+                      </p>
 
-    <div className="w-full flex items-center justify-between bg-muted/10 px-3 py-1 rounded-lg border border-border">
-      <span className="text-sm text-muted-foreground">Credits</span>
-      <span className="font-semibold text-primary text-sm">{user?.credits || 0}</span>
-    </div>
-  </div>
+                      <div className="w-full flex items-center justify-between bg-muted/10 px-3 py-1 rounded-lg border border-border">
+                        <span className="text-sm text-muted-foreground">Credits</span>
+                        <span className="font-semibold text-primary text-sm">{user?.credits || 0}</span>
+                      </div>
+                    </div>
 
-  {/* Logout Button */}
-  <button
-    onClick={logout}
-    className="w-full mt-2 px-4 py-2 text-sm text-destructive hover:bg-destructive/10 rounded-lg transition-colors"
-  >
-    Logout
-  </button>
-</div>
+                    {/* Logout Button */}
+                    <button
+                      onClick={logout}
+                      className="w-full mt-2 px-4 py-2 text-sm text-destructive hover:bg-destructive/10 rounded-lg transition-colors"
+                    >
+                      Logout
+                    </button>
+                  </div>
 
                 )}
               </div>
@@ -157,8 +157,8 @@ export default function DashboardNavbar() {
                   href={item.href}
                   onClick={() => setIsOpen(false)}
                   className={`flex items-center space-x-2 px-4 py-2 rounded-md transition-colors ${isActive(item.href)
-                      ? 'bg-primary/10 text-primary'
-                      : 'text-muted-foreground hover:text-primary-foreground hover:bg-muted'
+                    ? 'bg-primary/10 text-primary'
+                    : 'text-muted-foreground hover:text-primary-foreground hover:bg-muted'
                     }`}
                 >
                   <Icon className="w-5 h-5" />

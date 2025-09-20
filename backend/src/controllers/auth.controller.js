@@ -159,6 +159,7 @@ const login = async (req, res, next) => {
 
 const logout = async (req, res) => {
   jwt.clearTokenCookies(res)
+  
   res.json({
     success: true,
     message: 'Logout successful',

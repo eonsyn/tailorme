@@ -88,13 +88,13 @@ function UserBlogRender({ article }) {
   article.content.forEach((block, index) => {
     switch (block.type) {
       case "heading": {
-        if (paragraphCount % 2 === 0) {
-          blocks.push(
-            <div key={`ad-${index}`} className="my-6">
-              <ArticleAd />
-            </div>
-          );
-        }
+        // if (paragraphCount % 2 === 0) {
+        //   blocks.push(
+        //     <div key={`ad-${index}`} className="my-6">
+        //       <ArticleAd />
+        //     </div>
+        //   );
+        // }
         const HeadingTag = `h${block.level || 1}`;
         blocks.push(
           <HeadingTag
@@ -109,13 +109,13 @@ function UserBlogRender({ article }) {
 
       case "paragraph": {
         paragraphCount++;
-        if (paragraphCount % 3 === 0) {
-          blocks.push(
-            <div key={`ad-${index}`} className="my-6">
-              <ArticleAd />
-            </div>
-          );
-        }
+        // if (paragraphCount % 3 === 0) {
+        //   blocks.push(
+        //     <div key={`ad-${index}`} className="my-6">
+        //       <ArticleAd />
+        //     </div>
+        //   );
+        // }
         blocks.push(
           <p
             key={index}

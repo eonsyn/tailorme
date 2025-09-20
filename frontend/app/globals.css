@@ -187,15 +187,26 @@
 
 /* Ensure only resume content prints */
 @media print {
+  html, body {
+    background: white !important;  /* Full page white */
+    color: black !important;       /* Ensure text is visible */
+    margin: 0;
+    padding: 0;
+  }
+
   body * {
     -webkit-print-color-adjust: exact !important; /* Safari/Chrome */
     print-color-adjust: exact !important;        /* Firefox/Edge */
     color-adjust: exact !important;              /* Legacy */
   }
-  #print-area, #print-area * {
-    visibility: visible; /* show only print-area */
+
+  #print-area,
+  #print-area * {
+    visibility: visible;
+    background: white !important; /* Ensure content background is white too */
   }
-   .no-print {
+
+  .no-print {
     display: none !important;
   }
 
@@ -204,8 +215,9 @@
     left: 0;
     top: 0;
     width: 100%;
-  }
-   #print-area * {
+    height: 100%; 
+
     page-break-inside: avoid;
   }
 }
+

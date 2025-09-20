@@ -14,7 +14,7 @@ export default function ArticleCard({ article }) {
   return (
     <Link
       href={`/blog/${article.slug}`}
-      className="bg-[var(--card-background)] group w-full shadow-md rounded-2xl overflow-hidden hover:shadow-lg hover:border-[var(--accent)] border border-[var(--border)] transition-shadow duration-300 cursor-pointer h-[370px] flex flex-col"
+      className="bg-[var(--card-background)] group w-full shadow-md rounded-2xl overflow-hidden hover:shadow-lg hover:border-[var(--accent)] border border-[var(--border)] transition-shadow duration-300 cursor-pointer max-h-[370px] flex flex-col"
     >
       <div className="relative h-48 w-full overflow-hidden">
         {isCloudinary ? (

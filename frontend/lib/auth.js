@@ -1,6 +1,7 @@
 'use client'
 
 import { createContext, useContext, useEffect, useState } from 'react'
+import { usePathname, useRouter } from 'next/navigation'
 import api from './api'
 
 const AuthContext = createContext({})
@@ -8,10 +9,19 @@ const AuthContext = createContext({})
 export function AuthProvider({ children }) {
   const [user, setUser] = useState(null)
   const [loading, setLoading] = useState(true)
+  const router = useRouter()
+  const pathname = usePathname()
 
   useEffect(() => {
     checkAuth()
   }, [])
+
+  useEffect(() => {
+    // 🔑 If logged in AND visiting /auth/login or /auth/signup → redirect
+    if (!loading && user && (pathname === '/auth/login' || pathname === '/auth/signup')) {
+      router.replace('/protected/dashboard')
+    }
+  }, [user, loading, pathname, router])
 
   const checkAuth = async () => {
     try {
@@ -26,22 +36,20 @@ export function AuthProvider({ children }) {
 
   const login = async (email, password) => {
     const response = await api.post('/auth/login', { email, password })
- 
     setUser(response.user)
     return response
   }
 
-  const signup = async (email,password, name,username, referralCode,deviceFingerprint ) => {
-    console.log("referralCode is :",referralCode)
+  const signup = async (email, password, name, username, referralCode, deviceFingerprint) => {
+    console.log("referralCode is :", referralCode)
     const response = await api.post('/auth/signup', { 
       email, 
       password, 
       name,
       username, 
-      referralCode ,
+      referralCode,
       deviceFingerprint
     })
-    
     setUser(response.user)
     return response
   }
@@ -55,7 +63,8 @@ export function AuthProvider({ children }) {
       setUser(null)
     }
   }
-  const health = async()=>{
+
+  const health = async () => {
     const response = await api.get('/health')
     return response
   }

@@ -27,6 +27,7 @@ export default function RootLayout({ children }) {
         <AuthProvider>
           {children}
           <Toaster
+          className='no-print'
             position="top-right"
             toastOptions={{
               duration: 4000,

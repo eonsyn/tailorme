@@ -8,7 +8,8 @@ import LoadingSpinner from '../../../../components/LoadingSpinner';
 import BasicTemp from '@/template/BasicTemp';
 import ModernTemp from '@/template/ModernTemp';
 import ResumeEditor from '@/components/resume/ResumeEditor';
-
+import MinimalTemp from '@/template/MinimalTemp';
+import dummydata from '@/template/resume.json'
 export default function ResumeBuilderPage() {
   const [jobDescription, setJobDescription] = useState('');
   const [generating, setGenerating] = useState(false);
@@ -20,9 +21,9 @@ export default function ResumeBuilderPage() {
   const [editMode, setEditMode] = useState(false);
 
   const templates = [
-    { id: 'modern', name: 'Modern', component: ModernTemp, preview: '/templates/modern-preview.jpg' },
-    { id: 'classic', name: 'Classic', component: BasicTemp, preview: '/templates/classic-preview.jpg' },
-    { id: 'minimal', name: 'Minimal', component: ModernTemp, preview: '/templates/minimal-preview.jpg' }
+    { id: 'modern', name: 'Modern', component: ModernTemp, preview: '/Resume/modern-preview.png' },
+    { id: 'classic', name: 'Classic', component: BasicTemp, preview: '/Resume/classic-preview.png' },
+    { id: 'minimal', name: 'Minimal', component: MinimalTemp, preview: '/Resume/minimal-preview.png' }
   ];
 
   const handleGenerate = async () => {
@@ -108,23 +109,29 @@ export default function ResumeBuilderPage() {
         <div className="card p-6 no-print">
           <h2 className="text-xl font-semibold mb-4">Choose Template</h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-            {templates.map((templ) => (
-              <button
-                key={templ.id}
-                onClick={() => {
-                  setTemplate(() => templ.component);
-                  setSelectedTemplate(templ.id);
-                }}
-                className={`p-3 rounded-lg border-2 transition-colors ${
-                  selectedTemplate === templ.id
-                    ? 'border-primary bg-primary/10 text-primary'
-                    : 'border-border hover:border-ring'
-                }`}
-              >
-                <div className="aspect-[3/4] bg-muted rounded mb-2 border"></div>
-                <p className="text-sm font-medium">{templ.name}</p>
-              </button>
-            ))}
+            {templates.map((templ) => {
+  const Com = templ.component; // Capitalized so React treats it as a component
+  return (
+    <button
+      key={templ.id}
+      onClick={() => {
+        setTemplate(() => templ.component);
+        setSelectedTemplate(templ.id);
+      }}
+      className={`p-3 rounded-lg border-2 transition-colors ${
+        selectedTemplate === templ.id
+          ? 'border-primary bg-primary/10 text-primary'
+          : 'border-border hover:border-ring'
+      }`}
+    >
+      <div className="aspect-[3/4] bg-muted rounded mb-2 border overflow-hidden">
+        <Com data={dummydata} />
+      </div>
+      <p className="text-sm font-medium">{templ.name}</p>
+    </button>
+  );
+})}
+
           </div>
           <button
               onClick={handleGenerate}
