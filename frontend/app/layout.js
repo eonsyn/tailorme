@@ -2,6 +2,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { Toaster } from 'react-hot-toast';
 import { AuthProvider } from "@/lib/auth";
+import Footer from "@/components/Footer";
 export const metadata = {
   title: 'TailorMe - AI-Powered Resume Tailoring',
   description: 'Create job-specific resumes tailored to any job description using AI'
@@ -36,6 +37,7 @@ export default function RootLayout({ children }) {
             }} />
            
           </AuthProvider>
+          <Footer></Footer>
       </body>
     </html>);
 

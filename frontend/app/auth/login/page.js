@@ -6,7 +6,7 @@ import Link from 'next/link';
 import toast from 'react-hot-toast';
 import { useAuth } from '@/lib/auth';
 import { Loader2 } from 'lucide-react'; // Using Loader2 from lucide-react for consistency
-
+import BackgroundImage from '@/components/BackgroundImage';
 export default function LoginPage() {
   const [formData, setFormData] = useState({ email: '', password: '' });
   const [loading, setLoading] = useState(false);
@@ -37,7 +37,8 @@ export default function LoginPage() {
   };
 
   return (
-   <div className="min-h-screen bg-background flex items-center justify-center py-12 px-4">
+   <div className="min-h-screen relative  flex items-center justify-center py-12 px-4">
+  <BackgroundImage/>
   <div className="max-w-md w-full">
     {/* Logo + Heading */}
     <div className="text-center mb-8">
@@ -48,7 +49,7 @@ export default function LoginPage() {
         <span className="text-2xl font-bold text-foreground">TailorMe</span>
       </Link>
       <h1 className="text-3xl font-bold text-foreground">Welcome back</h1>
-      <p className="text-muted-foreground mt-2">Sign in to your account</p>
+       
     </div>
 
     {/* Login Card */}

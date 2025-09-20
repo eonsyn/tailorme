@@ -1,21 +1,17 @@
 'use client'
 import Link from 'next/link';
-import Navbar from '../components/Navbar';
-import Footer from '../components/Footer';
+import Navbar from '../components/Navbar'; 
 import background from '@/public/Images/background.png'
 import Image from 'next/image';
+import BackgroundImage from '@/components/BackgroundImage';
 export default function LandingPage() {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-primary-50 to-secondary-50">
+    <div className="min-h-screen">
       <Navbar />
       
       {/* Hero Section */}
       <section className="pt-20 relative pb-16 px-4">
-        <Image
-        className='absolute -z-20 pulse top-0 left-0'
-        src={background}
-        alt='background image'
-        />
+        <BackgroundImage/>
         <div className="max-w-6xl mx-auto text-center">
           <h1 className="text-5xl md:text-7xl font-bold   mb-6 leading-tight">
             AI-Powered
@@ -97,8 +93,7 @@ export default function LandingPage() {
           </Link>
         </div>
       </section>
-
-      <Footer />
+ 
     </div>);
 
 }

@@ -1,10 +1,11 @@
 // app/about/page.js
 import React from "react";
-
+import BackgroundImage from "@/components/BackgroundImage";
 export default function AboutPage() {
   return (
-    <main className="container mx-auto px-6 py-12">
+    <main className="container relative mx-auto px-6 py-12">
       {/* Header */}
+      
       <section className="text-center mb-12">
         <h1 className="text-4xl font-bold mb-4">About Us</h1>
         <p className="text-muted-foreground max-w-2xl mx-auto">
