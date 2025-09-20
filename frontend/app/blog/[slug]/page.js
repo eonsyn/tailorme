@@ -1,41 +1,41 @@
 // app/blog/[slug]/page.jsx
 import Link from "next/link";
-import BlogSuggestions from '@/components/blog/BlogSuggestions';
+import BlogSuggestions from "@/components/blog/BlogSuggestions";
 import UserBlogRender from "@/components/blog/UserBlogRender";
-import ImageComponent from "@/components/blog/ImageComponent";
 import BlockAi from "@/components/blog/ai/BlockAi";
 import RightAds from "@/components/ads/RightAds";
 import RecentJob from "@/components/blog/RecentJob";
 import TailorMePromotion from "@/components/blog/TailorMePromotion";
-import GoogleVerticleAd from "@/components/ads/GoogleVerticleAd";
+
 export async function generateMetadata({ params }) {
   const { slug } = await params;
 
   try {
     const res = await fetch(`${process.env.HOST_URL}/api/blog/${slug}`, {
-      next: { revalidate: 60 * 10 },
+      next: { revalidate: 600 },
     });
 
     const { article } = await res.json();
 
     if (!article) {
       return {
-        title: 'Blog Not Found | aktu brand',
-        description: 'This blog post does not exist or has been removed.',
+        title: "Blog Not Found | aktu brand",
+        description: "This blog post does not exist or has been removed.",
       };
     }
 
-    const formattedTitle = article.title || slug.replaceAll('-', ' ');
+    const formattedTitle = article.title || slug.replaceAll("-", " ");
     const description =
-      article.content?.find((b) => b.type === 'paragraph')?.value.slice(0, 160) ||
-      'Read the latest article on aktu brand.';
-    const image = article.thumbnailUrl || 'https://tailor0me.vercel.app/default-thumbnail.jpg';
+      article.content?.find((b) => b.type === "paragraph")?.value.slice(0, 160) ||
+      "Read the latest article on aktu brand.";
+    const image =
+      article.thumbnailUrl ||
+      "https://tailor0me.vercel.app/default-thumbnail.jpg";
 
     return {
       title: `${formattedTitle} | aktu brand`,
       description,
-      keywords: article.tags?.join(', '),
-
+      keywords: article.tags?.join(", "),
       openGraph: {
         title: `${formattedTitle} | aktu brand`,
         description,
@@ -48,27 +48,28 @@ export async function generateMetadata({ params }) {
             alt: formattedTitle,
           },
         ],
-        type: 'article',
+        type: "article",
       },
       twitter: {
-        card: 'summary_large_image',
+        card: "summary_large_image",
         title: `${formattedTitle} | aktu brand`,
         description,
         images: [image],
       },
     };
   } catch (error) {
-    console.error('Metadata generation error:', error);
+    console.error("Metadata generation error:", error);
     return {
-      title: 'Blog | aktu brand',
-      description: 'Read the latest blog posts on aktu brand.',
+      title: "Blog | aktu brand",
+      description: "Read the latest blog posts on aktu brand.",
     };
   }
 }
+
 export const revalidate = 3600;
 
 export async function generateStaticParams() {
-  const host = process.env.HOST_URL || 'http://localhost:3000';
+  const host = process.env.HOST_URL || "http://localhost:3000";
 
   try {
     const res = await fetch(`${host}/api/blog/save-article`);
@@ -84,14 +85,14 @@ export async function generateStaticParams() {
       slug: article.slug,
     }));
   } catch (error) {
-    console.error('generateStaticParams error:', error);
+    console.error("generateStaticParams error:", error);
     return [];
   }
 }
 
 export default async function BlogPage({ params }) {
   const { slug } = params;
-  const host = process.env.HOST_URL || 'http://localhost:3000';
+  const host = process.env.HOST_URL || "http://localhost:3000";
 
   const res = await fetch(`${host}/api/blog/${slug}`, { next: { revalidate: 3600 } });
 
@@ -100,12 +101,13 @@ export default async function BlogPage({ params }) {
       <div className="flex items-center justify-center h-[60vh]">
         <div className="bg-red-100 border border-red-400 text-red-700 px-6 py-4 rounded-xl shadow-md text-center">
           <h2 className="text-xl font-semibold mb-2">Article Not Found</h2>
-          <p className="text-sm">Sorry, the article you're looking for doesn't exist or may have been removed.</p>
+          <p className="text-sm">
+            Sorry, the article you&apos;re looking for doesn&apos;t exist or may have been removed.
+          </p>
         </div>
       </div>
     );
   }
-
 
   const post = await res.json();
   const article = post.article;
@@ -114,12 +116,12 @@ export default async function BlogPage({ params }) {
     return <div className="min-h-screen">Article not found</div>;
   }
 
-
+  // Helper to render markdown-like text with links, bold, italic
   function renderTextWithLinks(text) {
-    if (!text || typeof text !== 'string') return null;
+    if (!text || typeof text !== "string") return null;
 
-    // Regex to match [label](url), **bold**, and *italic*
-    const regex = /(\[([^\]]+)\]\((https?:\/\/[^\s)]+)\))|(\*\*([^*]+)\*\*)|(\*([^*]+)\*)/g;
+    const regex =
+      /(\[([^\]]+)\]\((https?:\/\/[^\s)]+)\))|(\*\*([^*]+)\*\*)|(\*([^*]+)\*)/g;
     const parts = [];
     let lastIndex = 0;
     let match;
@@ -130,7 +132,6 @@ export default async function BlogPage({ params }) {
       }
 
       if (match[1]) {
-        // Link match
         parts.push(
           <Link
             key={match[3] + match.index}
@@ -143,11 +144,9 @@ export default async function BlogPage({ params }) {
           </Link>
         );
       } else if (match[4]) {
-        // Bold match (**text**)
-        parts.push(<strong key={'b' + match.index}>{match[5]}</strong>);
+        parts.push(<strong key={"b" + match.index}>{match[5]}</strong>);
       } else if (match[6]) {
-        // Italic match (*text*)
-        parts.push(<em key={'i' + match.index}>{match[7]}</em>);
+        parts.push(<em key={"i" + match.index}>{match[7]}</em>);
       }
 
       lastIndex = regex.lastIndex;
@@ -159,70 +158,70 @@ export default async function BlogPage({ params }) {
 
     return parts;
   }
+
+  // Extract plain text for AI or other processing
   function extractPlainTextFromContent(contentArray) {
     return contentArray
-      .filter(block => block.type === 'paragraph' || block.type === 'heading')
-      .map(block => {
-        if (block.type === 'heading') {
-          return `${'#'.repeat(block.level || 1)} ${block.value}`;
+      .filter((block) => block.type === "paragraph" || block.type === "heading")
+      .map((block) => {
+        if (block.type === "heading") {
+          return `${"#".repeat(block.level || 1)} ${block.value}`;
         }
         return block.value;
       })
-      .join('\n\n');
+      .join("\n\n");
   }
 
   return (
     <>
-  <main className="min-h-screen mb-4 w-full flex bg-[var(--background)] text-[var(--text-primary)]">
-    {/* Left Side Ad */}
-    <div className="hidden md:block p-2 w-[20%]">
-      <RecentJob/>
-    </div>
+      <main className="min-h-screen mb-4 w-full flex bg-[var(--background)] text-[var(--text-primary)]">
+        {/* Left Side Ad */}
+        <div className="hidden md:block p-2 w-[20%]">
+          <RecentJob />
+        </div>
 
-    {/* Center Content */}
-    <div className="w-full   md:w-[60%] md:mx-auto md:px-4  pb-4 md:py-2">
-      {/* Floating AI Button */}
-      <div className="fixed bottom-4  right-4 z-50">
-        <BlockAi article={extractPlainTextFromContent(article.content)} />
+        {/* Center Content */}
+        <div className="w-full md:w-[60%] md:mx-auto md:px-4 pb-4 md:py-2">
+          {/* Floating AI Button */}
+          <div className="fixed bottom-4 right-4 z-50">
+            <BlockAi article={extractPlainTextFromContent(article.content)} />
+          </div>
+
+          {/* Main Blog Content */}
+          <div className="bg-[var(--card-background)] border border-[var(--border)] rounded-2xl p-4 shadow-md">
+            <UserBlogRender article={article} />
+          </div>
+
+          {/* Tags Section */}
+          <div className="mt-8 text-sm text-[var(--text-secondary)]">
+            Tags:{" "}
+            {article.tags?.map((tag, i) => (
+              <span
+                key={i}
+                className="inline-block bg-[var(--border)] text-[var(--text-primary)] px-2 py-1 rounded-lg mr-2 mb-2 shadow-sm"
+              >
+                #{tag}
+              </span>
+            ))}
+          </div>
+        </div>
+
+        {/* Right Side Ad + AI */}
+        <div className="w-[20%] hidden relative md:flex flex-col p-2">
+          <RightAds />
+          <div className="mt-4">
+            <BlockAi article={extractPlainTextFromContent(article.content)} />
+          </div>
+        </div>
+      </main>
+
+      {/* TailorMe Promotion Section */}
+      <TailorMePromotion jobTitle={article.jobTitle} />
+
+      {/* Blog Suggestions */}
+      <div className="bg-[var(--card-background)] border border-[var(--border)] shadow-md rounded-2xl mx-5 px-4 pt-4 pb-6 mb-2 mt-6">
+        <BlogSuggestions tags={article.tags} slug={article.slug} />
       </div>
-
-      {/* Main Blog Content */}
-      <div className="bg-[var(--card-background)] border border-[var(--border)] rounded-2xl p-4 shadow-md">
-        <UserBlogRender article={article} />
-      </div>
-
-      {/* Tags Section */}
-      <div className="mt-8 text-sm text-[var(--text-secondary)]">
-        Tags:{" "}
-        {article.tags?.map((tag, i) => (
-          <span
-            key={i}
-            className="inline-block bg-[var(--border)] text-[var(--text-primary)] px-2 py-1 rounded-lg mr-2 mb-2 shadow-sm"
-          >
-            #{tag}
-          </span>
-        ))}
-      </div>
-    </div>
-    {/* Right Side Ad + AI */}
-    <div className="w-[20%] hidden relative md:flex flex-col p-2">
-      <RightAds />
-      <div className="mt-4">
-        <BlockAi article={extractPlainTextFromContent(article.content)} />
-      </div>
-    </div>
-  </main>
-
-  {/* Suggestions */}
-  <hr className="border-[var(--border)] mx-4" />
-  
-<TailorMePromotion jobTitle={article.jobTitle}  />
-  <div className="bg-[var(--card-background)] border border-[var(--border)] shadow-md rounded-2xl mx-5 px-4 pt-4 pb-6 mb-2 mt-6">
-    <BlogSuggestions tags={article.tags} slug={article.slug} />
-  </div>
-</>
-
-
-
+    </>
   );
 }
