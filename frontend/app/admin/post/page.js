@@ -3,6 +3,9 @@ import { useEffect, useRef, useState } from 'react';
 import BlockEditor from '@/components/blog/BlockEditor';
 import BlockRenderer from '@/components/blog/BlockRenderer';
 import SubmitPopup from '@/components/admin/SubmitPopup';
+
+import { useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
 const emptyBlock = [{ type: 'paragraph', value: '', level: 1, items: [] }];
 
 function Page() {
@@ -18,8 +21,7 @@ function Page() {
     const [isopitonOpen, setisopitonOpen] = useState(false);
     const isOpenRef = useRef(isopitonOpen);
     const altInputRef = useRef(null);
-
-
+ 
     useEffect(() => {
 
         isOpenRef.current = isopitonOpen;

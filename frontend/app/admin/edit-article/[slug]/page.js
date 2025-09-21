@@ -5,6 +5,9 @@ import BlockRenderer from '@/components/blog/BlockRenderer';
 import { useParams } from 'next/navigation';
 import SubmitPopup from '@/components/admin/SubmitPopup';
 import { toast } from 'react-hot-toast';
+
+import { useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
 const emptyBlock = [{ type: 'paragraph', value: '', level: 1, items: [] }];
 
 function Page() {
@@ -64,7 +67,14 @@ function Page() {
     fetchArticle();
   }, [slug]);
 
+ const { data: session, status } = useSession();
+  const router = useRouter();
 
+  useEffect(() => {
+    if (status === "unauthenticated") {
+      router.replace("/admin/login");
+    }
+  }, [status]);
   useEffect(() => {
     isOpenRef.current = isopitonOpen;
   }, [isopitonOpen]);

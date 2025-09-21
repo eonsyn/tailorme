@@ -1,6 +1,8 @@
+// app/api/admin/login/route.js 
+
 import connectDB from '@/utils/db';
 import Admin from '@/models/Admin';
-import { generateToken } from '@/lib/auth';
+import { generateToken } from '@/flib/auth';
 import bcrypt from 'bcryptjs';
 import { NextResponse } from 'next/server';
 
