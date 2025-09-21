@@ -24,6 +24,7 @@
     "google-one-tap": "^1.0.6",
     "js-cookie": "^3.0.5",
     "lucide-react": "^0.344.0",
+    "google-auth-library": "^9.15.1",
     "mongoose": "^8.18.1",
     "next": "15.5.2",
     "next-auth": "^4.24.11",

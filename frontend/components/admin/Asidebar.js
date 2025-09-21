@@ -3,7 +3,8 @@
 import React from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
- 
+import { signOut } from 'next-auth/react';
+
 function Asidebar() {
   const router = useRouter();
 
@@ -23,7 +24,7 @@ function Asidebar() {
   ];
 
   const handleLogout = () => {
-   alert("logout")
+    signOut({ callbackUrl: '/admin/login' });
   };
 
   return (
