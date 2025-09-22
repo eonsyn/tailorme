@@ -90,7 +90,8 @@ const getResumeHistory = async (req, res, next) => {
     const resumes = await Resume.find({ user: req.user.userId })
       .sort({ createdAt: -1 })
       .skip(skip)
-      .limit(limit);
+      .limit(limit)
+      .select("_id title createdAt");
 
     const total = await Resume.countDocuments({ user: req.user.userId });
 
@@ -109,8 +110,28 @@ const getResumeHistory = async (req, res, next) => {
   }
 };
 
+const getResumeById = async (req, res, next) => {
+  try {
+    const { resumeId } = req.params;
+
+    const resume = await Resume.findOne({ _id: resumeId, user: req.user.userId });
+    if (!resume) {
+      return res.status(404).json({ success: false, message: "Resume not found" });
+    }
+
+    res.json({
+      success: true,
+      resume,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+
 module.exports = {
   generate,
   updateResume,
   getResumeHistory,
+  getResumeById,
 };

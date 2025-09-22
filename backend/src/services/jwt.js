@@ -49,8 +49,14 @@ const setAccessTokenCookie = (res, accessToken) => {
 }
 
 const clearTokenCookies = (res) => {
-  res.clearCookie('accessToken')
-  res.clearCookie('refreshToken')
+  const cookieOptions = {
+    httpOnly: true,
+    secure: env.NODE_ENV === 'production',
+    sameSite: env.NODE_ENV === 'production' ? 'none' : 'lax',
+  }
+
+  res.clearCookie('accessToken', cookieOptions)
+  res.clearCookie('refreshToken', cookieOptions)
 }
 
 module.exports = {

@@ -10,5 +10,6 @@ router.use(authenticate)
 router.post('/generate', resumeController.generate) 
 router.post('/update/:resumeId', resumeController.updateResume)
 router.get('/history', resumeController.getResumeHistory)
+router.get('/history/:resumeId',resumeController.getResumeById)
 
 module.exports = router
