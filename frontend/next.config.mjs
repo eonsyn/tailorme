@@ -7,6 +7,10 @@ const nextConfig = {
         protocol: 'https',
         hostname: 'res.cloudinary.com',
         pathname: '/**',
+      },{
+        protocol: 'https',
+        hostname: 'tailor0me.vercel.app',
+        pathname: '/**',
       },
     ],
   },

@@ -4,6 +4,7 @@ import { Toaster } from 'react-hot-toast';
 import { AuthProvider } from "@/lib/auth";
 import Footer from "@/components/Footer";
 import Script from "next/script";
+
 export const metadata = {
   title: 'TailorMe - AI-Powered Resume Tailoring',
   description: 'Create job-specific resumes tailored to any job description using AI',
@@ -11,6 +12,7 @@ export const metadata = {
     google: "l447jfQ4xxcrmN2Q_Cq8q3aeuLvLAJo6cVNv35IA96Y",
   },
 };
+
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"]
@@ -21,33 +23,36 @@ const geistMono = Geist_Mono({
   subsets: ["latin"]
 });
 
-
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
- 
       <head>
-       <Script
+        {/* ✅ Google AdSense meta verification */}
+        <meta
+          name="google-adsense-account"
+          content="ca-pub-2404358914933411"
+        />
+
+        {/* ✅ Google Analytics script */}
+        <Script
           src="https://www.googletagmanager.com/gtag/js?id=G-QNG4W1PKRF"
           strategy="afterInteractive"
         />
         <Script id="ga-init" strategy="afterInteractive">
           {`
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
-    gtag('config', 'G-QNG4W1PKRF');
-  `}
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', 'G-QNG4W1PKRF');
+          `}
         </Script>
- 
       </head>
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
 
+      <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
         <AuthProvider>
           {children}
           <Toaster
-          className='no-print'
+            className="no-print"
             position="top-right"
             toastOptions={{
               duration: 4000,
@@ -55,11 +60,11 @@ export default function RootLayout({ children }) {
                 background: '#363636',
                 color: '#fff'
               }
-            }} />
-           
-          </AuthProvider>
-          <Footer></Footer>
+            }}
+          />
+        </AuthProvider>
+        <Footer />
       </body>
-    </html>);
-
+    </html>
+  );
 }
