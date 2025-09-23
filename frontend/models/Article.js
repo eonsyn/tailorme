@@ -6,7 +6,7 @@ const contentBlockSchema = new mongoose.Schema({
   level: Number,
   items: [String],
   alt: String,
-});
+},{ _id: false });
 
 const articleSchema = new mongoose.Schema({
   title: String,
