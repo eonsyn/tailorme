@@ -76,6 +76,6 @@ export default function AuthGuard({ children }) {
   if (!user) {
     return null
   }
-
+ 
   return children
 }

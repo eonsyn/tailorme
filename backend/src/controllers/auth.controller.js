@@ -2,10 +2,112 @@ const User = require('../models/User')
 const Profile = require('../models/Profile')
 const jwt = require('../services/jwt')
 const { authValidation } = require('../utils/validators')
+const env = require("../config/env");
+const nodemailer = require("nodemailer");
+const EmailVerification = require('../../public/EmailVerification')
 
+
+
+// ====================== SEND VERIFY EMAIL ======================
+const sendVerifyEmail = async (req, res, next) => {
+  try {
+    const { email } = req.body
+
+    if (!email) {
+      return res.status(400).json({
+        success: false,
+        message: "Email is required"
+      })
+    }
+
+    // Find user
+    const user = await User.findOne({ email })
+    if (!user) {
+      return res.status(404).json({
+        success: false,
+        message: "User not found"
+      })
+    }
+
+    // Already verified?
+    if (user.isEmailVerified) {
+      return res.status(400).json({
+        success: false,
+        message: "Email already verified"
+      })
+    }
+
+    // Generate new email verification token
+    const emailToken = jwt.generateEmailToken(user._id, user.email)
+    const verificationUrl = `${env.FRONTEND_URL}/auth/verify-email/${emailToken}`
+
+    // Setup transporter
+    const transporter = nodemailer.createTransport({
+      host: env.SMTP_HOST,
+      port: env.SMTP_PORT,
+      secure: false,
+      auth: { user: env.SMTP_USER, pass: env.SMTP_PASS },
+    })
+
+    // Send email
+    await transporter.sendMail({
+      from: `"Tailor Me" <${env.SMTP_USER}>`,
+      to: user.email,
+      subject: "Verify your email - Tailor Me",
+      html: EmailVerification(verificationUrl),
+    })
+
+    res.json({
+      success: true,
+      message: "Verification email sent successfully. Please check your inbox.",
+    })
+  } catch (error) {
+    next(error)
+  }
+}
+
+// ====================== VERIFY EMAIL ======================
+const verifyEmail = async (req, res, next) => {
+  try {
+    const { token } = req.params
+    if (!token) {
+      return res.status(400).json({ success: false, message: "Verification token missing"  })
+    }
+
+    // Verify token
+    let decoded
+    try {
+      decoded = await jwt.verifyEmailToken(token )
+      
+    } catch (err) { 
+      return res.status(400).json({ success: false, message: "Invalid or expired token" })
+    }
+
+    // Find user and update isEmailVerified
+    const user = await User.findById(decoded.userId)
+    if (!user) {
+      return res.status(404).json({ success: false, message: "User not found" })
+    }
+
+    if (user.isEmailVerified) {
+      return res.status(200).json({ success: true, message: "Email already verified" })
+    }
+
+    user.isEmailVerified = true
+    await user.save()
+
+    res.json({
+      success: true,
+      message: "Email verified successfully. You can now log in.",
+    })
+  } catch (error) {
+    next(error)
+  }
+}
+
+// ====================== SIGNUP ======================
 const signup = async (req, res, next) => {
   try {
-    const data = req.body; 
     const { error, value } = authValidation.signup.validate(req.body)
     if (error) {
       return res.status(400).json({
@@ -26,27 +128,7 @@ const signup = async (req, res, next) => {
       })
     }
 
-
-    // Check for referral abuse only if referralCode is provided
-    if (referralCode) {
-      const abuseCheck = await User.findOne({
-        $or: [
-          { ipAddress },
-          { deviceFingerprint }
-        ],
-        'referral.referredBy': { $ne: null }
-      })
-
-      if (abuseCheck) {
-        return res.status(400).json({
-          success: false,
-          message: 'Referral signup not allowed from this device or IP.'
-        })
-      }
-    }
-
-
-    // Handle referral
+    // Referral logic (same as before)
     let referredBy = null
     if (referralCode) {
       referredBy = await User.findOne({ username: referralCode })
@@ -55,7 +137,7 @@ const signup = async (req, res, next) => {
       }
     }
 
-    // Create user
+    // Create user with isEmailVerified = false
     const user = new User({
       name,
       email,
@@ -64,42 +146,42 @@ const signup = async (req, res, next) => {
       ipAddress,
       deviceFingerprint,
       credits: referredBy ? 20 : 10,
-      referral: { referredBy: referredBy?._id }
+      referral: { referredBy: referredBy?._id },
+      isEmailVerified: false
     })
-
     await user.save()
 
-    // Handle referral rewards safely
-    if (referredBy) {
-      // Avoid double reward
-      const alreadyReferred = referredBy.referral.referredUsers
-        .some(r => r.user.toString() === user._id.toString())
-
-      if (!alreadyReferred) {
-        referredBy.referral.referredUsers.push({ user: user._id })
-        referredBy.credits += 50
-        await referredBy.save()
-      }
-    }
-
-    // Create empty profile
-    const profile = new Profile({
-      user: user._id,
-      name,
-      email,
-    })
+    // Create profile
+    const profile = new Profile({ user: user._id, name, email })
     await profile.save()
 
+    // Generate email verification token (valid for 1h)
+ 
+const emailToken = jwt.generateEmailToken(user._id.toString(), user.email, { expiresIn: '1h' })
 
-    // Generate tokens
-    const accessToken = jwt.generateAccessToken(user._id)
-    const refreshToken = jwt.generateRefreshToken(user._id)
-    jwt.setTokenCookies(res, accessToken, refreshToken)
+
+    const verificationUrl = `${env.FRONTEND_URL}/auth/verify-email/${emailToken}`
+
+    // Setup transporter
+    const transporter = nodemailer.createTransport({
+      host: env.SMTP_HOST,
+      port: env.SMTP_PORT,
+      secure: false,
+      auth: { user: env.SMTP_USER, pass: env.SMTP_PASS },
+    })
+
+    // Send verification mail
+    await transporter.sendMail({
+      from: `"Tailor Me" <${env.SMTP_USER}>`,
+      to: user.email,
+      subject: "Verify your email - Tailor Me",
+      html: EmailVerification(verificationUrl),
+    });
+
 
     res.status(201).json({
       success: true,
-      message: 'User created successfully',
-      user: user.toJSON(),
+      message: 'Signup successful! Please check your email to verify your account.',
     })
   } catch (error) {
     next(error)
@@ -108,6 +190,7 @@ const signup = async (req, res, next) => {
 
 const login = async (req, res, next) => {
   try {
+    console.log("login call")
     const { error, value } = authValidation.login.validate(req.body)
     if (error) {
       return res.status(400).json({
@@ -159,7 +242,7 @@ const login = async (req, res, next) => {
 
 const logout = async (req, res) => {
   jwt.clearTokenCookies(res)
-  
+
   res.json({
     success: true,
     message: 'Logout successful',
@@ -240,4 +323,7 @@ module.exports = {
   logout,
   refresh,
   me,
+  verifyEmail,
+  sendVerifyEmail
+
 }

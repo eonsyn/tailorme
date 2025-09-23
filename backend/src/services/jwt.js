@@ -14,8 +14,13 @@ const generateRefreshToken = (userId) => {
 }
 
 const verifyAccessToken = (token) => {
-  return jwt.verify(token, env.JWT_SECRET)
+  try {
+    return jwt.verify(token, env.JWT_SECRET)
+  } catch (err) {
+    return null
+  }
 }
+
 
 const verifyRefreshToken = (token) => {
   return jwt.verify(token, env.JWT_REFRESH_SECRET)
@@ -59,7 +64,22 @@ const clearTokenCookies = (res) => {
   res.clearCookie('refreshToken', cookieOptions)
 }
 
+// ====================== EMAIL VERIFICATION TOKEN ======================
+ 
+const generateEmailToken = (userId, email, options = { expiresIn: '24h' }) => {
+  return jwt.sign({ userId, email }, env.JWT_EMAIL_SECRET, options)
+}
+
+
+const verifyEmailToken = (token) => {
+  return jwt.verify(token, env.JWT_EMAIL_SECRET)
+}
+
+
+
 module.exports = {
+  generateEmailToken,
+  verifyEmailToken,
   generateAccessToken,
   generateRefreshToken,
   verifyAccessToken,

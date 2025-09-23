@@ -68,6 +68,16 @@ export function AuthProvider({ children }) {
     const response = await api.get('/health')
     return response
   }
+  const verifyEmail = async (token) => {
+    const response = await api.get(`/auth/verify-email/${token}`)
+    return response
+  }
+
+  const sendVerifyEmail = async () => {
+    const response = await api.post('/auth/send-verify-email',{
+      email: user.email
+    })
+    return response}
 
   const value = {
     user,
@@ -77,6 +87,8 @@ export function AuthProvider({ children }) {
     signup,
     logout,
     checkAuth,
+    verifyEmail,
+    sendVerifyEmail,
   }
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>

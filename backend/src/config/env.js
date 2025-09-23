@@ -4,8 +4,9 @@ require('dotenv').config()
 module.exports = {
   NODE_ENV: process.env.NODE_ENV || 'development',
   PORT: process.env.PORT || 5000,
-  
-  // Database
+
+ 
+  // Database 
   MONGODB_URI: process.env.MONGODB_URI || 'mongodb://localhost:27017/tailorme',
   
   // Redis
@@ -18,6 +19,7 @@ module.exports = {
   JWT_REFRESH_SECRET: process.env.JWT_REFRESH_SECRET || 'fallback-refresh-secret',
   JWT_EXPIRE: '2400m',
   JWT_REFRESH_EXPIRE: '7d',
+  JWT_EMAIL_SECRET:'sdfklweo4@#dfs',
   
   // CORS
   FRONTEND_URL: process.env.FRONTEND_URL || 'http://localhost:3000',

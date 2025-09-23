@@ -60,7 +60,7 @@ const userSchema = new mongoose.Schema({
 
   isEmailVerified: {
     type: Boolean,
-    default: true, // set false if email verification is needed
+    default: false, // set false if email verification is needed
   },
   lastLoginAt: Date,
 }, { timestamps: true })

@@ -31,6 +31,7 @@ const getStats = async (req, res, next) => {
     const stats = {
       credits: user.credits,
       totalResumes,
+      isEmailVerified: user.isEmailVerified,
       resumesThisMonth,
       profileCompleteness: profile?.completeness || 0,
       recentResumes,

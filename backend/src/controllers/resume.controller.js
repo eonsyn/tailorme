@@ -19,6 +19,9 @@ const generate = async (req, res, next) => {
     if (!user) {
       return res.status(404).json({ success: false, message: "User not found" });
     }
+    if(!user.isEmailVerified){
+      return res.status(404).json({ success: false, message: "Please verify your email first." })
+    }
     if (user.credits <= 0) {
       return res.status(400).json({ success: false, message: "Not enough credits" });
     }
