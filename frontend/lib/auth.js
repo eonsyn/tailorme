@@ -8,12 +8,14 @@ const AuthContext = createContext({})
 
 export function AuthProvider({ children }) {
   const [user, setUser] = useState(null)
+  const [profile,setProfile]=useState(null)
   const [loading, setLoading] = useState(true)
   const router = useRouter()
   const pathname = usePathname()
 
   useEffect(() => {
     checkAuth()
+    checkProfile()
   }, [])
 
   useEffect(() => {
@@ -34,6 +36,15 @@ export function AuthProvider({ children }) {
     }
   }
 
+  const checkProfile = async () => {
+    try {
+      const response = await api.get('/profile')
+      setProfile(response.profile)
+    } catch (err) {
+      console.log(err)
+    }
+  }
+
   const login = async (email, password) => {
     const response = await api.post('/auth/login', { email, password })
     setUser(response.user)
@@ -42,11 +53,11 @@ export function AuthProvider({ children }) {
 
   const signup = async (email, password, name, username, referralCode, deviceFingerprint) => {
     console.log("referralCode is :", referralCode)
-    const response = await api.post('/auth/signup', { 
-      email, 
-      password, 
+    const response = await api.post('/auth/signup', {
+      email,
+      password,
       name,
-      username, 
+      username,
       referralCode,
       deviceFingerprint
     })
@@ -68,25 +79,34 @@ export function AuthProvider({ children }) {
     const response = await api.get('/health')
     return response
   }
+  const getprofile = async () => {
+    const response = await api.get('/profile')
+
+    return response
+  }
   const verifyEmail = async (token) => {
     const response = await api.get(`/auth/verify-email/${token}`)
     return response
   }
 
   const sendVerifyEmail = async () => {
-    const response = await api.post('/auth/send-verify-email',{
+    const response = await api.post('/auth/send-verify-email', {
       email: user.email
     })
-    return response}
+    return response
+  }
 
   const value = {
     user,
     health,
+    profile,
     loading,
     login,
     signup,
     logout,
     checkAuth,
+    checkProfile,
+    getprofile,
     verifyEmail,
     sendVerifyEmail,
   }

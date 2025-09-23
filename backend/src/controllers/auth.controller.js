@@ -189,8 +189,7 @@ const emailToken = jwt.generateEmailToken(user._id.toString(), user.email, { exp
 }
 
 const login = async (req, res, next) => {
-  try {
-    console.log("login call")
+  try { 
     const { error, value } = authValidation.login.validate(req.body)
     if (error) {
       return res.status(400).json({

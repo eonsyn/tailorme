@@ -208,6 +208,7 @@ Focus on:
 3. Quantify achievements where possible
 4. Maintain truthfulness to the original profile
 5. Optimize for ATS systems
+6. Add all Schooling detail
 `
   }
 }

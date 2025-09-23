@@ -1,22 +1,71 @@
 import React from 'react'
+import { useAuth } from '@/lib/auth';
+import { Linkedin, Code, Twitter, Globe } from 'lucide-react';
+import { FaXTwitter } from "react-icons/fa6"; // brand new X icon
 
 function BasicTemp({ data }) {
- if (!data) return null;
+  const { profile } = useAuth()
+  if (!data) return null;
 
   const { name, title, contact, summary, skills, experience, education, projects } = data;
+  const getSocialIcon = (network) => {
+    switch (network) {
+      case 'LinkedIn':
+        return <Linkedin className="w-5 h-5 text-gray-800" />;
+      case 'GitHub':
+        return <Code className="w-5 h-5 text-gray-800" />;
+      case 'Portfolio':
+        return <Globe className="w-5 h-5 text-gray-800" />;
+      case 'Twitter':
+        return <FaXTwitter className="w-5 h-5 text-gray-800" />
+      default:
+        return null;
+    }
+  };
 
   return (
-    <div id='print-area' className= " w-full bg-white p-8 font-sans text-gray-800">
+    <div id='print-area' className=" w-full bg-white p-8 font-sans text-gray-800">
       {/* Header */}
       <div className="text-center border-b pb-6 mb-6">
-        <h1 className="text-3xl uppercase font-bold text-gray-900">{name}</h1>
-        <p className="text-lg text-gray-600">{title}</p>
-        <div className="flex justify-center gap-6 mt-3 text-sm text-gray-500">
-          <span>{contact.email}</span>
-          <span>{contact.phone}</span>
-          <span>{contact.location}</span>
+        {/* Name & Title */}
+        <h1 className="text-3xl font-bold uppercase text-gray-900">
+          {name}
+        </h1>
+        <p className="text-lg text-gray-600">
+          {title}
+        </p>
+        <div className='flex items-center justify-between'>
+
+
+          {/* Contact Info */}
+          <div className="flex justify-center gap-6 mt-3 text-sm text-gray-500">
+            <span>{contact.email}</span>
+            <span>{contact.phone}</span>
+            <span>{contact.location}</span>
+          </div>
+
+          {/* Social Links */}
+          {profile?.social?.length > 0 && (
+            <div className="flex justify-center gap-4 mt-4">
+              {profile.social.map((link, idx) => (
+                <a
+                  key={idx}
+                  href={link.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center gap-2 text-sm text-gray-600 hover:text-blue-600 transition"
+                >
+                  {getSocialIcon(link.network)}
+                  <span className="hidden sm:inline">{link.network}</span>
+                </a>
+              ))}
+            </div>
+          )}
         </div>
       </div>
+
+
+
 
       {/* Summary */}
       <section className="mb-6">
@@ -70,7 +119,7 @@ function BasicTemp({ data }) {
       )}
 
       {/* Education */}
-      {education?.length > 0 && (
+      {profile.education?.length > 0 && (
         <section className="mb-6">
           <h2 className="text-xl font-semibold text-gray-900 mb-2 border-l-4 border-blue-500 pl-3">
             Education

@@ -4,7 +4,7 @@ const socialLink = new mongoose.Schema(
     network: { 
       type: String, 
       required: true, 
-      enum: ["LinkedIn", "GitHub", "Portfolio"] // ✅ only these 3 allowed
+      enum: ["LinkedIn", "GitHub", "Portfolio","Twitter"] // ✅ only these 3 allowed
     },
     url: { type: String, required: true }
   },

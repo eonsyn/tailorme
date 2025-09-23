@@ -129,7 +129,7 @@ function AddEducation({ profile }) {
             }}
           >
             <Plus className="w-4 h-4 mr-2" />
-            Add Education
+            Add  
           </button>
         )}
       </div>
@@ -159,7 +159,7 @@ function AddEducation({ profile }) {
               ) : (
                 <>
                   <Check className="w-4 h-4" />
-                  <span>{editingIndex !== null ? 'Update Education' : 'Add Education'}</span>
+                  <span>{editingIndex !== null ? 'Update ' : 'Add '}</span>
                 </>
               )}
             </button>

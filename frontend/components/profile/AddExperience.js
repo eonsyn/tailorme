@@ -136,7 +136,7 @@ function AddExperience({ profile }) {
             }}
           >
             <Plus className="w-4 h-4 mr-2" />
-            Add Experience
+            Add
           </button>
         )}
       </div>
@@ -220,7 +220,7 @@ function AddExperience({ profile }) {
               ) : (
                 <>
                   <Check className="w-4 h-4" />
-                  <span>{editingIndex !== null ? 'Update Experience' : 'Add Experience'}</span>
+                  <span>{editingIndex !== null ? 'Update  ' : 'Add  '}</span>
                 </>
               )}
             </button>

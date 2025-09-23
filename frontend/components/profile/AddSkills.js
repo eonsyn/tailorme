@@ -26,7 +26,6 @@ function AddSkills({ profile }) {
 
       setSkills((prev) => [...prev, skill]);
       e.target.reset();
-      setShowForm(false);
       toast.success('Skill added!');
     } catch (err) {
       console.error(err);
@@ -55,7 +54,7 @@ function AddSkills({ profile }) {
 
   return (
     <div className="card p-8">
-      <div className="flex justify-between items-center mb-6">
+      <div className=" md:flex  justify-between items-center mb-6">
         <h2 className="text-xl font-semibold text-foreground">Skills</h2>
 
         {!showForm ? (
@@ -67,7 +66,7 @@ function AddSkills({ profile }) {
             Add Skill
           </button>
         ) : (
-          <form onSubmit={handleAddSkill} className="flex items-center gap-2">
+          <form onSubmit={handleAddSkill} className="md:flex items-center gap-2">
             <input
               name="skill"
               type="text"
@@ -75,6 +74,8 @@ function AddSkills({ profile }) {
               placeholder="Enter a skill"
               autoFocus
             />
+            <div className='h-full  flex gap-1 items-center mt-2 md:mt-0 justify-between'>
+              
             <button type="submit" className="btn btn-primary flex items-center justify-center gap-2" disabled={isSaving}>
               {isSaving ? (
                 <Loader2 className="animate-spin w-4 h-4" />
@@ -91,6 +92,7 @@ function AddSkills({ profile }) {
               <X className="w-4 h-4" />
               Cancel
             </button>
+            </div>
           </form>
         )}
       </div>
@@ -100,7 +102,7 @@ function AddSkills({ profile }) {
           skills.map((skill, index) => (
             <div
               key={index}
-              className="badge badge-lg relative flex items-center"
+              className="badge bg-accent p-1 rounded-md badge-lg relative flex items-center"
             >
               <span className="text-sm font-medium">{skill}</span>
               <button

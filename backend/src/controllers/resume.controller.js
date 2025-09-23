@@ -30,10 +30,19 @@ const generate = async (req, res, next) => {
     if (!profile) {
       return res.status(400).json({ success: false, message: "Please complete your profile first" });
     }
-
+ 
     // 🔹 Directly call LLM adapter (no queue)
-    const tailoredResume = await LLMAdapter.tailorResume(profile.toObject(), jobDescription);
-
+     let tailoredResume;
+    try {
+      tailoredResume = await LLMAdapter.tailorResume(profile.toObject(), jobDescription);
+    } catch (llmError) {
+      console.error("LLMAdapter Error:", llmError);
+      return res.status(500).json({
+        success: false,
+        message: "Failed to generate resume. Please try again later.",
+      });
+    }
+    
     // 🔹 Deduct credits
     user.credits -= 2;
     await user.save();

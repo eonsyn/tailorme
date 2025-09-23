@@ -9,24 +9,18 @@ import AddEducation from '@/components/profile/AddEducation';
 import AddProject from '@/components/profile/AddProject';
 import AddCertificate from '@/components/profile/AddCertificate';
 import AddBasicInfo from '@/components/profile/AddBasicInfo';
+import { useAuth } from '@/lib/auth'
 export default function ProfilePage() {
-  const [profile, setProfile] = useState(null);
-  const [loading, setLoading] = useState(true);
+  const [userProfile, setUserProfile] = useState(null);
+
+  const { profile, loading } = useAuth();
 
   useEffect(() => {
-    fetchProfile();
-  }, []);
-
-  const fetchProfile = async () => {
-    try {
-      const data = await api.get('/profile');
-      setProfile(data.profile);
-    } catch (error) {
-      console.error('Failed to fetch profile:', error);
-    } finally {
-      setLoading(false);
+    if (!loading) {
+      setUserProfile(profile);
     }
-  };
+  }, [profile, loading]);
+
 
 
 
@@ -39,38 +33,38 @@ export default function ProfilePage() {
   }
 
   return (
-   <div className="space-y-8">
-  {/* Header Section */}
-  <div>
-    <h1 className="text-3xl font-bold text-foreground">
-      Profile
-    </h1>
-    <p className="text-muted-foreground mt-2">
-      Manage your professional information and credentials
-    </p>
-  </div>
+    <div className="space-y-8">
+      {/* Header Section */}
+      <div>
+        <h1 className="text-3xl font-bold text-foreground">
+          Profile
+        </h1>
+        <p className="text-muted-foreground mt-2">
+          Manage your professional information and credentials
+        </p>
+      </div>
 
-  {/* Profile Sections */}
-  <div className="space-y-6 md:space-y-8">
-    {/* Basic Information */}
-    <AddBasicInfo setProfile={setProfile} profile={profile} />
+      {/* Profile Sections */}
+      <div className="space-y-6 md:space-y-8">
+        {/* Basic Information */}
+        <AddBasicInfo setProfile={setUserProfile} profile={userProfile} />
 
-    {/* Experience */}
-    <AddExperience profile={profile} />
+        {/* Experience */}
+        <AddExperience profile={userProfile} />
 
-    {/* Education */}
-    <AddEducation profile={profile} />
-    
-    {/* Skills */}
-    <AddSkills profile={profile} />
+        {/* Education */}
+        <AddEducation profile={userProfile} />
 
-    {/* Projects */}
-    <AddProject profile={profile} />
+        {/* Skills */}
+        <AddSkills profile={userProfile} />
 
-    {/* Certificates */}
-    <AddCertificate profile={profile} />
-  </div>
-</div>
-    );
+        {/* Projects */}
+        <AddProject profile={userProfile} />
+
+        {/* Certificates */}
+        <AddCertificate profile={userProfile} />
+      </div>
+    </div>
+  );
 
 }
