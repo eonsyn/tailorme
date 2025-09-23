@@ -19,7 +19,7 @@ export async function generateMetadata({ params }) {
 
     if (!article) {
       return {
-        title: "Blog Not Found | aktu brand",
+        title: "Blog Not Found | Branded Resume",
         description: "This blog post does not exist or has been removed.",
       };
     }
