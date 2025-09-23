@@ -51,7 +51,7 @@ export default function ResumeBuilderPage() {
       toast.success('Resume generated successfully!');
     } catch (err) {
       console.error(err);
-      toast.error('Failed to generate resume');
+      toast.error(err.message || 'Failed to generate resume');
     } finally {
       setGenerating(false);
     }
