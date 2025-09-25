@@ -174,7 +174,7 @@ function UserBlogRender({ article }) {
                 key={i}
                 className="mb-2 before:content-['“'] after:content-['”'] before:mr-1 after:ml-1 block"
               >
-                {line}
+                {renderTextWithLinks(line)}
               </p>
             ))}
           </blockquote>
@@ -196,10 +196,10 @@ function UserBlogRender({ article }) {
                       key={rowIndex}
                       className={
                         rowIndex === 0
-                          ? "bg-red-200 text-black text-center font-semibold"
+                          ? "bg-red-200  text-center font-semibold"
                           : rowIndex % 2 === 0
-                          ? "bg-gray-100"
-                          : "bg-white"
+                          ? " "
+                          : ""
                       }
                     >
                       {row.map((cell, cellIndex) => (
