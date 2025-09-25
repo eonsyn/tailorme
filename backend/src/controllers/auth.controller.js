@@ -131,7 +131,14 @@ const signup = async (req, res, next) => {
     // Referral logic (same as before)
     let referredBy = null
     if (referralCode) {
+      
       referredBy = await User.findOne({ username: referralCode })
+if(referredBy.deviceFingerprint === deviceFingerprint){
+  return res.status(400).json({
+    sucess:false,
+    message:"Don't missuse refferal"
+  })
+}
       if (!referredBy) {
         return res.status(400).json({ success: false, message: 'Invalid referral code' })
       }
@@ -151,32 +158,29 @@ const signup = async (req, res, next) => {
     })
     await user.save()
 
-    // Create profile
-    const profile = new Profile({ user: user._id, name, email })
-    await profile.save()
-
+     
     // Generate email verification token (valid for 1h)
 
-    const emailToken = jwt.generateEmailToken(user._id.toString(), user.email, { expiresIn: '1h' })
+    // const emailToken = jwt.generateEmailToken(user._id.toString(), user.email, { expiresIn: '1h' })
 
 
-    const verificationUrl = `${env.FRONTEND_URL}/auth/verify-email/${emailToken}`
+    // const verificationUrl = `${env.FRONTEND_URL}/auth/verify-email/${emailToken}`
 
-    // Setup transporter
-    const transporter = nodemailer.createTransport({
-      host: env.SMTP_HOST,
-      port: env.SMTP_PORT,
-      secure: false,
-      auth: { user: env.SMTP_USER, pass: env.SMTP_PASS },
-    })
+    // // Setup transporter
+    // const transporter = nodemailer.createTransport({
+    //   host: env.SMTP_HOST,
+    //   port: env.SMTP_PORT,
+    //   secure: false,
+    //   auth: { user: env.SMTP_USER, pass: env.SMTP_PASS },
+    // })
 
-    // Send verification mail
-    await transporter.sendMail({
-      from: `"Tailor Me" <${env.SMTP_USER}>`,
-      to: user.email,
-      subject: "Verify your email - Tailor Me",
-      html: EmailVerification(verificationUrl),
-    });
+    // // Send verification mail
+    // await transporter.sendMail({
+    //   from: `"Tailor Me" <${env.SMTP_USER}>`,
+    //   to: user.email,
+    //   subject: "Verify your email - Tailor Me",
+    //   html: EmailVerification(verificationUrl),
+    // });
 
     const accessToken = jwt.generateAccessToken(user._id)
     const refreshToken = jwt.generateRefreshToken(user._id)
