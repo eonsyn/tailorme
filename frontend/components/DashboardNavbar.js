@@ -8,7 +8,7 @@ import { useAuth } from '../lib/auth'
 
 export default function DashboardNavbar() {
   const [isOpen, setIsOpen] = useState(false)
-  const { user, logout } = useAuth()
+  const { user,checkAuth, logout } = useAuth()
   const pathname = usePathname()
   const [open, setOpen] = useState(false)
   const [theme, setTheme] = useState('light')

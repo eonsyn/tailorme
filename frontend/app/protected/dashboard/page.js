@@ -176,7 +176,7 @@ export default function DashboardPage() {
       </div>
 
       {/* Recent Resumes */}
-      {stats?.recentResumes?.length > 0 &&
+      {/* {stats?.recentResumes?.length > 0 &&
         <div className="card p-8">
           <h2 className="text-xl font-semibold text-foreground mb-6">Recent Resumes</h2>
           <div className="space-y-4">
@@ -200,7 +200,7 @@ export default function DashboardPage() {
             </Link>
           </div>
         </div>
-      }
+      } */}
     </div>
   );
 }

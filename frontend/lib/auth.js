@@ -50,7 +50,14 @@ export function AuthProvider({ children }) {
     setUser(response.user)
     return response
   }
-
+ const forgot = async (email)=>{
+  const response = await api.post('/auth/forgot',{email})
+  return response;
+ }
+ const reset_password= async (token, password) =>{
+  const response = await api.post('/auth/reset-password',{token, password})
+return response; 
+}
   const signup = async (email, password, name, username, referralCode, deviceFingerprint) => {
     console.log("referralCode is :", referralCode)
     const response = await api.post('/auth/signup', {
@@ -72,6 +79,7 @@ export function AuthProvider({ children }) {
       console.error('Logout error:', error)
     } finally {
       setUser(null)
+      setProfile(null)
     }
   }
 
@@ -104,6 +112,8 @@ export function AuthProvider({ children }) {
     login,
     signup,
     logout,
+    forgot,
+reset_password,
     checkAuth,
     checkProfile,
     getprofile,

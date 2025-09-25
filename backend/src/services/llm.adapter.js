@@ -21,77 +21,24 @@ class LLMAdapter {
     }
   }
 
-  async tailorResume(profile, jobDescription, templateId) {
-    console.log("hi i am call here 1")
+  async tailorResume(profile, jobDescription) {
+     
     if (this.provider === "mock") {
       return this.mockTailorResume(profile, jobDescription)
     }
     if (this.provider === "openai") {
-      return this.openaiTailorResume(profile, jobDescription, templateId)
+      return this.openaiTailorResume(profile, jobDescription )
     }
     if (this.provider === "gemini") {
-      return this.geminiTailorResume(profile, jobDescription, templateId)
+      return this.geminiTailorResume(profile, jobDescription )
     }
 
     throw new Error(`Unsupported LLM provider: ${this.provider}`)
   }
 
-  async mockTailorResume(profile, jobDescription) {
-    return {
-      name: profile.name || "John Doe",
-      title: profile.title || "Software Engineer",
-      contact: {
-        email: profile.email || "john@example.com",
-        phone: profile.phone || "+1 (555) 123-4567",
-        location: profile.location || "San Francisco, CA",
-      },
-      summary: `Experienced ${profile.title || "professional"} with expertise in modern technologies. Proven track record of delivering high-quality solutions and working effectively in collaborative environments.`,
-      skills:
-        profile.skills?.slice(0, 8) || [
-          "JavaScript",
-          "React",
-          "Node.js",
-          "Python",
-          "SQL",
-          "AWS",
-          "Docker",
-          "Git",
-        ],
-      experience:
-        profile.experience || [
-          {
-            title: "Senior Software Engineer",
-            company: "Tech Company",
-            location: "San Francisco, CA",
-            startDate: "Jan 2022",
-            endDate: "Present",
-            current: true,
-            description:
-              "Led development of scalable web applications using modern technologies.",
-            achievements: [
-              "Improved application performance by 40%",
-              "Led team of 5 engineers",
-              "Implemented CI/CD pipeline",
-            ],
-          },
-        ],
-      education:
-        profile.education || [
-          {
-            degree: "Bachelor of Science in Computer Science",
-            institution: "University of Technology",
-            location: "San Francisco, CA",
-            startYear: "2018",
-            endYear: "2022",
-            gpa: "3.8",
-          },
-        ],
-    }
-  }
-
-  async openaiTailorResume(profile, jobDescription, templateId) {
+  async openaiTailorResume(profile, jobDescription ) {
     try {
-      const prompt = this.buildTailoringPrompt(profile, jobDescription, templateId)
+      const prompt = this.buildTailoringPrompt(profile, jobDescription )
 
       const completion = await this.openai.chat.completions.create({
         model: "gpt-4o-mini",
@@ -119,10 +66,10 @@ class LLMAdapter {
     }
   }
 
-  async geminiTailorResume(profile, jobDescription, templateId) {
+  async geminiTailorResume(profile, jobDescription ) {
      
     try {
-      const prompt = this.buildTailoringPrompt(profile, jobDescription, templateId)
+      const prompt = this.buildTailoringPrompt(profile, jobDescription )
 
       const response = await this.geminiModel.generateContent(prompt)
 
@@ -144,8 +91,9 @@ class LLMAdapter {
     }
   }
 
+
   buildTailoringPrompt(profile, jobDescription) {
-    return `
+  return `
 Please tailor the following resume to match the job description below. 
 Maintain factual accuracy but optimize presentation, keywords, and emphasis 
 to align with the job requirements.
@@ -156,49 +104,75 @@ ${JSON.stringify(profile, null, 2)}
 JOB DESCRIPTION:
 ${jobDescription}
 
-Return a JSON object with this structure. 
-⚠️ Do NOT invent or add extra data. 
+Return a single JSON object with the following structure: 
+⚠️ Do NOT invent or add extra data or even icon or logo in it. 
 If any section (like projects) is missing in the candidate profile, exclude it.
 
 {
-  "name": "candidate name",
-  "title": "professional title matching role",
-  "contact": {
-    "email": "email",
-    "phone": "phone",
-    "location": "location"
+  "resume": {
+    "name": "candidate name",
+    "title": "professional title matching role",
+    "contact": {
+      "email": "email",
+      "phone": "phone",
+      "location": "location"
+    },
+    "summary": "3-4 sentence professional summary tailored to this role",
+    "skills": ["top 8-10 relevant skills"],
+    "experience": [
+      {
+        "title": "job title",
+        "company": "company name",
+        "location": "location",
+        "startDate": "start date",
+        "endDate": "end date or Present",
+        "current": boolean,
+        "description": "tailored description emphasizing relevant experience",
+        "achievements": ["3-5 quantified achievements relevant to role"]
+      }
+    ],
+    "education": [
+      {
+        "degree": "degree name",
+        "institution": "school name",
+        "location": "location",
+        "startYear": "year",
+        "endYear": "year",
+        "gpa": "gpa if provided"
+      }
+    ],
+    "projects": [
+      {
+        "name": "project title",
+        "description": "brief tailored description of project",
+        "technologies": ["list", "of", "tech stack"],
+        "link": "project URL if provided"
+      }
+    ]
   },
-  "summary": "3-4 sentence professional summary tailored to this role",
-  "skills": ["top 8-10 relevant skills"],
-  "experience": [
-    {
-      "title": "job title",
-      "company": "company name",
-      "location": "location",
-      "startDate": "start date",
-      "endDate": "end date or Present",
-      "current": boolean,
-      "description": "tailored description emphasizing relevant experience",
-      "achievements": ["3-5 quantified achievements relevant to role"]
-    }
+
+  "coverLetter": {
+    "greeting": "Dear Hiring Manager,",
+    "intro": "Opening paragraph introducing the candidate and role interest",
+    "body": [
+      "Paragraph 1: Highlight most relevant skills and achievements",
+      "Paragraph 2: Align past experience with job requirements",
+      "Paragraph 3 (optional): Why candidate is a cultural or mission fit"
+    ],
+    "closing": "Closing paragraph expressing enthusiasm and availability",
+    "signoff": "Sincerely,",
+    "signature": "Candidate Name"
+  },
+
+  "improvementTips": [
+    "Tip 1: Concrete suggestion to increase hiring chances",
+    "Tip 2: Another practical and actionable improvement"
   ],
-  "education": [
-    {
-      "degree": "degree name",
-      "institution": "school name",
-      "location": "location",
-      "startYear": "year",
-      "endYear": "year",
-      "gpa": "gpa if provided"
-    }
-  ],
-  "projects": [
-    {
-      "name": "project title",
-      "description": "brief tailored description of project",
-      "technologies": ["list", "of", "tech stack"],
-      "link": "project URL if provided"
-    }
+
+  "practiceFocus": [
+    "Point 1: Practical skill-building or preparation activity",
+    "Point 2: Main area to focus on for career growth",
+    "Point 3: Strategy to improve alignment with target jobs"
   ]
 }
 
@@ -209,8 +183,12 @@ Focus on:
 4. Maintain truthfulness to the original profile
 5. Optimize for ATS systems
 6. Add all Schooling detail
+7. Provide clear, professional, and concise cover letter text
+8. Give exactly 2 improvement tips and 3 practice focus points
 `
-  }
+}
+
+  
 }
 
 module.exports = new LLMAdapter()

@@ -71,15 +71,15 @@ const verifyEmail = async (req, res, next) => {
   try {
     const { token } = req.params
     if (!token) {
-      return res.status(400).json({ success: false, message: "Verification token missing"  })
+      return res.status(400).json({ success: false, message: "Verification token missing" })
     }
 
     // Verify token
     let decoded
     try {
-      decoded = await jwt.verifyEmailToken(token )
-      
-    } catch (err) { 
+      decoded = await jwt.verifyEmailToken(token)
+
+    } catch (err) {
       return res.status(400).json({ success: false, message: "Invalid or expired token" })
     }
 
@@ -156,8 +156,8 @@ const signup = async (req, res, next) => {
     await profile.save()
 
     // Generate email verification token (valid for 1h)
- 
-const emailToken = jwt.generateEmailToken(user._id.toString(), user.email, { expiresIn: '1h' })
+
+    const emailToken = jwt.generateEmailToken(user._id.toString(), user.email, { expiresIn: '1h' })
 
 
     const verificationUrl = `${env.FRONTEND_URL}/auth/verify-email/${emailToken}`
@@ -178,9 +178,15 @@ const emailToken = jwt.generateEmailToken(user._id.toString(), user.email, { exp
       html: EmailVerification(verificationUrl),
     });
 
+    const accessToken = jwt.generateAccessToken(user._id)
+    const refreshToken = jwt.generateRefreshToken(user._id)
+
+    // Set cookies
+    jwt.setTokenCookies(res, accessToken, refreshToken)
 
     res.status(201).json({
       success: true,
+      user: user.toJSON(),
       message: 'Signup successful! Please check your email to verify your account.',
     })
   } catch (error) {
@@ -189,7 +195,7 @@ const emailToken = jwt.generateEmailToken(user._id.toString(), user.email, { exp
 }
 
 const login = async (req, res, next) => {
-  try { 
+  try {
     const { error, value } = authValidation.login.validate(req.body)
     if (error) {
       return res.status(400).json({
@@ -316,6 +322,98 @@ const me = async (req, res, next) => {
   }
 };
 
+// ====================== FORGOT PASSWORD ======================
+
+const forgot = async (req, res, next) => {
+  try {
+    const { email } = req.body
+    if (!email) {
+      return res.status(400).json({ success: false, message: 'Email is required' })
+    }
+
+    // Find user
+    const user = await User.findOne({ email })
+    if (!user) {
+      return res.status(404).json({ success: false, message: 'User not found' })
+    }
+
+    // Generate reset token
+    const resetToken = jwt.generateResetToken(user.email)
+    const resetUrl = `${env.FRONTEND_URL}/auth/reset-password/${resetToken}`
+
+    // Setup transporter
+    const transporter = nodemailer.createTransport({
+      host: env.SMTP_HOST,
+      port: env.SMTP_PORT,
+      secure: false,
+      auth: { user: env.SMTP_USER, pass: env.SMTP_PASS },
+    })
+
+    // Send reset email
+    await transporter.sendMail({
+      from: `"Tailor Me" <${env.SMTP_USER}>`,
+      to: user.email,
+      subject: "Reset your password - Tailor Me",
+      html: `
+        <h2>Password Reset Request</h2>
+        <p>You requested to reset your password. Click the link below to reset:</p>
+        <a href="${resetUrl}" target="_blank">${resetUrl}</a>
+        <p>If you didn’t request this, please ignore this email.</p>
+      `,
+    })
+
+    res.json({
+      success: true,
+      message: "Password reset email sent successfully. Please check your inbox.",
+    })
+  } catch (error) {
+    next(error)
+  }
+}
+
+// ====================== RESET PASSWORD ======================
+const resetPassword = async (req, res, next) => {
+  try {
+    const { token, password } = req.body
+    if (!token || !password) {
+      return res.status(400).json({ success: false, message: 'Token and password are required' })
+    }
+
+    // Verify token
+    let decoded
+    try {
+      decoded = jwt.verifyResetToken(token)
+    } catch (err) {
+      return res.status(400).json({ success: false, message: 'Invalid or expired token' })
+    }
+
+    // Find user by decoded email
+    const user = await User.findOne({ email: decoded.email })
+    if (!user) {
+      return res.status(404).json({ success: false, message: 'User not found' })
+    }
+
+    // Update password
+    user.password = password
+    await user.save()
+
+    // Auto login after reset
+    const accessToken = jwt.generateAccessToken(user._id)
+    const refreshToken = jwt.generateRefreshToken(user._id)
+
+    jwt.setTokenCookies(res, accessToken, refreshToken)
+
+    res.json({
+      success: true,
+      message: 'Password reset successful, you are now logged in',
+      user: user.toJSON(),
+    })
+  } catch (error) {
+    next(error)
+  }
+}
+
+
 module.exports = {
   signup,
   login,
@@ -323,6 +421,11 @@ module.exports = {
   refresh,
   me,
   verifyEmail,
-  sendVerifyEmail
+  sendVerifyEmail,
+  forgot,
+  resetPassword,
+
+
+
 
 }

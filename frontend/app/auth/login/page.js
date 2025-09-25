@@ -12,11 +12,7 @@ export default function LoginPage() {
   const [loading, setLoading] = useState(false);
   const { login, user } = useAuth();
   const router = useRouter();
-useEffect(() => {
- if(user){
-  console.log("hi i cam asdfs ")
- }
-}, [])
+ 
 
   const handleChange = (e) => {
     setFormData((prev) => ({
@@ -40,9 +36,7 @@ useEffect(() => {
       setLoading(false);
     }
   };
-  const handle = ()=>{
-    console.log("hi")
-  }
+ 
 
   return (
    <div className="min-h-screen relative  flex items-center justify-center py-12 px-4">
@@ -56,7 +50,7 @@ useEffect(() => {
         </div>
         <span  className="text-2xl font-bold text-foreground">TailorMe</span>
       </Link>
-      <h1 onClick={handle} className="text-3xl font-bold text-foreground">Welcome back</h1>
+      <h1   className="text-3xl font-bold text-foreground">Welcome back</h1>
        
     </div>
 

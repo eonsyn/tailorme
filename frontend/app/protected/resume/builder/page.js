@@ -9,7 +9,8 @@ import BasicTemp from '@/template/BasicTemp';
 import ModernTemp from '@/template/ModernTemp';
 import ResumeEditor from '@/components/resume/ResumeEditor';
 import MinimalTemp from '@/template/MinimalTemp';
-import dummydata from '@/template/resume.json'
+import dummydata from '@/template/resume.json';
+import CoverLetter from '@/components/resume/CoverLetter'
 export default function ResumeBuilderPage() {
   const [jobDescription, setJobDescription] = useState('');
   const [generating, setGenerating] = useState(false);
@@ -19,6 +20,7 @@ export default function ResumeBuilderPage() {
   const [Template, setTemplate] = useState(() => ModernTemp);
   const [selectedTemplate, setSelectedTemplate] = useState('modern');
   const [editMode, setEditMode] = useState(false);
+  const [genresume, setGenResume] = useState(null);
 
   const templates = [
     { id: 'modern', name: 'Modern', component: ModernTemp, preview: '/Resume/modern-preview.png' },
@@ -40,13 +42,13 @@ export default function ResumeBuilderPage() {
     try {
       const response = await api.post('/resume/generate', { jobDescription });
 
-      if (!response || !response.resume) {
+      if (!response || !response.resumeData) {
         toast.error('Invalid response from server');
         setGenerating(false);
         return;
       }
-
-      setGeneratedResume(response.resume);
+      setGeneratedResume(response.resumeData.resume);
+      setGenResume(response.resumeData);
       setResumeId(response.resumeId || null);
       toast.success('Resume generated successfully!');
     } catch (err) {
@@ -91,17 +93,31 @@ export default function ResumeBuilderPage() {
             onChange={(e) => {
               const input = e.target.value;
               const nonSpaceLength = input.replace(/\s+/g, '').length;
-              if (nonSpaceLength <= 1500) setJobDescription(input);
+              if (nonSpaceLength <= 2000) {
+                setJobDescription(input);
+              } else {
+                // trim to 1500 non-space chars
+                const allowed = input
+                  .split('')
+                  .reduce((acc, char) => {
+                    if (acc.replace(/\s+/g, '').length < 2000) {
+                      return acc + char;
+                    }
+                    return acc;
+                  }, '');
+                setJobDescription(allowed);
+              }
             }}
             placeholder="Paste the job description here..."
             rows={12}
             className="input resize-none"
           />
+
           <div className="flex justify-between items-center mt-2">
             <span className="text-sm text-muted-foreground">
-              {jobDescription.replace(/\s+/g, '').length}/1500
+              {jobDescription.replace(/\s+/g, '').length}/2000
             </span>
-            
+
           </div>
         </div>
 
@@ -110,54 +126,52 @@ export default function ResumeBuilderPage() {
           <h2 className="text-xl font-semibold mb-4">Choose Template</h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
             {templates.map((templ) => {
-  const Com = templ.component; // Capitalized so React treats it as a component
-  return (
-    <button
-      key={templ.id}
-      onClick={() => {
-        setTemplate(() => templ.component);
-        setSelectedTemplate(templ.id);
-      }}
-      className={`p-3 rounded-lg border-2 transition-colors ${
-        selectedTemplate === templ.id
-          ? 'border-primary bg-primary/10 text-primary'
-          : 'border-border hover:border-ring'
-      }`}
-    >
-      <div className="aspect-[3/4] bg-muted rounded mb-2 border overflow-hidden">
-        <Com data={dummydata} />
-      </div>
-      <p className="text-sm font-medium">{templ.name}</p>
-    </button>
-  );
-})}
+              const Com = templ.component; // Capitalized so React treats it as a component
+              return (
+                <button
+                  key={templ.id}
+                  onClick={() => {
+                    setTemplate(() => templ.component);
+                    setSelectedTemplate(templ.id);
+                  }}
+                  className={`p-3 rounded-lg border-2 transition-colors ${selectedTemplate === templ.id
+                    ? 'border-primary bg-primary/10 text-primary'
+                    : 'border-border hover:border-ring'
+                    }`}
+                >
+                  <div className="aspect-[3/4] bg-muted rounded mb-2 border overflow-hidden">
+                    <Com data={dummydata} />
+                  </div>
+                  <p className="text-sm font-medium">{templ.name}</p>
+                </button>
+              );
+            })}
 
           </div>
           <button
-              onClick={handleGenerate}
-              disabled={generating || !jobDescription.trim()}
-              className="btn w-full mt-6 btn-primary"
-            >
-              {generating ? (
-                <span className="flex items-center">
-                  <LoadingSpinner className="animate-spin mr-2" /> Generating...
-                </span>
-              ) : (
-                <span className="flex items-center">
-                  <Coins className="w-5 h-5 mr-2" /> 2 credits Generate Resume
-                </span>
-              )}
-            </button>
+            onClick={handleGenerate}
+            disabled={generating || !jobDescription.trim()}
+            className="btn w-full mt-6 btn-primary"
+          >
+            {generating ? (
+              <span className="flex items-center">
+                <LoadingSpinner className="animate-spin mr-2" /> Generating...
+              </span>
+            ) : (
+              <span className="flex items-center">
+                <Coins className="w-5 h-5 mr-2" /> 2 credits Generate Resume
+              </span>
+            )}
+          </button>
         </div>
 
         {/* Preview Section */}
         <div
-          className={`card p-6 ${
-            editMode ? 'lg:col-span-1' : 'lg:col-span-2'
-          } flex flex-col`}
+          className={`card p-6 ${editMode ? 'lg:col-span-1' : 'lg:col-span-2'
+            } flex flex-col`}
         >
           <div className="flex justify-between items-center mb-4 no-print">
-            <h2 className="text-xl font-semibold">Preview</h2>
+            <h2 className="text-xl font-semibold">Resume Preview</h2>
             {generatedResume && (
               <div className="flex space-x-2">
                 <button
@@ -205,7 +219,9 @@ export default function ResumeBuilderPage() {
             <ResumeEditor resume={generatedResume} setResume={setGeneratedResume} />
           </div>
         )}
+
       </div>
+      <CoverLetter data={genresume?.coverLetter} />
     </div>
   );
 }

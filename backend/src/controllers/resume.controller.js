@@ -51,14 +51,14 @@ const generate = async (req, res, next) => {
     const resume = new Resume({
       user: req.user.userId,
       title: `Generated Resume - ${new Date().toLocaleString()}`,
-      content: tailoredResume,
+      content: tailoredResume.resume,
     });
     await resume.save();
 
     res.json({
       success: true,
       message: "Resume generated successfully",
-      resume: tailoredResume,
+      resumeData: tailoredResume,
       resumeId: resume._id,
     });
 
