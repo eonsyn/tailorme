@@ -48,15 +48,15 @@ const userSchema = new mongoose.Schema({
   payments: [paymentSchema],
 
   referral: {
-  referredBy: { type: mongoose.Schema.Types.ObjectId, ref: 'User', default: null },
-  referredUsers: [
-    {
-      user: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
-      date: { type: Date, default: Date.now }
-    }
-  ],
-}
-,
+    referredBy: { type: mongoose.Schema.Types.ObjectId, ref: 'User', default: null },
+    referredUsers: [
+      {
+        user: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
+        date: { type: Date, default: Date.now }
+      }
+    ],
+  }
+  ,
 
   isEmailVerified: {
     type: Boolean,

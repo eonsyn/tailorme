@@ -130,20 +130,18 @@ const signup = async (req, res, next) => {
 
     // Referral logic (same as before)
     let referredBy = null
-    if (referralCode) {
-      
+    if (referralCode) { 
       referredBy = await User.findOne({ username: referralCode })
-if(referredBy.deviceFingerprint === deviceFingerprint){
-  return res.status(400).json({
-    sucess:false,
-    message:"Don't missuse refferal"
-  })
-}
+      if (referredBy.deviceFingerprint === deviceFingerprint) {
+        return res.status(400).json({
+          sucess: false,
+          message: "Don't missuse refferal"
+        })
+      }
       if (!referredBy) {
         return res.status(400).json({ success: false, message: 'Invalid referral code' })
       }
     }
-
     // Create user with isEmailVerified = false
     const user = new User({
       name,
@@ -155,10 +153,10 @@ if(referredBy.deviceFingerprint === deviceFingerprint){
       credits: referredBy ? 20 : 10,
       referral: { referredBy: referredBy?._id },
       isEmailVerified: false
-    })
+    }) 
     await user.save()
 
-     
+
     // Generate email verification token (valid for 1h)
 
     // const emailToken = jwt.generateEmailToken(user._id.toString(), user.email, { expiresIn: '1h' })
@@ -181,13 +179,15 @@ if(referredBy.deviceFingerprint === deviceFingerprint){
     //   subject: "Verify your email - Tailor Me",
     //   html: EmailVerification(verificationUrl),
     // });
-
     const accessToken = jwt.generateAccessToken(user._id)
+    
+
     const refreshToken = jwt.generateRefreshToken(user._id)
 
     // Set cookies
     jwt.setTokenCookies(res, accessToken, refreshToken)
 
+    
     res.status(201).json({
       success: true,
       user: user.toJSON(),

@@ -4,6 +4,8 @@ import Navbar from '../components/Navbar';
 import background from '@/public/Images/background.png'
 import Image from 'next/image';
 import BackgroundImage from '@/components/BackgroundImage';
+import Review from '@/components/review/Review';
+
 export default function LandingPage() {
   return (
     <div className="min-h-screen">
@@ -78,7 +80,7 @@ export default function LandingPage() {
           </div>
         </div>
       </section>
-
+      <Review/>
       {/* CTA Section */}
       <section className="py-16 px-4 bg-primary-600">
         <div className="max-w-4xl mx-auto text-center">
