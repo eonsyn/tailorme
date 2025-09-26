@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useEffect } from "react";
 import Link from "next/link";
 import CopyLinkButton from "../smallComponent/CopyLinkButton";
 import ImageComponent from "@/components/blog/ImageComponent";
@@ -22,13 +22,11 @@ function UserBlogRender({ article }) {
         parts.push(text.slice(lastIndex, match.index));
       }
 
-      // Markdown links: [text](url)
+      // Markdown links
       if (match[1]) {
         const url = match[3].trim();
         const label = match[2];
-
-        const isExternal =
-          url.startsWith("http://") || url.startsWith("https://");
+        const isExternal = url.startsWith("http://") || url.startsWith("https://");
 
         if (isExternal) {
           parts.push(
@@ -82,19 +80,16 @@ function UserBlogRender({ article }) {
     return rows.length > 0 ? rows : null;
   }
 
+  useEffect(() => {
+    console.log(article);
+  }, []);
+
   const blocks = [];
   let paragraphCount = 0;
 
   article.content.forEach((block, index) => {
     switch (block.type) {
       case "heading": {
-        // if (paragraphCount % 2 === 0) {
-        //   blocks.push(
-        //     <div key={`ad-${index}`} className="my-6">
-        //       <ArticleAd />
-        //     </div>
-        //   );
-        // }
         const HeadingTag = `h${block.level || 1}`;
         blocks.push(
           <HeadingTag
@@ -109,13 +104,6 @@ function UserBlogRender({ article }) {
 
       case "paragraph": {
         paragraphCount++;
-        // if (paragraphCount % 3 === 0) {
-        //   blocks.push(
-        //     <div key={`ad-${index}`} className="my-6">
-        //       <ArticleAd />
-        //     </div>
-        //   );
-        // }
         blocks.push(
           <p
             key={index}
@@ -145,7 +133,9 @@ function UserBlogRender({ article }) {
             className="flex items-center flex-col py-4 h-[40vh] md:h-[60vh]"
           >
             <ImageComponent imageUrl={block.value} alt={block.alt} />
-            <span className="italic text-sm mt-2">{block.alt}</span>
+            {block.alt && (
+              <span className="italic text-sm mt-2">{block.alt}</span>
+            )}
           </div>
         );
         break;
@@ -156,9 +146,11 @@ function UserBlogRender({ article }) {
             key={index}
             className="list-disc list-inside text-base md:text-lg lg:text-xl mb-4 space-y-1"
           >
-            {block.value.split("\n").map((item, i) => (
-              <li key={i}>{renderTextWithLinks(item)}</li>
-            ))}
+            {(block.items?.length ? block.items : block.value?.split("\n") || []).map(
+              (item, i) => (
+                <li key={i}>{renderTextWithLinks(item)}</li>
+              )
+            )}
           </ul>
         );
         break;
@@ -196,7 +188,7 @@ function UserBlogRender({ article }) {
                       key={rowIndex}
                       className={
                         rowIndex === 0
-                          ? "bg-red-200  text-center font-semibold"
+                          ? "bg-red-400 text-center font-semibold"
                           : rowIndex % 2 === 0
                           ? " "
                           : ""

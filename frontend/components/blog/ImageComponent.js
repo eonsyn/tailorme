@@ -25,14 +25,14 @@ function ImageComponent({ imageUrl, alt }) {
       {/* Thumbnail */}
       <div
         onClick={() => setIsOpen(true)}
-        className="cursor-zoom-in transition-transform duration-300 ease-in-out  inline-block h-full w-full relative"
+        className="cursor-zoom-in  transition-transform duration-300 ease-in-out  inline-block h-full w-full relative"
       >
         {imageUrl.startsWith("https://res.cloudinary") ? (
            <Image
         src={imageUrl}
         alt={alt}
         fill
-        className="object-contain rounded-md"
+        className="object-cover rounded-md"
           
       />
 
@@ -40,7 +40,7 @@ function ImageComponent({ imageUrl, alt }) {
           <img
             src={imageUrl}
             alt={alt}
-            className="h-full w-full object-contain rounded-md shadow"
+            className="h-full w-full object-cover rounded-md shadow"
           />
         )}
 

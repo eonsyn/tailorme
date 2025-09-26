@@ -18,6 +18,7 @@ export default function BlogSuggestions({ tags, slug }) {
         });
 
         const data = await res.json();
+         console.log("blog suggestion:",data)
         if (res.ok) {
           const filtered = data.suggestions?.filter(item => item.slug !== slug) || [];
           setSuggestions(filtered);
@@ -28,6 +29,7 @@ export default function BlogSuggestions({ tags, slug }) {
     };
 
     fetchSuggestions();
+   
   }, [tags, slug]);
 
   if (!suggestions.length) return null;
