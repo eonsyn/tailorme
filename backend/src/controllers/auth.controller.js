@@ -5,7 +5,7 @@ const { authValidation } = require('../utils/validators')
 const env = require("../config/env");
 const nodemailer = require("nodemailer");
 const EmailVerification = require('../../public/EmailVerification')
-
+const axios = require("axios");
 
 
 // ====================== SEND VERIFY EMAIL ======================
@@ -41,21 +41,15 @@ const sendVerifyEmail = async (req, res, next) => {
     const emailToken = jwt.generateEmailToken(user._id, user.email)
     const verificationUrl = `${env.FRONTEND_URL}/auth/verify-email/${emailToken}`
 
-    // Setup transporter
-    const transporter = nodemailer.createTransport({
-      host: env.SMTP_HOST,
-      port: env.SMTP_PORT,
-      secure: false,
-      auth: { user: env.SMTP_USER, pass: env.SMTP_PASS },
-    })
+     
 
     // Send email
-    await transporter.sendMail({
-      from: `"Tailor Me" <${env.SMTP_USER}>`,
+    await axios.post(`${env.EMAIL_HOST}/send-email`, {
       to: user.email,
       subject: "Verify your email - Tailor Me",
+      text: `Verify your email here: ${verificationUrl}`,
       html: EmailVerification(verificationUrl),
-    })
+    });
 
     res.json({
       success: true,
@@ -326,54 +320,56 @@ const me = async (req, res, next) => {
   }
 };
 
-// ====================== FORGOT PASSWORD ======================
+// ====================== FORGOT PASSWORD =================
 
 const forgot = async (req, res, next) => {
   try {
-    const { email } = req.body
+    const { email } = req.body;
     if (!email) {
-      return res.status(400).json({ success: false, message: 'Email is required' })
+      return res.status(400).json({ success: false, message: "Email is required" });
     }
 
     // Find user
-    const user = await User.findOne({ email })
+    const user = await User.findOne({ email });
     if (!user) {
-      return res.status(404).json({ success: false, message: 'User not found' })
+      return res.status(404).json({ success: false, message: "User not found" });
     }
 
     // Generate reset token
-    const resetToken = jwt.generateResetToken(user.email)
-    const resetUrl = `${env.FRONTEND_URL}/auth/reset-password/${resetToken}`
+    const resetToken = jwt.generateResetToken(user.email);
+    const resetUrl = `${env.FRONTEND_URL}/auth/reset-password/${resetToken}`;
 
-    // Setup transporter
-    const transporter = nodemailer.createTransport({
-      host: env.SMTP_HOST,
-      port: env.SMTP_PORT,
-      secure: false,
-      auth: { user: env.SMTP_USER, pass: env.SMTP_PASS },
-    })
-
-    // Send reset email
-    await transporter.sendMail({
-      from: `"Tailor Me" <${env.SMTP_USER}>`,
+    // Call external email microservice
+    await axios.post(`${env.EMAIL_HOST}/send-email`, {
       to: user.email,
       subject: "Reset your password - Tailor Me",
+      text: `Reset your password by clicking here: ${resetUrl}`,
       html: `
-        <h2>Password Reset Request</h2>
-        <p>You requested to reset your password. Click the link below to reset:</p>
-        <a href="${resetUrl}" target="_blank">${resetUrl}</a>
-        <p>If you didn’t request this, please ignore this email.</p>
+        <div style="font-family: Arial, sans-serif; padding: 20px;">
+          <h2>Password Reset Request</h2>
+          <p>You requested to reset your password. Click the link below to reset:</p>
+          <a href="${resetUrl}" target="_blank"
+             style="display:inline-block; padding:10px 20px;
+                    background:#4CAF50; color:#fff; text-decoration:none;
+                    border-radius:5px;">
+            Reset Password
+          </a>
+          <p style="margin-top:20px;">If you didn’t request this, please ignore this email.</p>
+        </div>
       `,
-    })
+    });
 
-    res.json({
+    return res.json({
       success: true,
       message: "Password reset email sent successfully. Please check your inbox.",
-    })
+    });
   } catch (error) {
-    next(error)
+    console.error("❌ Forgot password error:", error);
+    next(error);
   }
-}
+};
+
+
 
 // ====================== RESET PASSWORD ======================
 const resetPassword = async (req, res, next) => {

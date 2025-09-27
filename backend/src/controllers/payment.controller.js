@@ -4,7 +4,7 @@ const env = require("../config/env");
 const User = require("../models/User");
 const nodemailer = require("nodemailer");
 const paymentSuccessTemplate = require('../../public/paymentSuccessTemplate')
-
+const axios = require("axios");
 // 🎯 Credit Packs
 const CREDIT_PLANS = {
   basic: { credits: 30, price: 20 },
@@ -79,17 +79,11 @@ const verifyPayment = async (req, res) => {
     await user.save();
 
     //   Send Email
-    const transporter = nodemailer.createTransport({
-      host: env.SMTP_HOST,
-      port: env.SMTP_PORT,
-      secure: false,
-      auth: { user: env.SMTP_USER, pass: env.SMTP_PASS },
-    }); 
-    await transporter.sendMail({
-      from: `"Tailor Me" <${env.SMTP_USER}>`,
+    await axios.post("http://localhost:4000/send-email", {
       to: user.email,
       subject: "Credits Purchased - Tailor Me",
-      html:paymentSuccessTemplate(user, plan, credits,price),
+      text: `Your purchase of ${credits} credits was successful. Plan: ${plan}, Amount: ₹${price}`,
+      html: paymentSuccessTemplate(user, plan, credits, price),
     });
 
     res.json({ success: true, message: `  ${credits} credits added to your account!` });

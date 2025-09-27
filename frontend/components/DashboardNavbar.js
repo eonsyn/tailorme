@@ -11,7 +11,7 @@ export default function DashboardNavbar() {
   const { user,checkAuth, logout } = useAuth()
   const pathname = usePathname()
   const [open, setOpen] = useState(false)
-  const [theme, setTheme] = useState('light')
+  const [theme, setTheme] = useState('dark')
 
   useEffect(() => {
     // Set initial theme from local storage or system preference
@@ -115,7 +115,10 @@ export default function DashboardNavbar() {
 
                     {/* Logout Button */}
                     <button
-                      onClick={logout}
+                      onClick={async() => {
+                  await logout();
+                   window.location.reload();
+                }}
                       className="w-full mt-2 px-4 py-2 text-sm text-destructive hover:bg-destructive/10 rounded-lg transition-colors"
                     >
                       Logout
@@ -169,9 +172,10 @@ export default function DashboardNavbar() {
             <div className="border-t border-border pt-4 mt-4 space-y-2">
               <div className="px-4 py-2 text-sm text-muted-foreground">Hi, {user?.name}</div>
               <button
-                onClick={() => {
-                  logout()
-                  setIsOpen(false)
+                onClick={async() => {
+                 await logout();
+                  setIsOpen(false);
+                   window.location.reload();
                 }}
                 className="w-full text-left px-4 py-2 text-destructive hover:bg-destructive/10"
               >
