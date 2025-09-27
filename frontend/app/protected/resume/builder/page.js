@@ -37,7 +37,8 @@ export default function ResumeBuilderPage() {
     setGenerating(true);
     setGeneratedResume(null);
     setResumeId(null);
-    setProgress(0);
+    setGenResume(null);
+    setProgress(40);
 
     try {
       const response = await api.post('/resume/generate', { jobDescription });
@@ -122,9 +123,9 @@ export default function ResumeBuilderPage() {
         </div>
 
         {/* Template Selection */}
-        <div className="card p-6 no-print">
+        <div className="card  p-6 no-print">
           <h2 className="text-xl font-semibold mb-4">Choose Template</h2>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+          <div className="grid  grid-cols-3 gap-4">
             {templates.map((templ) => {
               const Com = templ.component; // Capitalized so React treats it as a component
               return (
@@ -139,7 +140,7 @@ export default function ResumeBuilderPage() {
                     : 'border-border hover:border-ring'
                     }`}
                 >
-                  <div className="aspect-[3/4] bg-muted rounded mb-2 border overflow-hidden">
+                  <div className="aspect-[3/4] bg-muted rounded mb-2 border relative overflow-hidden">
                     <Com data={dummydata} />
                   </div>
                   <p className="text-sm font-medium">{templ.name}</p>
@@ -159,7 +160,7 @@ export default function ResumeBuilderPage() {
               </span>
             ) : (
               <span className="flex items-center">
-                <Coins className="w-5 h-5 mr-2" /> 2 credits Generate Resume
+                <Coins className="w-5 h-5 mr-2" /> 1 credits Generate Resume
               </span>
             )}
           </button>

@@ -30,7 +30,11 @@ const generate = async (req, res, next) => {
     if (!profile) {
       return res.status(400).json({ success: false, message: "Please complete your profile first" });
     }
- 
+ if(profile.completeness<50){
+  return res.status(400).json({
+    success:false,message:"Complete your Profile First."
+  })
+ }
     // 🔹 Directly call LLM adapter (no queue)
      let tailoredResume;
     try {
@@ -44,7 +48,7 @@ const generate = async (req, res, next) => {
     }
     
     // 🔹 Deduct credits
-    user.credits -= 2;
+    user.credits -= 1;
     await user.save();
 
     // 🔹 Optionally save resume to DB

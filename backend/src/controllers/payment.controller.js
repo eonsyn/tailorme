@@ -79,7 +79,7 @@ const verifyPayment = async (req, res) => {
     await user.save();
 
     //   Send Email
-    await axios.post("http://localhost:4000/send-email", {
+    await axios.post(`${env.EMAIL_HOST}/send-email`, {
       to: user.email,
       subject: "Credits Purchased - Tailor Me",
       text: `Your purchase of ${credits} credits was successful. Plan: ${plan}, Amount: ₹${price}`,

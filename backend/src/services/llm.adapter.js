@@ -16,7 +16,7 @@ class LLMAdapter {
     if (this.provider === "gemini") {
       this.gemini = new GoogleGenerativeAI(env.GEMINI_API_KEY)
       this.geminiModel = this.gemini.getGenerativeModel({
-        model: "gemini-1.5-flash", // fast and cost-effective
+        model: "gemini-2.5-flash", // fast and cost-effective
       })
     }
   }

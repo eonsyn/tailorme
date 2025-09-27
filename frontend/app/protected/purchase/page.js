@@ -51,7 +51,7 @@ export default function PurchasePage() {
             };
 
             const verifyRes = await api.post("/payment/verify-payment", payload);
-
+             
             if (verifyRes.success) {
               toast.success(`${verifyRes.message}`);
               // Refresh user data after credits added
@@ -61,8 +61,8 @@ export default function PurchasePage() {
               toast.error("Payment verification failed.");
             }
           } catch (err) {
-            console.error(err);
-            toast.error("Verification error. Try again.");
+            console.error("error is :",err);
+            toast.error("Verification error. Try again."); 
           }
         },
         theme: { color: "#6366f1" }
