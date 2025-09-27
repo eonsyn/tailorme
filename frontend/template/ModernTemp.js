@@ -25,7 +25,7 @@ export default function ModernCardTemp({ data }) {
   return (
     <div id="print-area" className="  bg-white shadow-md rounded-lg overflow-hidden font-sans">
       {/* Header */}
-      <div className="bg-gradient-to-r from-indigo-600 to-blue-500 text-white p-8 text-center">
+      <div className="text-black p-8 text-center">
         <h1 className="text-4xl font-bold uppercase">{data.name}</h1>
         <p className="text-lg opacity-90 mt-1">{data.title}</p>
        
