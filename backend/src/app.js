@@ -10,7 +10,7 @@ const errorHandler = require('./middlewares/errorHandler')
 const app = express()
 const allowedOrigins = [
   'http://localhost:3000',
-  process.env.FRONTEND_URL, // replace with your actual frontend URL
+  process.env.FRONTEND_URL || "https://tailor0me.vercel.app", // replace with your actual frontend URL
 ];
 // Security middleware
 app.use(helmet())
