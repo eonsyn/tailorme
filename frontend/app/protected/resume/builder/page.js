@@ -222,7 +222,7 @@ export default function ResumeBuilderPage() {
         )}
 
       </div>
-      <CoverLetter data={genresume?.coverLetter} />
+      {/*<CoverLetter data={genresume?.coverLetter} />*/}
     </div>
   );
 }
