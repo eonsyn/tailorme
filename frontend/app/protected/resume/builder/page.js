@@ -85,7 +85,11 @@ export default function ResumeBuilderPage() {
         <h1 className="text-3xl font-bold text-foreground">Resume Builder</h1>
         <p className="text-muted-foreground mt-2">Create and update your tailored resume</p>
       </div>
+{/* <MinimalTemp data={dummydata}/>
 
+
+<ModernTemp data={dummydata}/>
+<BasicTemp data={dummydata}/> */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
         {/* Job Description */}
         <div className="card p-6 no-print">
