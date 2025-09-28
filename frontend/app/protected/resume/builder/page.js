@@ -11,6 +11,7 @@ import ResumeEditor from '@/components/resume/ResumeEditor';
 import MinimalTemp from '@/template/MinimalTemp';
 import dummydata from '@/template/resume.json';
 import CoverLetter from '@/components/resume/CoverLetter'
+import Image from 'next/image';
 export default function ResumeBuilderPage() {
   const [jobDescription, setJobDescription] = useState('');
   const [generating, setGenerating] = useState(false);
@@ -23,9 +24,9 @@ export default function ResumeBuilderPage() {
   const [genresume, setGenResume] = useState(null);
 
   const templates = [
-    { id: 'modern', name: 'Modern', component: ModernTemp, preview: '/Resume/modern-preview.png' },
-    { id: 'classic', name: 'Classic', component: BasicTemp, preview: '/Resume/classic-preview.png' },
-    { id: 'minimal', name: 'Minimal', component: MinimalTemp, preview: '/Resume/minimal-preview.png' }
+    { id: 'modern', name: 'Modern', component: ModernTemp, preview: '/Resume/ModernTemp.jpg' },
+    { id: 'classic', name: 'Classic', component: BasicTemp, preview: '/Resume/BasicTemp.jpg' },
+    { id: 'minimal', name: 'Minimal', component: MinimalTemp, preview: '/Resume/MinimalTemp.png' }
   ];
 
   const handleGenerate = async () => {
@@ -141,7 +142,15 @@ export default function ResumeBuilderPage() {
                     }`}
                 >
                   <div className="aspect-[3/4] bg-muted rounded mb-2 border relative overflow-hidden">
-                    <Com data={dummydata} />
+                    
+                    <div style={{ position: 'relative', width: '100%', height: '100%' }}>
+  <Image
+    src={templ.preview}
+    alt='preview resume'
+    fill // This makes the image fill its parent
+    style={{ objectFit: 'cover' }} // This ensures the image covers the area without distortion
+  />
+</div>
                   </div>
                   <p className="text-sm font-medium">{templ.name}</p>
                 </button>
@@ -165,7 +174,7 @@ export default function ResumeBuilderPage() {
             )}
           </button>
         </div>
-
+ 
         {/* Preview Section */}
         <div
           className={`card p-6 ${editMode ? 'lg:col-span-1' : 'lg:col-span-2'
