@@ -27,17 +27,17 @@ export async function generateMetadata({ params }) {
     const formattedTitle = article.title || slug.replaceAll("-", " ");
     const description =
       article.content?.find((b) => b.type === "paragraph")?.value.slice(0, 160) ||
-      "Read the latest article on aktu brand.";
+      "Read the latest article on Tailor Me.";
     const image =
       article.thumbnailUrl ||
       "https://tailor0me.vercel.app/default-thumbnail.jpg";
 
     return {
-      title: `${formattedTitle} | aktu brand`,
+      title: `${formattedTitle} | Tailor Me`,
       description,
       keywords: article.tags?.join(", "),
       openGraph: {
-        title: `${formattedTitle} | aktu brand`,
+        title: `${formattedTitle} | Tailor Me`,
         description,
         url: `https://tailor0me.vercel.app/blog/${slug}`,
         images: [
@@ -52,7 +52,7 @@ export async function generateMetadata({ params }) {
       },
       twitter: {
         card: "summary_large_image",
-        title: `${formattedTitle} | aktu brand`,
+        title: `${formattedTitle} | Tailor Me`,
         description,
         images: [image],
       },
@@ -60,8 +60,8 @@ export async function generateMetadata({ params }) {
   } catch (error) {
     console.error("Metadata generation error:", error);
     return {
-      title: "Blog | aktu brand",
-      description: "Read the latest blog posts on aktu brand.",
+      title: "Blog | Tailor Me",
+      description: "Read the latest blog posts on Tailor Me.",
     };
   }
 }
