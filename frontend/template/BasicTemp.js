@@ -21,7 +21,7 @@ function BasicTemp({ data }) {
   return (
     <div
       id="print-area"
-      className="w-full min-h-[1123px] bg-white p-12 font-sans text-gray-800 mx-auto shadow-xl print:shadow-none"
+      className="w-full   bg-white p-12 font-sans text-gray-800 mx-auto shadow-xl print:shadow-none"
     >
       {/* Header */}
       <header className="text-center pb-2">

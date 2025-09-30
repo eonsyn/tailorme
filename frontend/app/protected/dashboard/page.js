@@ -6,6 +6,8 @@ import { FileText, User, CreditCard, TrendingUp, ArrowRight } from "lucide-react
 import api from "../../../lib/api";
 import VerifyEmail from "@/components/alert/VerifyEmail";
 import { useAuth } from '@/lib/auth';
+
+import  BackgroundImage from '@/components/BackgroundImage'
 // Skeleton Loader Component
 const DashboardSkeleton = () => {
   return (
@@ -63,34 +65,18 @@ const DashboardSkeleton = () => {
 };
 
 // Main Dashboard Page Component
-export default function DashboardPage() {
-  const [stats, setStats] = useState(null);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    fetchDashboardStats();
-  }, []);
-  const {user}=useAuth()
-
-  const fetchDashboardStats = async () => {
-    try {
-      const data = await api.get("/dashboard/stats");
-      console.log("Dashboard stats:", data);
-      setStats(data);
-    } catch (error) {
-      console.error("Failed to fetch dashboard stats:", error);
-    } finally {
-      setLoading(false);
-    }
-  };
-
+export default function DashboardPage() { 
+  
+  
+  const {user,stats,loading}=useAuth()
+ 
   if (loading) {
     return <DashboardSkeleton />;
   }
 
   return (
-    <div className="space-y-8">
-      {/* Main Heading Section */}
+    <div className="space-y-8 relative">
+      {/* Main Heading Section */} 
       <div>
         <h1 className="text-3xl font-bold text-foreground">Dashboard</h1>
         <p className="text-muted-foreground mt-2">Welcome back! Here&apos;s your overview.</p>

@@ -17,7 +17,7 @@ function MinimalTemp({ data }) {
   return (
     <div
       id="print-area"
-      className="w-full min-h-[1123px] bg-white p-10 font-sans text-gray-800  shadow-xl print:shadow-none"
+      className="w-full   bg-white p-10 font-sans text-gray-800  shadow-xl print:shadow-none"
     >
       {/* ================= HEADER ================= */}
       <header className="flex justify-between items-start mb-6">

@@ -8,14 +8,15 @@ const AuthContext = createContext({})
 
 export function AuthProvider({ children }) {
   const [user, setUser] = useState(null)
-  const [profile,setProfile]=useState(null)
+  const [profile, setProfile] = useState(null)
   const [loading, setLoading] = useState(true)
+    const [stats, setStats] = useState(null);
   const router = useRouter()
   const pathname = usePathname()
 
   useEffect(() => {
     checkAuth()
-    checkProfile()
+    
   }, [])
 
   useEffect(() => {
@@ -29,6 +30,8 @@ export function AuthProvider({ children }) {
     try {
       const response = await api.get('/auth/me')
       setUser(response.user)
+      checkProfile()
+    fetchDashboardStats()
     } catch (error) {
       setUser(null)
     } finally {
@@ -50,14 +53,14 @@ export function AuthProvider({ children }) {
     setUser(response.user)
     return response
   }
- const forgot = async (email)=>{
-  const response = await api.post('/auth/forgot',{email})
-  return response;
- }
- const reset_password= async (token, password) =>{
-  const response = await api.post('/auth/reset-password',{token, password})
-return response; 
-}
+  const forgot = async (email) => {
+    const response = await api.post('/auth/forgot', { email })
+    return response;
+  }
+  const reset_password = async (token, password) => {
+    const response = await api.post('/auth/reset-password', { token, password })
+    return response;
+  }
   const signup = async (email, password, name, username, referralCode, deviceFingerprint) => {
     console.log("referralCode is :", referralCode)
     const response = await api.post('/auth/signup', {
@@ -96,7 +99,17 @@ return response;
     const response = await api.get(`/auth/verify-email/${token}`)
     return response
   }
-
+const fetchDashboardStats = async () => {
+    try {
+      const data = await api.get("/dashboard/stats");
+      console.log("Dashboard stats:", data);
+      setStats(data);
+    } catch (error) {
+      console.error("Failed to fetch dashboard stats:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
   const sendVerifyEmail = async () => {
     const response = await api.post('/auth/send-verify-email', {
       email: user.email
@@ -110,10 +123,12 @@ return response;
     profile,
     loading,
     login,
+    stats,
+    fetchDashboardStats,
     signup,
     logout,
     forgot,
-reset_password,
+    reset_password,
     checkAuth,
     checkProfile,
     getprofile,

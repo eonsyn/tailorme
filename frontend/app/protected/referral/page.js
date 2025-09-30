@@ -18,8 +18,8 @@ export default function ReferralPage() {
   };
 
   return (
-    <div className="flex flex-col items-center min-h-screen bg-background p-6 sm:p-8">
-      <div className="w-full max-w-2xl p-2 sm:p-8 lg:p-12 text-center ">
+    <div className="flex flex-col items-center min-h-screen   sm:p-8">
+      <div className="w-full max-w-2xl p-2 sm:p-8  text-center ">
         {/* Header */}
         <h1 className="text-3xl sm:text-4xl font-extrabold text-foreground mb-2">
           Invite & Earn Credits

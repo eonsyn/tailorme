@@ -156,6 +156,13 @@
     /* Primary button styles */
     @apply bg-[var(--color-primary)] text-[var(--color-primary-foreground)] hover:bg-[var(--color-primary-foreground)] hover:text-[var(--color-primary)] disabled:opacity-50 disabled:cursor-not-allowed;
   }
+.btn-danger {
+  @apply  bg-[var(--color-primary-foreground)]  
+         hover:bg-[var(--color-destructive)] hover:text-[var(--color-primary-foreground)] 
+         text-[var(--color-destructive)]
+         border border-[var(--color-destructive)]
+         disabled:opacity-50 disabled:cursor-not-allowed;
+}
 
   .btn-secondary {
     /* Secondary button styles */
@@ -181,43 +188,42 @@
 
 /* Print-specific styles to hide non-essential elements */
 /* Hide browser print headers & footers */
-@page {
-  margin: 0;
+ 
+
+
+
+
+
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-12px); }
 }
 
-/* Ensure only resume content prints */
-@media print {
-  html, body {
-    background: white !important;  /* Full page white */
-    color: black !important;       /* Ensure text is visible */
-    margin: 0;
-    padding: 0;
+@keyframes gradientShift {
+  0% {
+    background-position: 0% 50%;
+    transform: rotate(0deg);
   }
-
-  body * {
-    -webkit-print-color-adjust: exact !important; /* Safari/Chrome */
-    print-color-adjust: exact !important;        /* Firefox/Edge */
-    color-adjust: exact !important;              /* Legacy */
+  25% {
+    background-position: 50% 50%;
+    transform: rotate(90deg);
   }
-
-  #print-area,
-  #print-area * {
-    visibility: visible;
-    background: white !important; /* Ensure content background is white too */
+  50% {
+    background-position: 100% 50%;
+    transform: rotate(180deg);
   }
-
-  .no-print {
-    display: none !important;
+  75% {
+    background-position: 50% 50%;
+    transform: rotate(270deg);
   }
-
-  #print-area {
-    position: absolute;
-    left: 0;
-    top: 0;
-    width: 100%;
-    height: 100%; 
-
-    page-break-inside: avoid;
+  100% {
+    background-position: 0% 50%;
+    transform: rotate(360deg);
   }
 }
 
+
+@keyframes glowPulse {
+  0%, 100% { opacity: 0.2; transform: scale(0.9); }
+  50% { opacity: 0.5; transform: scale(1.1); }
+}
