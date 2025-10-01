@@ -101,6 +101,7 @@ export function AuthProvider({ children }) {
   }
 const fetchDashboardStats = async () => {
     try {
+      setLoading(true);
       const data = await api.get("/dashboard/stats");
       console.log("Dashboard stats:", data);
       setStats(data);
