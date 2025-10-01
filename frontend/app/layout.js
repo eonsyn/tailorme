@@ -6,7 +6,7 @@ import Footer from "@/components/Footer";
 import Script from "next/script";
 
 export const metadata = {
-  title: 'TailorMe - AI-Powered Resume Tailoring',
+  title: 'Gpt Resume - AI-Powered Resume Tailoring',
   description: 'Create job-specific resumes tailored to any job description using AI',
   verification: {
     google: "l447jfQ4xxcrmN2Q_Cq8q3aeuLvLAJo6cVNv35IA96Y",

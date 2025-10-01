@@ -5,7 +5,7 @@ import background from '@/public/Images/background.png'
 import Image from 'next/image';
 import BackgroundImage from '@/components/BackgroundImage';
 import Review from '@/components/review/Review';
-
+import Faq from '@/components/Faq';
 export default function LandingPage() {
   return (
     <div className="min-h-screen">
@@ -14,14 +14,13 @@ export default function LandingPage() {
       {/* Hero Section */}
       <section className="pt-20 relative pb-16 px-4">
         <BackgroundImage/>
-        <div className="max-w-6xl mx-auto text-center">
+        <div className="max-w-7xl mx-auto text-center">
           <h1 className="text-5xl md:text-7xl font-bold   mb-6 leading-tight">
             AI-Powered
-            <span className="block ">Resume Tailoring</span>
+            <span className="block -mt-3">Resume Tailoring</span>
           </h1>
-          <p className="text-xl  mb-8 max-w-3xl mx-auto leading-relaxed">
-            Transform your generic resume into job-specific masterpieces. Our AI analyzes job descriptions 
-            and crafts perfectly tailored resumes, cover letters, and interview preparation materials.
+          <p className="text-base  mb-8 max-w-xl mx-auto leading-relaxed">
+           Turn your generic resume into a job-ready masterpiece. Our AI tailors resumes, cover letters, and self-improvement tips for the perfect role fit.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Link href="/auth/signup" className="btn btn-primary text-lg px-8 py-4">
@@ -95,6 +94,8 @@ export default function LandingPage() {
           </Link>
         </div>
       </section>
+
+      <Faq/>
  
     </div>);
 

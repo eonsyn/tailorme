@@ -5,7 +5,9 @@ import { usePathname } from 'next/navigation'
 import { useState, useEffect } from 'react'
 import { Menu, X, User, FileText, Settings, CreditCard, Gift, Sun, Moon } from 'lucide-react'
 import { useAuth } from '../lib/auth'
-
+import WhiteLogo from '@/public/WhiteLogo.png';
+import BlackLogo from '@/public/BlackLogo.png'
+import Image from 'next/image';
 export default function DashboardNavbar() {
   const [isOpen, setIsOpen] = useState(false)
   const { user,checkAuth, logout } = useAuth()
@@ -50,10 +52,10 @@ export default function DashboardNavbar() {
         <div className="flex justify-between items-center h-16">
           {/* Logo and Name */}
           <Link href="/protected/dashboard" className="flex items-center space-x-2">
-            <div className="w-8 h-8 bg-primary rounded-md flex items-center justify-center">
-              <span className="text-primary-foreground font-bold text-lg">T</span>
-            </div>
-            <span className="text-xl font-bold text-foreground">TailorMe</span>
+            <div className="w-8 h-8 rounded-md flex items-center justify-center">
+                <Image src={theme === "dark" ?WhiteLogo:BlackLogo} alt='logo' cover />
+               </div>
+            <span className="text-xl font-bold text-foreground">GptResume</span>
           </Link>
 
           {/* Desktop Navigation */}

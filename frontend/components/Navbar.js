@@ -4,7 +4,9 @@ import Link from "next/link";
 import { useState, useEffect } from "react";
 import { Menu, Sun, Moon, X } from "lucide-react";
 import { usePathname } from "next/navigation";
-
+import WhiteLogo from '@/public/WhiteLogo.png';
+import BlackLogo from '@/public/BlackLogo.png'
+import Image from 'next/image';
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
   const [theme, setTheme] = useState("dark");
@@ -42,10 +44,11 @@ export default function Navbar() {
         <div className="flex justify-between items-center h-16">
           {/* Logo */}
           <Link href="/" className="flex items-center space-x-2">
-            <div className="w-8 h-8 bg-primary rounded-md flex items-center justify-center">
-              <span className="text-secondary font-bold text-lg">T</span>
+            <div className="w-8 h-8   rounded-md flex items-center justify-center">
+              <Image src={theme === "dark" ?WhiteLogo:BlackLogo} alt='logo' cover />
             </div>
-            <span className="text-xl font-bold text-foreground">TailorMe</span>
+            
+            <span className="text-xl font-bold text-foreground">GptResume</span>
           </Link>
 
           {/* Desktop Navigation */}

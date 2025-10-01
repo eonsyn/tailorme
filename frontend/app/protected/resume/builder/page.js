@@ -5,6 +5,8 @@ import { Wand2, Download, Coins, Edit3, Save } from 'lucide-react';
 import toast from 'react-hot-toast';
 import api from '@/lib/api';
 import LoadingSpinner from '../../../../components/LoadingSpinner';
+import ImprovementTips from '@/components/resume/ImprovementTips';
+import PracticeFocus from '@/components/resume/PracticeFocus';
 import BasicTemp from '@/template/BasicTemp';
 import ModernTemp from '@/template/ModernTemp';
 import ResumeEditor from '@/components/resume/ResumeEditor';
@@ -119,7 +121,7 @@ export default function ResumeBuilderPage() {
 
   return (
     <div className="space-y-8">
-       
+
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
         {/* Job Description */}
@@ -131,12 +133,12 @@ export default function ResumeBuilderPage() {
             </div>
           ) : (
             <div className="card p-6 no-print">
-              <h2 className="text-xl flex gap-2 items-center font-semibold mb-4">  <button  onClick={() => {
+              <h2 className="text-xl flex gap-2 items-center font-semibold mb-4">  <button onClick={() => {
                 setGeneratedResume(null);
                 setResumeId(null);
                 setGenResume(null);
               }} className="btn rounded-full p-3 btn-danger">
-                <ArrowLeft />    
+                <ArrowLeft />
               </button>Choose Template</h2>
               <div className="grid grid-cols-3 gap-4">
                 {templates.map((templ) => {
@@ -149,8 +151,8 @@ export default function ResumeBuilderPage() {
                         setSelectedTemplate(templ.id);
                       }}
                       className={`p-3 rounded-lg border-2 transition-colors ${selectedTemplate === templ.id
-                          ? 'border-primary bg-primary/10 text-primary'
-                          : 'border-border hover:border-ring'
+                        ? 'border-primary bg-primary/10 text-primary'
+                        : 'border-border hover:border-ring'
                         }`}
                     >
                       <div className="aspect-[3/4] bg-muted rounded mb-2 border relative overflow-hidden">
@@ -168,7 +170,7 @@ export default function ResumeBuilderPage() {
                   );
                 })}
               </div>
-             
+
             </div>
           )
         ) : (
@@ -281,7 +283,18 @@ export default function ResumeBuilderPage() {
 
 
       </div>
-      {/*<CoverLetter data={genresume?.coverLetter} />*/}
+      
+      {
+        genresume  &&
+     <div className='grid grid-cols-2 gap-4'>
+
+        <ImprovementTips data={genresume?.improvementTips} />
+        <PracticeFocus data={genresume?.practiceFocus} />
+      </div>
+         }
+      
+      <CoverLetter data={genresume?.coverLetter} />
+
     </div>
   );
 }

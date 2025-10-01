@@ -9,7 +9,7 @@ const reviews = [
     "role": "Final Year Student",
     "company": "IIT Delhi (Intern)",
     "rating": 5,
-    "text": "TailorMe transformed my resume in minutes. I uploaded my details and got a role-specific resume that helped me land multiple interviews during placements.",
+    "text": "GptResume transformed my resume in minutes. I uploaded my details and got a role-specific resume that helped me land multiple interviews during placements.",
     "avatar": "https://res.cloudinary.com/dgp04dpun/image/upload/v1758890454/aktu%20brand/lxejomsrqg5d5xyb8hiz.png",
     "date": "2025-08-10"
   },
@@ -39,7 +39,7 @@ const reviews = [
     "role": "UI/UX Designer",
     "company": "Freelancer",
     "rating": 4,
-    "text": "Quick, reliable and the generated resumes have a human touch. I recommended TailorMe to my classmates.",
+    "text": "Quick, reliable and the generated resumes have a human touch. I recommended GptResume to my classmates.",
     "avatar": "https://res.cloudinary.com/dgp04dpun/image/upload/v1758887313/aktu%20brand/fjxukysk9gfakzmsks2y.png",
     "date": "2025-07-28"
   }
@@ -47,7 +47,7 @@ const reviews = [
 
 export default function Review() {
   return (
-    <section className="py-10 px-4 sm:px-6 lg:px-8 ">
+    <section className="py-10 relative px-4 sm:px-6 lg:px-8 ">
       <div className="max-w-5xl mx-auto">
         <div className="flex items-center justify-between mb-6">
           <div>
@@ -55,7 +55,7 @@ export default function Review() {
               <Sparkles className="w-6 h-6 text-indigo-500" />
               What people are saying
             </h2>
-            <p className="mt-1 text-sm text-gray-600 dark:text-gray-300">Real reviews from TailorMe users — curated to build trust.</p>
+            <p className="mt-1 text-sm text-gray-600 dark:text-gray-300">Real reviews from GptResume users — curated to build trust.</p>
           </div>
           <div className="hidden sm:flex items-center gap-3">
             <img src="https://images.unsplash.com/photo-1542744173-8e7e53415bb0?w=400&q=80&auto=format&fit=crop" alt="trust badge" className="w-20 h-12 rounded-md object-cover shadow-sm" />
@@ -64,11 +64,15 @@ export default function Review() {
               <div>Verified reviews · AI-assisted</div>
             </div>
           </div>
-        </div>
-
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+        </div> 
+        <div className="grid relative grid-cols-1 sm:grid-cols-2 gap-6">
+          {/* <div className="bg-gradient-to-r from-[#13568F] to-[#E3965A]  absolute bottom-0 right-0 -z-10 rounded-full h-[30vh] w-[20vw] blur-2xl"></div>
+          
+          <div className="bg-gradient-to-r from-[#13568F] to-[#E3965A]  absolute bottom-0 left-0 -z-10 rounded-full h-[30vh] w-[20vw] blur-2xl"></div>
+          <div className="bg-gradient-to-r from-[#13568F] to-[#E3965A]  absolute top-0 left-0 -z-10 rounded-full h-[30vh] w-[20vw] blur-2xl"></div>
+          <div className="bg-gradient-to-r from-[#13568F] to-[#E3965A]  absolute top-0 right-0 -z-10 rounded-full h-[30vh] w-[20vw] blur-2xl"></div> */}
           {reviews.map((r) => (
-            <article key={r.id} className="card shadow-md rounded-2xl p-5 hover:shadow-lg transition-shadow">
+            <article key={r.id} className="bg-foreground/10 drop-shadow-2xl shadow-md rounded-2xl p-5 hover:shadow-lg transition-shadow">
               <div className="flex items-start gap-4">
                 <img src={r.avatar} alt={`${r.name} avatar`} className="w-14 h-14 rounded-full object-cover ring-2 ring-foreground" />
                 <div className="flex-1">

@@ -1,15 +1,18 @@
 import React from "react";
 import Link from "next/link";
-import { Mail, Github, Twitter } from "lucide-react";
-
-const footerLinks = [
+import Image from "next/image";
+// Assuming 'X' is for Twitter/X.com
+import WhiteLogo from "@/public/WhiteLogo.png";
+import BlackLogo from '@/public/BlackLogo.png'
+// Ideally, social links could also be dynamic or come from a config
+ 
+const footerNavSections = [
   {
     title: "Product",
     links: [
       { label: "Resume Builder", href: "/protected/resume-builder" },
       { label: "Cover Letters", href: "/protected/cover-letters" },
-      { label: "Interview Prep", href: "/protected/interview-prep" },
-      { label: "Templates", href: "/protected/templates" },
+      { label: "Blog", href: "/blog" },
     ],
   },
   {
@@ -24,45 +27,48 @@ const footerLinks = [
   {
     title: "Support",
     links: [
-      { label: "Help Center", href: "/help" },
-      { label: "Tutorials", href: "/tutorials" },
-      { label: "FAQ", href: "/faq" },
-      { label: "Community", href: "/community" },
+      { label: "Help / Tutorial", href: "/help" },
+      { label: "FAQ", href: "/#faq" },
     ],
   },
 ];
 
 export default function Footer() {
   return (
-    <footer className="no-print bg-card rounded-t-2xl border-t text-card-foreground py-12">
-      <div className="container mx-auto px-4">
-        <div className="grid md:grid-cols-4 gap-8">
-          {/* Logo + Description */}
-          <div>
-            <div className="flex items-center space-x-2 mb-4">
-              <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center">
-                <span className="text-primary-foreground font-bold text-lg">
-                  T
-                </span>
+    <footer className="no-print bg-card rounded-t-2xl border-t border-border text-card-foreground py-12 md:py-16 font-sans">
+      <div className="container mx-auto px-6 max-w-7xl">
+        {/* Main Footer Grid */}
+        <div className="flex flex-wrap gap-x-8 gap-y-12">
+          {/* Brand Info & Socials */}
+          <div className="lg:col-span-1">
+            <Link href="/" className="flex items-center space-x-3 mb-4 group">
+              <div className="w-10 h-10 rounded-full bg-black flex items-center justify-center p-1 shadow-lg transition-all duration-300 group-hover:scale-105 group-hover:shadow-primary/50">
+                <Image src={WhiteLogo} alt="GptResume Logo" width={28} height={28} />
               </div>
-              <span className="text-xl font-bold">TailorMe</span>
-            </div>
-            <p className="text-muted-foreground leading-relaxed">
-              AI-powered resume tailoring platform helping professionals land
-              their dream jobs.
+              <span className="text-2xl font-bold tracking-tight text-foreground transition-colors duration-300 group-hover:text-primary">
+                GptResume
+              </span>
+            </Link>
+            <p className="text-muted-foreground leading-relaxed text-sm mt-4 max-w-xs">
+              AI-powered platform tailoring resumes & cover letters to land your dream job with confidence.
             </p>
+
+            {/* Social Icons */}
+             
           </div>
 
-          {/* Dynamic Links */}
-          {footerLinks.map((section) => (
-            <div key={section.title}>
-              <h3 className="text-lg font-semibold mb-4">{section.title}</h3>
-              <ul className="space-y-2 text-muted-foreground">
+          {/* Dynamic Footer Navigation Links */}
+          {footerNavSections.map((section) => (
+            <div key={section.title} className="lg:col-span-1">
+              <h3 className="text-lg font-semibold text-foreground mb-5 tracking-wide">
+                {section.title}
+              </h3>
+              <ul className="space-y-3 text-sm">
                 {section.links.map((link) => (
                   <li key={link.label}>
                     <Link
                       href={link.href}
-                      className="hover:text-foreground transition-colors"
+                      className="text-muted-foreground hover:text-primary transition-colors duration-300 relative before:content-[''] before:absolute before:w-0 before:h-[1px] before:bottom-0 before:left-0 before:bg-primary before:transition-all before:duration-300 hover:before:w-full"
                     >
                       {link.label}
                     </Link>
@@ -73,9 +79,9 @@ export default function Footer() {
           ))}
         </div>
 
-        {/* Bottom Section */}
-        <div className="border-t border-border mt-8 pt-8 text-center text-muted-foreground">
-          <p>&copy; 2025 TailorMe. All rights reserved.</p>
+        {/* Copyright Section */}
+        <div className="border-t border-border pt-8 mt-12 text-center text-xs text-muted-foreground">
+          <p>&copy; {new Date().getFullYear()} GptResume. All rights reserved.</p>
         </div>
       </div>
     </footer>

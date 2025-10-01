@@ -130,7 +130,7 @@ function UserBlogRender({ article }) {
         blocks.push(
           <div
             key={index}
-            className="flex items-center flex-col py-4 h-[40vh] md:h-[60vh]"
+            className="flex items-center flex-col py-4  "
           >
             <ImageComponent imageUrl={block.value} alt={block.alt} />
             {block.alt && (

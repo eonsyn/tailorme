@@ -188,12 +188,12 @@ export default async function BlogPage({ params }) {
           </div>
 
           {/* Main Blog Content */}
-          <div className="bg-[var(--card-background)] border border-[var(--border)] rounded-2xl p-4 shadow-md">
+          <div className="bg-[var(--card-background)] md:border border-[var(--border)] rounded-2xl p-4 md:shadow-md">
             <UserBlogRender article={article} />
           </div>
 
           {/* Tags Section */}
-          <div className="mt-8 text-sm text-[var(--text-secondary)]">
+          <div className="mt-8 text-sm px-4 text-[var(--text-secondary)]">
             Tags:{" "}
             {article.tags?.map((tag, i) => (
               <span
@@ -219,7 +219,7 @@ export default async function BlogPage({ params }) {
       <TailorMePromotion jobTitle={article.jobTitle} />
 
       {/* Blog Suggestions */}
-      <div className="bg-[var(--card-background)] border border-[var(--border)] shadow-md rounded-2xl mx-5 px-4 pt-4 pb-6 mb-2 mt-6">
+      <div className=" md:border border-[var(--border)] md:shadow-md rounded-2xl md:mx-5 px-4 md:pt-4 pb-6 mb-2 md:mt-6">
         <BlogSuggestions tags={article.tags} slug={article.slug} />
       </div>
     </>
