@@ -21,7 +21,7 @@ function TailorMePromotion({ jobTitle, companyName }) {
       {/* Call-to-action Button */}
       <div>
         <Link
-          href={`/protected/resume-builder?job=${encodeURIComponent(jobTitle || "")}`}
+          href={`/protected/resume/builder?job=${encodeURIComponent(jobTitle || "")}`}
           className="btn btn-primary flex items-center gap-2"
         >
           Build Your Tailored Resume
