@@ -54,7 +54,7 @@ export default function ResumeBuilderPage() {
     const interval = setInterval(() => {
       progressValue += 1;
       if(progressValue>60){
-        speed=350;
+        speed=450;
       }
       // Cap progress at 90% until the API finishes
       if (progressValue <= 90) {
@@ -291,7 +291,9 @@ export default function ResumeBuilderPage() {
                 </button>
 
                 <button onClick={handleExport} className="btn btn-primary flex items-center">
-                  <Download className="w-4 h-4 mr-2" /> Export
+                  <Download className="w-4 h-4 mr-2" />{
+                        loading ? "Exporting..." : "Export"
+                      } 
                 </button>
               </div>
             )}
