@@ -108,10 +108,10 @@ Your task is to **tailor the candidate’s resume and cover letter** to the prov
 ---
 
 CANDIDATE PROFILE:
-${profile}
+${JSON.stringify(profile,2,null)}
 
 JOB DESCRIPTION:
-${jobDescription}
+${JSON.stringify(jobDescription,2,null)}
 
 ---
 

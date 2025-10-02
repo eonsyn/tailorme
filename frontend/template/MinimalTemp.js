@@ -25,7 +25,7 @@ function MinimalTemp({ data }) {
           <h1 className="text-3xl font-extrabold uppercase text-gray-900 tracking-wider leading-none">
             {name}
           </h1>
-          <p className="text-base text-gray-700 mt-1 font-normal">{title}</p>
+          <p className="text-base capitalize text-gray-700 mt-1 font-normal">{title}</p>
         </div>
 
         {/* Contact Info */}

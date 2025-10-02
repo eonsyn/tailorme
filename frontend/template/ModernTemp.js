@@ -45,7 +45,7 @@ export default function ModernTemp({ data }) {
       {/* HEADER */}
       <header className="mb-6">
         <h1 className="text-3xl font-extrabold tracking-tight uppercase text-black">{data.name}</h1>
-        <p className="text-lg font-semibold text-gray-700 mb-4">{data.title}</p>
+        <p className="text-lg capitalize font-semibold text-gray-700 mb-4">{data.title}</p>
 
         <div className="flex flex-wrap gap-x-6 gap-y-2 text-xs text-gray-600 border-t border-b border-gray-200 py-1 items-center">
           {data.contact?.phone && <div className="flex items-center"><Phone className="w-3 h-3 mr-1 text-blue-500" />{data.contact.phone}</div>}

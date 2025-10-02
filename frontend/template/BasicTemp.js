@@ -28,7 +28,7 @@ function BasicTemp({ data }) {
         <h1 className="text-3xl font-normal uppercase text-gray-900 leading-none">
           {name}
         </h1>
-        <p className="text-sm text-gray-600">{title}</p>
+        <p className="text-sm capitalize text-gray-600">{title}</p>
 
         <div className="flex justify-center flex-wrap gap-x-4 gap-y-1 mt-1 text-sm text-gray-700">
           {contact?.email && (

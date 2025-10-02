@@ -49,13 +49,18 @@ export default function ResumeBuilderPage() {
     setGenResume(null);
     setProgress(10);
     let progressValue = 10;
+    let speed = 250;
+
     const interval = setInterval(() => {
       progressValue += 1;
+      if(progressValue>60){
+        speed=350;
+      }
       // Cap progress at 90% until the API finishes
       if (progressValue <= 90) {
         setProgress(progressValue);
       }
-    }, 200); // every 200ms → 1% step
+    }, speed); // every 200ms → 1% step
 
     try {
       const response = await api.post('/resume/generate', { jobDescription, profile });
