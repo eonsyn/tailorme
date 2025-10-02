@@ -29,8 +29,8 @@ export default function ResumeBuilderPage() {
   const [editMode, setEditMode] = useState(false);
   const [genresume, setGenResume] = useState(null);
   const [loading, setloading] = useState(false);
-  const {profile,user,stats}=useAuth()
-   
+  const { profile, user, stats } = useAuth()
+
   const templates = [
     { id: 'modern', name: 'Modern', component: ModernTemp, preview: '/Resume/ModernTemp.jpg' },
     { id: 'classic', name: 'Classic', component: BasicTemp, preview: '/Resume/BasicTemp.jpg' },
@@ -58,7 +58,7 @@ export default function ResumeBuilderPage() {
     }, 200); // every 200ms → 1% step
 
     try {
-      const response = await api.post('/resume/generate', { jobDescription ,profile });
+      const response = await api.post('/resume/generate', { jobDescription, profile });
 
       if (!response || !response.resumeData) {
         toast.error('Invalid response from server');
@@ -66,13 +66,13 @@ export default function ResumeBuilderPage() {
         setProgress(0);
         return;
       }
-      console.log("response aryan:",response)
-      if(response.resumeData.alert){
+      console.log("response aryan:", response)
+      if (response.resumeData.alert) {
 
         toast.error("You are Not Eligible for this job")
-      }else{
+      } else {
 
-      toast.success('Resume generated successfully!');
+        toast.success('Resume generated successfully!');
       }
       setGeneratedResume(response.resumeData.resume);
       setGenResume(response.resumeData);
@@ -132,11 +132,11 @@ export default function ResumeBuilderPage() {
   return (
     <div className="space-y-8">
 
-{genresume?.alert && (
-  <p className="text-red-600 bg-foreground p-2 rounded-2xl font-medium mt-2">
-    {genresume.alert}
-  </p>
-)}
+      {genresume?.alert && (
+        <p className="text-red-600 bg-foreground p-2 rounded-2xl font-medium mt-2">
+          {genresume.alert}
+        </p>
+      )}
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
         {/* Job Description */}
@@ -220,36 +220,36 @@ export default function ResumeBuilderPage() {
                 {jobDescription.replace(/\s+/g, '').length}/2000
               </span>
               <span className='flex items-center space-x-2'>
-               Credits : { user.credits }<Coins className="w-5 ml-1 h-5 mr-2" />
+                Credits : {user.credits}<Coins className="w-5 ml-1 h-5 mr-2" />
               </span>
             </div>
 
-           <button
-  onClick={handleGenerate}
-  disabled={generating || !jobDescription.trim() || stats?.profileCompleteness < 60}
-  className="btn w-full mt-6 btn-primary"
->
-  {generating ? (
-    <span className="flex items-center justify-center">
-      <LoadingSpinner className="animate-spin mr-2" />
-      Generating...
-    </span>
-  ) : (
-    <span className="flex items-center justify-center gap-2">
-      {stats?.profileCompleteness < 60 ? (
-        <span className="  font-medium">
-          Complete your profile first
-        </span>
-      ) : (
-        <>
-          <span>{stats?.profileCompleteness}%</span>
-          <Coins className="w-5 h-5" />
-          <span>1 credit Generate Resume</span>
-        </>
-      )}
-    </span>
-  )}
-</button>
+            <button
+              onClick={handleGenerate}
+              disabled={generating || !jobDescription.trim() || stats?.profileCompleteness < 60}
+              className="btn w-full mt-6 btn-primary"
+            >
+              {generating ? (
+                <span className="flex items-center justify-center">
+                  <LoadingSpinner className="animate-spin mr-2" />
+                  Generating...
+                </span>
+              ) : (
+                <span className="flex items-center justify-center gap-2">
+                  {stats?.profileCompleteness < 60 ? (
+                    <span className="  font-medium">
+                      Complete your profile first
+                    </span>
+                  ) : (
+                    <>
+                      
+                      <Coins className="w-5 h-5" />
+                      <span>1 credit Generate Resume</span>
+                    </>
+                  )}
+                </span>
+              )}
+            </button>
 
           </div>
         )}
@@ -313,16 +313,16 @@ export default function ResumeBuilderPage() {
 
 
       </div>
-      
-      {
-        genresume  &&
-     <div className='grid grid-cols-2 gap-4'>
 
-        <ImprovementTips data={genresume?.improvementTips} />
-        <PracticeFocus data={genresume?.practiceFocus} />
-      </div>
-         }
-      
+      {
+        genresume &&
+        <div className='grid grid-cols-2 gap-4'>
+
+          <ImprovementTips data={genresume?.improvementTips} />
+          <PracticeFocus data={genresume?.practiceFocus} />
+        </div>
+      }
+
       <CoverLetter data={genresume?.coverLetter} />
 
     </div>
