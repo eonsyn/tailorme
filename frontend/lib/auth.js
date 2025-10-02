@@ -10,6 +10,8 @@ export function AuthProvider({ children }) {
   const [user, setUser] = useState(null)
   const [profile, setProfile] = useState(null)
   const [loading, setLoading] = useState(true)
+  
+  const [profileloading, setProfileLoading] = useState(true)
   const [stats, setStats] = useState(null);
   const router = useRouter()
   const pathname = usePathname()
@@ -41,13 +43,13 @@ export function AuthProvider({ children }) {
 
   const checkProfile = async () => {
     try {
-      setLoading(true)
+      setProfileLoading(true)
       const response = await api.get('/profile')
       setProfile(response.profile) 
     } catch (err) {
       console.log(err)
     }finally{
-      setLoading(false)
+      setProfileLoading(false)
     }
   }
 
@@ -138,6 +140,7 @@ export function AuthProvider({ children }) {
     getprofile,
     verifyEmail,
     sendVerifyEmail,
+    profileloading,
   }
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>

@@ -13,20 +13,20 @@ import { useAuth } from '@/lib/auth'
 export default function ProfilePage() {
   const [userProfile, setUserProfile] = useState(null);
 
-  const { profile, checkProfile, loading } = useAuth();
+  const { profile, checkProfile, profileloading } = useAuth();
 
   useEffect(() => {
 
-    if (!loading) {
+    if (!profileloading) {
 
       setUserProfile(profile);
     }
-  }, [profile, loading]);
+  }, [profile, profileloading]);
 
 
  
 
-  if (loading) {
+  if (profileloading) {
     return (
       <div className="flex items-center justify-center h-64">
         <LoadingSpinner />
@@ -51,22 +51,28 @@ export default function ProfilePage() {
       {/* Profile Sections */}
       <div className="space-y-6 md:space-y-8">
         {/* Basic Information */}
-        <AddBasicInfo setProfile={setUserProfile} profile={userProfile} />
+        <div className='rounded-xl md:bg-[var(--color-card)] text-[var(--color-card-foreground)] shadow-md md:border border-[var(--color-border)]'>
+        <AddBasicInfo setProfile={setUserProfile} profile={userProfile} /></div>
 <hr className='md:hidden'></hr>
         {/* Experience */}
-        <AddExperience setProfile={setUserProfile} profile={userProfile} />
+        <div className='rounded-xl md:bg-[var(--color-card)] text-[var(--color-card-foreground)] shadow-md md:border border-[var(--color-border)]'>
+        <AddExperience setProfile={setUserProfile} profile={userProfile} /></div>
 <hr className='md:hidden'></hr>
         {/* Education */}
-        <AddEducation setProfile={setUserProfile} profile={userProfile} />
+        <div className='rounded-xl md:bg-[var(--color-card)] text-[var(--color-card-foreground)] shadow-md md:border border-[var(--color-border)]'>
+        <AddEducation setProfile={setUserProfile} profile={userProfile} /></div>
 <hr className='md:hidden'></hr>
         {/* Skills */}
-        <AddSkills setProfile={setUserProfile} profile={userProfile} />
+        <div className='rounded-xl md:bg-[var(--color-card)] text-[var(--color-card-foreground)] shadow-md md:border border-[var(--color-border)]'>
+        <AddSkills setProfile={setUserProfile} profile={userProfile} /></div>
 <hr className='md:hidden'></hr>
         {/* Projects */}
-        <AddProject setProfile={setUserProfile} profile={userProfile} />
+        <div className='rounded-xl md:bg-[var(--color-card)] text-[var(--color-card-foreground)] shadow-md md:border border-[var(--color-border)]'>
+        <AddProject setProfile={setUserProfile} profile={userProfile} /></div>
 <hr className='md:hidden'></hr>
         {/* Certificates */}
-        <AddCertificate setProfile={setUserProfile} profile={userProfile} />
+        <div className='rounded-xl md:bg-[var(--color-card)] text-[var(--color-card-foreground)] shadow-md md:border border-[var(--color-border)]'>
+        <AddCertificate setProfile={setUserProfile} profile={userProfile} /></div>
       </div>
     </div>
   );

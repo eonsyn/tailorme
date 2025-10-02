@@ -35,10 +35,10 @@ const footerNavSections = [
 
 export default function Footer() {
   return (
-    <footer className="no-print bg-card rounded-t-2xl border-t border-border text-card-foreground py-12 md:py-16 font-sans">
+    <footer className="no-print bg-card rounded-t-2xl border-t border-border text-card-foreground pt-12 md:pt-16 pb-2 font-sans">
       <div className="container mx-auto px-6 max-w-7xl">
         {/* Main Footer Grid */}
-        <div className="flex flex-wrap gap-x-8 gap-y-12">
+        <div className="flex flex-wrap justify-between gap-x-8 gap-y-12">
           {/* Brand Info & Socials */}
           <div className="lg:col-span-1">
             <Link href="/" className="flex items-center space-x-3 mb-4 group">
@@ -80,7 +80,7 @@ export default function Footer() {
         </div>
 
         {/* Copyright Section */}
-        <div className="border-t border-border pt-8 mt-12 text-center text-xs text-muted-foreground">
+        <div className="border-t border-border pt-8 mt-1 text-center text-xs text-muted-foreground">
           <p>&copy; {new Date().getFullYear()} GptResume. All rights reserved.</p>
         </div>
       </div>
