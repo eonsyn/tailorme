@@ -53,9 +53,9 @@ function AddSkills({ profile }) {
   }, [profile]);
 
   return (
-    <div className="card p-8">
+    <div className="md:card md:p-8">
       <div className=" md:flex  justify-between items-center mb-6">
-        <h2 className="text-xl font-semibold text-foreground">Skills</h2>
+        <h2 className="text-xl font-semibold text-foreground">Skills <span className="text-sm text-gray-500">(+15 score for minimum 4 skills)</span></h2>
 
         {!showForm ? (
           <button

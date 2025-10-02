@@ -102,9 +102,9 @@ function AddProject({ profile }) {
   };
 
   return (
-    <div className="card p-8">
+    <div className="md:card md:p-8">
       <div className="flex justify-between items-center mb-6">
-        <h2 className="text-xl font-semibold text-foreground">Projects</h2>
+        <h2 className="text-xl font-semibold text-foreground">Projects <span className="text-sm text-gray-500">(+10 score)</span></h2>
         {!showForm && (
           <button
             className="btn btn-outline flex items-center"

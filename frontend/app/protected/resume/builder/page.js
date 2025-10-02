@@ -226,7 +226,7 @@ export default function ResumeBuilderPage() {
 
            <button
   onClick={handleGenerate}
-  disabled={generating || !jobDescription.trim() || stats?.profileCompleteness < 70}
+  disabled={generating || !jobDescription.trim() || stats?.profileCompleteness < 60}
   className="btn w-full mt-6 btn-primary"
 >
   {generating ? (
@@ -236,7 +236,7 @@ export default function ResumeBuilderPage() {
     </span>
   ) : (
     <span className="flex items-center justify-center gap-2">
-      {stats?.profileCompleteness < 70 ? (
+      {stats?.profileCompleteness < 60 ? (
         <span className="  font-medium">
           Complete your profile first
         </span>

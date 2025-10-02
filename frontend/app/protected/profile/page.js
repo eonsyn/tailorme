@@ -1,7 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
-import api from '@/lib/api';
+import { useEffect, useState } from 'react'; 
 import LoadingSpinner from '../../../components/LoadingSpinner';
 import AddSkills from '@/components/profile/AddSkills';
 import AddExperience from '@/components/profile/AddExperience';
@@ -10,6 +9,7 @@ import AddProject from '@/components/profile/AddProject';
 import AddCertificate from '@/components/profile/AddCertificate';
 import AddBasicInfo from '@/components/profile/AddBasicInfo';
 import { useAuth } from '@/lib/auth'
+ 
 export default function ProfilePage() {
   const [userProfile, setUserProfile] = useState(null);
 
@@ -21,13 +21,10 @@ export default function ProfilePage() {
 
       setUserProfile(profile);
     }
-  }, [userProfile, loading]);
+  }, [profile, loading]);
 
 
-  useEffect(() => {
-    checkProfile()
-  }, [userProfile]);
-
+ 
 
   if (loading) {
     return (
@@ -38,36 +35,38 @@ export default function ProfilePage() {
   }
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-8 relative">
       {/* Header Section */}
       <div>
         <h1 className="text-3xl font-bold text-foreground">
           Profile
+
         </h1>
         <p className="text-muted-foreground mt-2">
           Manage your professional information and credentials
         </p>
       </div>
 
+     
       {/* Profile Sections */}
       <div className="space-y-6 md:space-y-8">
         {/* Basic Information */}
         <AddBasicInfo setProfile={setUserProfile} profile={userProfile} />
-
+<hr className='md:hidden'></hr>
         {/* Experience */}
-        <AddExperience profile={userProfile} />
-
+        <AddExperience setProfile={setUserProfile} profile={userProfile} />
+<hr className='md:hidden'></hr>
         {/* Education */}
-        <AddEducation profile={userProfile} />
-
+        <AddEducation setProfile={setUserProfile} profile={userProfile} />
+<hr className='md:hidden'></hr>
         {/* Skills */}
-        <AddSkills profile={userProfile} />
-
+        <AddSkills setProfile={setUserProfile} profile={userProfile} />
+<hr className='md:hidden'></hr>
         {/* Projects */}
-        <AddProject profile={userProfile} />
-
+        <AddProject setProfile={setUserProfile} profile={userProfile} />
+<hr className='md:hidden'></hr>
         {/* Certificates */}
-        <AddCertificate profile={userProfile} />
+        <AddCertificate setProfile={setUserProfile} profile={userProfile} />
       </div>
     </div>
   );

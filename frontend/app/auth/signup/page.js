@@ -75,7 +75,7 @@ function SignupFormContent() {
         deviceFingerprint
       );
       toast.success('Account created successfully!');
-      router.push('/protected/dashboard');
+      router.push('/protected/complete-profile');
     } catch (error) {
       toast.error(error?.message || 'Signup failed');
       console.error(error);

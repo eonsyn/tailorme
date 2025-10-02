@@ -96,9 +96,9 @@ function AddCertificate({ profile }) {
   }
 
   return (
-    <div className="card p-8">
+    <div className="md:card md:p-8">
       <div className="flex justify-between items-center mb-6">
-        <h2 className="text-xl font-semibold text-foreground">Certifications</h2>
+        <h2 className="text-xl font-semibold text-foreground">Certifications <span className="text-sm text-gray-500">(+7 score)</span></h2>
         {!showForm && (
           <button
             className="btn btn-outline flex items-center"

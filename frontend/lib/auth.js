@@ -41,10 +41,13 @@ export function AuthProvider({ children }) {
 
   const checkProfile = async () => {
     try {
+      setLoading(true)
       const response = await api.get('/profile')
-      setProfile(response.profile)
+      setProfile(response.profile) 
     } catch (err) {
       console.log(err)
+    }finally{
+      setLoading(false)
     }
   }
 

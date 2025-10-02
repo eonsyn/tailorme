@@ -30,7 +30,7 @@ const generate = async (req, res, next) => {
     if (!profile) {
       return res.status(400).json({ success: false, message: "Please complete your profile first" });
     }
- if(profile.completeness<70){
+ if(profile.completeness<60){
   return res.status(400).json({
     success:false,message:"Complete your Profile First."
   })

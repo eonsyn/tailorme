@@ -41,7 +41,7 @@ function AddBasicInfo({ profile, setProfile }) {
   };
 
   return (
-    <div className="card p-8">
+    <div className="md:card md:p-8">
       <h2 className="text-xl font-semibold text-foreground mb-6">
         Basic Information
       </h2>
@@ -49,7 +49,7 @@ function AddBasicInfo({ profile, setProfile }) {
       <form onSubmit={handleBasicInfoSubmit} className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
         {/* Full Name */}
         <div className="md:col-span-1 lg:col-span-1">
-          <label className="input-label">Full Name</label>
+          <label className="input-label">Full Name <span className="text-sm text-gray-500">(+10 score)</span></label>
           <input
             type="text"
             name="name"
@@ -61,19 +61,24 @@ function AddBasicInfo({ profile, setProfile }) {
 
         {/* Email */}
         <div className="md:col-span-1 lg:col-span-1">
-          <label className="input-label">Email</label>
-          <input
-            type="email"
-            name="email"
-            defaultValue={profile?.email || ""}
-            className="input"
-            required
-          />
-        </div>
+  <label htmlFor="email" className="input-label">
+    Email <span className="text-sm text-gray-500">(+10 score)</span>
+  </label>
+  <input
+    id="email"
+    type="email"
+    name="email"
+    defaultValue={profile?.email || ""}
+    className="input"
+    placeholder="Enter your email"
+    required
+  />
+</div>
+
 
         {/* Phone */}
         <div className="md:col-span-1 lg:col-span-1">
-          <label className="input-label">Phone</label>
+          <label className="input-label">Phone <span className="text-sm text-gray-500">(+5 score)</span></label>
           <input
             type="tel"
             name="phone"
@@ -84,7 +89,7 @@ function AddBasicInfo({ profile, setProfile }) {
 
         {/* Professional Title */}
         <div className="md:col-span-1 lg:col-span-2">
-          <label className="input-label">Professional Title</label>
+          <label className="input-label">Professional Title <span className="text-sm text-gray-500">(+10 score)</span></label>
           <input
             type="text"
             name="title"
@@ -96,7 +101,7 @@ function AddBasicInfo({ profile, setProfile }) {
 
         {/* Location */}
         <div className="md:col-span-1 lg:col-span-1">
-          <label className="input-label">Location</label>
+          <label className="input-label">Location <span className="text-sm text-gray-500">(+5 score)</span></label>
           <input
             type="text"
             name="location"
@@ -108,7 +113,7 @@ function AddBasicInfo({ profile, setProfile }) {
 
         {/* Social Links */}
         <div className="md:col-span-2 lg:col-span-3">
-          <h3 className="text-lg font-medium text-foreground mb-4">Social Links</h3>
+          <h3 className="text-lg font-medium text-foreground mb-4">Social Links <span className="text-sm text-gray-500">(+3 score)</span></h3>
           <div className="grid md:grid-cols-2 gap-4">
             {/* LinkedIn */}
             <div>
@@ -167,7 +172,7 @@ function AddBasicInfo({ profile, setProfile }) {
 
         {/* Professional Summary */}
         <div className="md:col-span-2 lg:col-span-3">
-          <label className="input-label">Professional Summary</label>
+          <label className="input-label">Professional Summary <span className="text-sm text-gray-500">(+5 score)</span></label>
           <textarea
             name="summary"
             defaultValue={profile?.summary || ""}

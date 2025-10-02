@@ -3,7 +3,7 @@ import { Plus, Trash2, Edit, Check, X, Loader2 } from 'lucide-react';
 import toast from 'react-hot-toast';
 import api from '@/lib/api';
 
-function AddEducation({ profile }) {
+function AddEducation({ profile, setProfile }) {
   const [education, setEducation] = useState([]);
   const [editingIndex, setEditingIndex] = useState(null);
   const [showForm, setShowForm] = useState(false);
@@ -32,32 +32,32 @@ function AddEducation({ profile }) {
     e.preventDefault();
     setIsSaving(true);
     try {
+      let updatedEducation;
+
       if (editingIndex !== null) {
-        // Update flow
+        // Update existing education
         const eduToUpdate = education[editingIndex];
         const res = await api.put(`/profile/education/${eduToUpdate._id}`, formData);
-        
-        // Check if the response is successful and contains the profile data
-        if (res.profile && Array.isArray(res.profile.education)) {
-          setEducation(res.profile.education);
-          toast.success("Education updated!");
-        } else {
-          throw new Error("Invalid response from server");
-        }
+
+        updatedEducation = res.profile?.education || education.map((edu, i) =>
+          i === editingIndex ? { ...edu, ...formData } : edu
+        );
+
+        toast.success("Education updated!");
         setEditingIndex(null);
       } else {
-        // Add flow
+        // Add new education
         const res = await api.post("/profile/education", formData);
+        updatedEducation = res.profile?.education || [...education, formData];
 
-        // Check for success and new data
-        if (res.profile && Array.isArray(res.profile.education)) {
-          setEducation(res.profile.education);
-          toast.success("Education added!");
-        } else {
-          throw new Error("Invalid response from server");
-        }
+        toast.success("Education added!");
       }
 
+      // Update local and parent state
+      setEducation(updatedEducation);
+      
+      
+      // Reset form
       setFormData({
         degree: '',
         institution: '',
@@ -85,7 +85,11 @@ function AddEducation({ profile }) {
   const handleDelete = async (id) => {
     try {
       await api.delete(`/profile/education/${id}`);
-      setEducation(prev => prev.filter(edu => edu._id !== id));
+
+      const updatedEducation = education.filter(edu => edu._id !== id);
+      setEducation(updatedEducation);
+    
+      
       toast.success("Education deleted!");
     } catch (err) {
       console.error(err);
@@ -108,9 +112,9 @@ function AddEducation({ profile }) {
   };
 
   return (
-    <div className="card p-8">
+    <div className="md:card md:p-8">
       <div className="flex justify-between items-center mb-6">
-        <h2 className="text-xl font-semibold text-foreground">Education</h2>
+        <h2 className="text-xl font-semibold text-foreground">Education <span className="text-sm text-gray-500">(+10 score)</span></h2>
         {!showForm && (
           <button
             className="btn btn-outline flex items-center"

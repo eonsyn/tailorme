@@ -82,13 +82,13 @@ profileSchema.methods.calculateCompleteness = function() {
     phone: 5,
     location: 5,
     title: 10,
-    summary: 10,
+    summary: 5,
     skills: 15,
-    experience: 15,
+    experience: 10,
     education: 10,
-    projects: 5,
+    projects: 10,
     social: 3,
-    certifications: 2,
+    certifications: 7,
   }
 
   if (this.name) score += weights.name
