@@ -12,7 +12,7 @@ const generate = async (req, res, next) => {
       return res.status(400).json({ success: false, message: error.details[0].message });
     }
 
-    const { jobDescription } = value;
+    const { jobDescription ,profile } = value;
 
     // 🔹 check user credits
     const user = await User.findById(req.user.userId);
@@ -26,19 +26,19 @@ const generate = async (req, res, next) => {
       return res.status(400).json({ success: false, message: "Not enough credits" });
     }
 
-    const profile = await Profile.findOne({ user: req.user.userId });
+    
     if (!profile) {
       return res.status(400).json({ success: false, message: "Please complete your profile first" });
     }
- if(profile.completeness<50){
+ if(profile.completeness<70){
   return res.status(400).json({
     success:false,message:"Complete your Profile First."
   })
- }
+ } 
     // 🔹 Directly call LLM adapter (no queue)
      let tailoredResume;
     try {
-      tailoredResume = await LLMAdapter.tailorResume(profile.toObject(), jobDescription);
+      tailoredResume = await LLMAdapter.tailorResume(profile, jobDescription);
     } catch (llmError) {
       console.error("LLMAdapter Error:", llmError);
       return res.status(500).json({

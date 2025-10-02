@@ -4,17 +4,19 @@ import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { useState, useEffect } from 'react'
 import { Menu, X, User, FileText, Settings, CreditCard, Gift, Sun, Moon } from 'lucide-react'
-import { useAuth } from '../lib/auth'
+ 
 import WhiteLogo from '@/public/WhiteLogo.png';
 import BlackLogo from '@/public/BlackLogo.png'
 import Image from 'next/image';
+import { useAuth } from '@/lib/auth';
+
 export default function DashboardNavbar() {
   const [isOpen, setIsOpen] = useState(false)
-  const { user,checkAuth, logout } = useAuth()
+  const { user,checkAuth, stats,logout } = useAuth()
   const pathname = usePathname()
   const [open, setOpen] = useState(false)
   const [theme, setTheme] = useState('dark')
-
+ 
   useEffect(() => {
     // Set initial theme from local storage or system preference
     const storedTheme = localStorage.getItem('theme')
@@ -99,33 +101,63 @@ export default function DashboardNavbar() {
                 </button>
 
                 {open && (
-                  <div
-                    id="user-menu"
-                    className="absolute top-12 right-0 bg-card shadow-xl rounded-2xl border border-border py-3 w-52 transition-all duration-200 z-50"
-                  >
-                    {/* User Info */}
-                    <div className="px-4 flex flex-col items-start gap-2 pb-3 border-b border-border">
-                      <p className="text-sm text-muted-foreground">
-                        Hello, <span className="font-medium">{user?.name}</span>
-                      </p>
+                <div
+  id="user-menu"
+  className="absolute top-12 right-0 bg-card shadow-xl rounded-2xl border border-border py-3 w-52 transition-all duration-200 z-50"
+>
+  {/* User Info */}
+  <div className="px-4 flex flex-col items-start gap-2 pb-3 border-b border-border">
+    <p className="text-sm text-muted-foreground">
+      Hello, <span className="font-medium">{user?.name}</span>
+    </p>
 
-                      <div className="w-full flex items-center justify-between bg-muted/10 px-3 py-1 rounded-lg border border-border">
-                        <span className="text-sm text-muted-foreground">Credits</span>
-                        <span className="font-semibold text-primary text-sm">{user?.credits || 0}</span>
-                      </div>
-                    </div>
+    {/* Credits */}
+    <div className="w-full flex items-center justify-between bg-muted/10 px-3 py-1 rounded-lg border border-border">
+      <span className="text-sm text-muted-foreground">Credits</span>
+      <span className="font-semibold text-primary text-sm">
+        {user?.credits || 0}
+      </span>
+    </div>
 
-                    {/* Logout Button */}
-                    <button
-                      onClick={async() => {
-                  await logout();
-                   window.location.reload();
-                }}
-                      className="w-full mt-2 px-4 py-2 text-sm text-destructive hover:bg-destructive/10 rounded-lg transition-colors"
-                    >
-                      Logout
-                    </button>
-                  </div>
+    {/* Profile Completeness */}
+    <div
+      className={`w-full flex items-center justify-between px-3 py-1 rounded-lg border 
+        ${
+          stats?.profileCompleteness >= 80
+            ? "bg-green-100 border-green-500 text-green-700"
+            : stats?.profileCompleteness >= 50
+            ? "bg-yellow-100 border-yellow-500 text-yellow-700"
+            : "bg-red-100 border-red-500 text-red-700"
+        }`}
+    >
+      <span className="text-sm font-medium">Profile</span>
+      <span className="font-semibold text-sm">
+        {stats?.profileCompleteness}%
+      </span>
+    </div>
+
+    {/* CTA if profile incomplete */}
+    {stats?.profileCompleteness < 80 && (
+      <a
+        href="/protected/profile"
+        className="w-full mt-2 px-3 py-2 text-xs text-center rounded-lg btn-primary btn transition-colors"
+      >
+        Opps! Profile Incomplete.</a>
+    )}
+  </div>
+
+  {/* Logout Button */}
+  <button
+    onClick={async () => {
+      await logout();
+      window.location.reload();
+    }}
+    className="w-full mt-2 px-4 py-2 text-sm text-destructive hover:bg-destructive/10 rounded-lg transition-colors"
+  >
+    Logout
+  </button>
+</div>
+
 
                 )}
               </div>

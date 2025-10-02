@@ -22,23 +22,23 @@ class LLMAdapter {
   }
 
   async tailorResume(profile, jobDescription) {
-     
+
     if (this.provider === "mock") {
       return this.mockTailorResume(profile, jobDescription)
     }
     if (this.provider === "openai") {
-      return this.openaiTailorResume(profile, jobDescription )
+      return this.openaiTailorResume(profile, jobDescription)
     }
     if (this.provider === "gemini") {
-      return this.geminiTailorResume(profile, jobDescription )
+      return this.geminiTailorResume(profile, jobDescription)
     }
 
     throw new Error(`Unsupported LLM provider: ${this.provider}`)
   }
 
-  async openaiTailorResume(profile, jobDescription ) {
+  async openaiTailorResume(profile, jobDescription) {
     try {
-      const prompt = this.buildTailoringPrompt(profile, jobDescription )
+      const prompt = this.buildTailoringPrompt(profile, jobDescription)
 
       const completion = await this.openai.chat.completions.create({
         model: "gpt-4o-mini",
@@ -66,10 +66,10 @@ class LLMAdapter {
     }
   }
 
-  async geminiTailorResume(profile, jobDescription ) {
-     
+  async geminiTailorResume(profile, jobDescription) {
+
     try {
-      const prompt = this.buildTailoringPrompt(profile, jobDescription )
+      const prompt = this.buildTailoringPrompt(profile, jobDescription)
 
       const response = await this.geminiModel.generateContent(prompt)
 
@@ -93,102 +93,116 @@ class LLMAdapter {
 
 
   buildTailoringPrompt(profile, jobDescription) {
-  return `
-Please tailor the following resume to match the job description below. 
-Maintain factual accuracy but optimize presentation, keywords, and emphasis 
-to align with the job requirements.
+   return `
+You are an expert career coach and resume writer.  
+Your task is to **tailor the candidate’s resume and cover letter** to the provided job description.  
+
+⚠️ STRICT RULES:  
+- Do NOT invent or fabricate data (skills, jobs, projects, degrees, logos, icons, etc.).  
+- If any section is missing in the candidate profile, exclude it from the output.  
+- Only use the information provided in the candidate profile.  
+- If improvements are possible but data is missing, mention them in "improvementTips" and "practiceFocus" instead of creating content.  
+- Maintain factual accuracy while optimizing keywords, relevance, and formatting for ATS.  
+- If the candidate is clearly **not eligible** based on minimum requirements, return an "alert" message explaining it.  
+
+---
 
 CANDIDATE PROFILE:
-${JSON.stringify(profile, null, 2)}
+${profile}
 
 JOB DESCRIPTION:
 ${jobDescription}
 
-Return a single JSON object with the following structure: 
-⚠️ Do NOT invent or add extra data or even icon or logo in it. 
-If any section (like projects) is missing in the candidate profile, exclude it.
+---
+
+🎯 OUTPUT FORMAT:  
+Return a **single JSON object** in the following structure.  
+⚠️ Only include fields that exist in the candidate’s profile.  
+Do not insert placeholders, null, or empty values.  
 
 {
   "resume": {
-    "name": "candidate name",
-    "title": "professional title matching role",
+    "name": ...,
+    "title": ...,
     "contact": {
-      "email": "email",
-      "phone": "phone",
-      "location": "location"
+      "email": ...,
+      "phone": ...,
+      "location": ...
     },
-    "summary": "3-4 sentence professional summary tailored to this role",
-    "skills": ["top 8-10 relevant skills"],
+    "summary": ...,
+    "skills": [...],
     "experience": [
       {
-        "title": "job title",
-        "company": "company name",
-        "location": "location",
-        "startDate": "start date",
-        "endDate": "end date or Present",
-        "current": boolean,
-        "description": "tailored description emphasizing relevant experience",
-        "achievements": ["3-5 quantified achievements relevant to role"]
+        "title": ...,
+        "company": ...,
+        "location": ...,
+        "startDate": ...,
+        "endDate": ...,
+        "current": ...,
+        "description": ...,
+        "achievements": [...]
       }
     ],
     "education": [
       {
-        "degree": "degree name",
-        "institution": "school name",
-        "location": "location",
-        "startYear": "year",
-        "endYear": "year",
-        "gpa": "gpa if provided"
+        "degree": ...,
+        "institution": ...,
+        "location": ...,
+        "startYear": ...,
+        "endYear": ...,
+        "gpa": ...
       }
     ],
     "projects": [
       {
-        "name": "project title",
-        "description": "brief tailored description of project",
-        "technologies": ["list", "of", "tech stack"],
-        "link": "project URL if provided"
+        "name": ...,
+        "description": ...,
+        "technologies": [...],
+        "link": ...
       }
     ]
   },
 
   "coverLetter": {
-    "greeting": "Dear Hiring Manager,",
-    "intro": "Opening paragraph introducing the candidate and role interest",
-    "body": [
-      "Paragraph 1: Highlight most relevant skills and achievements",
-      "Paragraph 2: Align past experience with job requirements",
-      "Paragraph 3 (optional): Why candidate is a cultural or mission fit"
-    ],
-    "closing": "Closing paragraph expressing enthusiasm and availability",
-    "signoff": "Sincerely,",
-    "signature": "Candidate Name"
+    "greeting": ...,
+    "intro": ...,
+    "body": [...],
+    "closing": ...,
+    "signoff": ...,
+    "signature": ...
   },
 
   "improvementTips": [
-    "Tip 1: Concrete suggestion to increase hiring chances",
-    "Tip 2: Another practical and actionable improvement"
+    ...,
+    ...
   ],
 
   "practiceFocus": [
-    "Point 1: Practical skill-building or preparation activity",
-    "Point 2: Main area to focus on for career growth",
-    "Point 3: Strategy to improve alignment with target jobs"
-  ]
+    ...,
+    ...,
+    ...
+  ],
+
+  "alert": "Only include this key if the candidate is not eligible for the job. Otherwise omit it."
 }
 
-Focus on:
-1. Use keywords from the job description
-2. Emphasize relevant experience, skills, and projects
-3. Quantify achievements where possible
-4. Maintain truthfulness to the original profile
-5. Optimize for ATS systems
-6. Add all Schooling detail
-7. Provide clear, professional, and concise cover letter text
-8. Give exactly 2 improvement tips and 3 practice focus points
-`
-}
+---
 
-  
+📌 FOCUS AREAS:  
+1. Use exact keywords from the job description.  
+2. Highlight the most relevant experience, skills, and projects.  
+3. Quantify achievements where possible.  
+4. Stay truthful to the candidate profile.  
+5. Optimize formatting and phrasing for ATS systems.  
+6. Include **all available education details** (if given).  
+7. Write a concise and professional cover letter.  
+8. Provide **exactly 2 improvement tips** and **3 practice focus points**.  
+`;
+
+
+  }
+
+
 }
 
 module.exports = new LLMAdapter()

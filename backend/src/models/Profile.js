@@ -72,7 +72,7 @@ const profileSchema = new mongoose.Schema({
 }, {
   timestamps: true,
 })
-
+ 
 // Calculate profile completeness
 profileSchema.methods.calculateCompleteness = function() {
   let score = 0
@@ -82,10 +82,13 @@ profileSchema.methods.calculateCompleteness = function() {
     phone: 5,
     location: 5,
     title: 10,
-    summary: 15,
+    summary: 10,
     skills: 15,
-    experience: 20,
+    experience: 15,
     education: 10,
+    projects: 5,
+    social: 3,
+    certifications: 2,
   }
 
   if (this.name) score += weights.name
@@ -94,13 +97,18 @@ profileSchema.methods.calculateCompleteness = function() {
   if (this.location) score += weights.location
   if (this.title) score += weights.title
   if (this.summary) score += weights.summary
+
   if (this.skills && this.skills.length >= 3) score += weights.skills
   if (this.experience && this.experience.length >= 1) score += weights.experience
   if (this.education && this.education.length >= 1) score += weights.education
+  if (this.projects && this.projects.length >= 1) score += weights.projects
+  if (this.social && this.social.length >= 1) score += weights.social
+  if (this.certifications && this.certifications.length >= 1) score += weights.certifications
 
-  this.completeness = score
-  return score
+  this.completeness = Math.min(score, 100) // cap at 100
+  return this.completeness
 }
+
 
 profileSchema.pre('save', function(next) {
   this.calculateCompleteness()

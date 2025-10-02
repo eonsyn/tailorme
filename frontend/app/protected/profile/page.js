@@ -13,15 +13,20 @@ import { useAuth } from '@/lib/auth'
 export default function ProfilePage() {
   const [userProfile, setUserProfile] = useState(null);
 
-  const { profile, loading } = useAuth();
+  const { profile, checkProfile, loading } = useAuth();
 
   useEffect(() => {
+
     if (!loading) {
+
       setUserProfile(profile);
     }
-  }, [profile, loading]);
+  }, [userProfile, loading]);
 
 
+  useEffect(() => {
+    checkProfile()
+  }, [userProfile]);
 
 
   if (loading) {
