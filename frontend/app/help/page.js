@@ -1,6 +1,6 @@
 import React from "react";
 import Link from "next/link";
-import { HelpCircle, FileText, Edit3, ShieldCheck, Mail } from "lucide-react";
+import { HelpCircle, FileText, Edit3, ShieldCheck, Mail, UserCheck } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import BackgroundImage from "@/components/BackgroundImage";
 
@@ -21,28 +21,33 @@ function HelpPage() {
 
         {/* How it Works */}
         <section className="space-y-8">
-          <h2 className="text-2xl font-semibold mb-4">How It Works</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-center">How It Works</h2>
           <div className="grid gap-6 md:grid-cols-2">
             {[
               {
+                icon: <UserCheck className="h-8 w-8 mb-3 text-[var(--color-primary)]" />,
+                title: "1. Complete Your Profile Once",
+                text: "Fill in your details, experience, and skills just once — GPT Resume remembers it for you.",
+              },
+              {
                 icon: <FileText className="h-8 w-8 mb-3 text-[var(--color-primary)]" />,
-                title: "1. Paste Job Description",
-                text: "Start by pasting the job description from the role you’re applying for.",
+                title: "2. Paste Job Description",
+                text: "Simply paste the job description of the role you’re applying for.",
               },
               {
                 icon: <Edit3 className="h-8 w-8 mb-3 text-[var(--color-primary)]" />,
-                title: "2. Get Tailored Resume",
-                text: "Our AI instantly generates a job-specific resume, cover letter, and improvement tips.",
+                title: "3. Get Tailored Resume",
+                text: "Our AI instantly creates a personalized resume and cover letter based on your profile and job description.",
               },
               {
                 icon: <ShieldCheck className="h-8 w-8 mb-3 text-[var(--color-primary)]" />,
-                title: "3. Edit Freely",
-                text: "Easily edit and fine-tune your resume and cover letter before downloading.",
+                title: "4. Edit & Download",
+                text: "Customize your resume and cover letter as you like, then download or export them in one click.",
               },
               {
                 icon: <HelpCircle className="h-8 w-8 mb-3 text-[var(--color-primary)]" />,
-                title: "4. Apply With Confidence",
-                text: "Submit tailored applications that stand out to recruiters and ATS systems.",
+                title: "5. Apply With Confidence",
+                text: "Submit applications that are tailored, professional, and ready to impress recruiters and ATS systems.",
               },
             ].map((step, idx) => (
               <div
@@ -57,11 +62,8 @@ function HelpPage() {
           </div>
         </section>
 
-        {/* FAQ Section */}
-         
-
         {/* Contact Section */}
-        <section className="mt-16">
+        <section className="mt-16 text-center">
           <h2 className="text-2xl font-semibold mb-4">Still Need Help?</h2>
           <p className="text-[var(--color-muted-foreground)] mb-4">
             Our support team is here to assist you anytime.

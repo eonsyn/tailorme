@@ -21,6 +21,7 @@
     "class-variance-authority": "^0.7.1",
     "cloudinary": "^2.7.0",
     "clsx": "^2.1.1",
+    "framer-motion": "^12.23.22",
     "google-auth-library": "^9.15.1",
     "google-one-tap": "^1.0.6",
     "js-cookie": "^3.0.5",

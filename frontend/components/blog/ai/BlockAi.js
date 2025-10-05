@@ -1,50 +1,69 @@
 'use client';
-import { FaRobot } from 'react-icons/fa';
+
 import React, { useState, useEffect } from 'react';
+import { FaRobot } from 'react-icons/fa';
+import { motion, AnimatePresence } from 'framer-motion';
 import AiPopUp from './AiPopUp';
 
-function BlockAi({ article }) {
+export default function BlockAi({ article }) {
   const [isBotOpen, setIsBotOpen] = useState(false);
 
   const toggleBot = () => setIsBotOpen(prev => !prev);
 
-  // Lock scroll when popup is open
+  // Lock scroll when popup is active
   useEffect(() => {
-    if (isBotOpen) {
-      document.body.classList.add('overflow-hidden');
-    } else {
-      document.body.classList.remove('overflow-hidden');
-    }
-
-    return () => {
-      document.body.classList.remove('overflow-hidden');
-    };
+    document.body.classList.toggle('overflow-hidden', isBotOpen);
+    return () => document.body.classList.remove('overflow-hidden');
   }, [isBotOpen]);
 
   return (
-    <div className="w-full relative text-xl z-10">
-      {/* Blurred overlay */}
-      {isBotOpen && (
-        <div className="fixed inset-0 bg-black/30 backdrop-blur-sm z-40"></div>
-      )}
+    <div className="relative z-10 text-xl">
+      {/* Overlay */}
+      <AnimatePresence>
+        {isBotOpen && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 bg-black/40 backdrop-blur-md z-40 transition-all"
+          />
+        )}
+      </AnimatePresence>
 
       {/* AI Popup */}
-      {isBotOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center">
-          <AiPopUp isBotOpen={isBotOpen} article={article} onClose={toggleBot} />
-        </div>
-      )}
+      <AnimatePresence>
+        {isBotOpen && (
+          <motion.div
+            initial={{ scale: 0.9, opacity: 0, y: 40 }}
+            animate={{ scale: 1, opacity: 1, y: 0 }}
+            exit={{ scale: 0.95, opacity: 0, y: 40 }}
+            transition={{ type: 'spring', stiffness: 120, damping: 18 }}
+            className="fixed inset-0 z-50 flex items-center justify-center p-4"
+          >
+            <AiPopUp
+              isBotOpen={isBotOpen}
+              article={article}
+              onClose={toggleBot}
+            />
+          </motion.div>
+        )}
+      </AnimatePresence>
 
-      {/* Bot Toggle Button */}
-      <div
+      {/* Floating AI Button */}
+      <motion.button
         onClick={toggleBot}
-        className="fixed btn btn-primary bottom-4 right-4 z-50 text-sm px-4 py-3 rounded-full flex items-center gap-2 cursor-pointer shadow-lg"
+        whileTap={{ scale: 0.9 }}
+        className={`
+          fixed bottom-6 right-6 z-50 flex items-center gap-2
+          px-5 py-3 rounded-full shadow-lg border
+          btn-primary text-sm font-semibold
+          hover:shadow-xl hover:scale-105
+          transition-all duration-300 ease-in-out
+        `}
       >
-        <FaRobot className="text-lg" />
-        <span className="font-semibold">Ask to Arya</span>
-      </div>
+        <FaRobot className="text-base" />
+        <span>Ask to Arya</span>
+      </motion.button>
     </div>
   );
 }
-
-export default BlockAi;

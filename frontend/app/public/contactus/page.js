@@ -51,7 +51,6 @@ export default function ContactUsPage() {
       setIsSubmitting(false);
     }
   };
-
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-background p-6">
       <div className="card w-full max-w-lg p-8 space-y-6">

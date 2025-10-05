@@ -10,8 +10,8 @@ const footerNavSections = [
   {
     title: "Product",
     links: [
-      { label: "Resume Builder", href: "/protected/resume-builder" },
-      { label: "Cover Letters", href: "/protected/cover-letters" },
+      { label: "Resume Builder", href: "/protected/resume/builder" },
+      { label: "Cover Letters", href: "/protected/resume/builder" },
       { label: "Blog", href: "/blog" },
     ],
   },
