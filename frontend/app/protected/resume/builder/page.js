@@ -10,8 +10,7 @@ import PracticeFocus from '@/components/resume/PracticeFocus';
 import BasicTemp from '@/template/BasicTemp';
 import ModernTemp from '@/template/ModernTemp';
 import ResumeEditor from '@/components/resume/ResumeEditor';
-import MinimalTemp from '@/template/MinimalTemp';
-import dummydata from '@/template/resume.json';
+import MinimalTemp from '@/template/MinimalTemp'; 
 import CoverLetter from '@/components/resume/CoverLetter'
 import Image from 'next/image';
 import { ArrowLeft } from "lucide-react";

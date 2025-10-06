@@ -22,11 +22,11 @@ export default function LandingPage() {
             Build a job-winning resume with GPT Resume — the AI-powered platform that customizes your resume, cover letter, and interview answers to perfectly match any job description.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Link href="/auth/signup" className="btn btn-primary text-lg px-8 py-4">
-              Create My GPT Resume
+            <Link href="/protected/resume/builder" className="btn btn-primary text-lg px-8 py-4">
+              Create Your Resume
             </Link>
-            <Link href="/public/pricing" className="btn btn-outline text-lg px-8 py-4">
-              View Pricing
+            <Link href="/auth/signup" className="btn btn-outline text-lg px-8 py-4">
+              Signup For Free
             </Link>
           </div>
         </div>
