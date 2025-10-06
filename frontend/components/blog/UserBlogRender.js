@@ -235,7 +235,7 @@ function UserBlogRender({ article }) {
           })}
         </span>
 
-        <CopyLinkButton url={`${process.env.HOST_URL}/blog/${article.slug}`} />
+        <CopyLinkButton url={`https://gptresume.vercel.app/blog/${article.slug}`} />
       </div>
       <hr />
       {blocks}
