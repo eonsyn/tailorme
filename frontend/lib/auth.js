@@ -23,7 +23,7 @@ export function AuthProvider({ children }) {
 
   useEffect(() => {
     // 🔑 If logged in AND visiting /auth/login or /auth/signup → redirect
-    if (!loading && user && (pathname === '/auth/login' || pathname === '/auth/signup')) {
+    if (!loading && user && (pathname === '/auth/login')) {
       router.replace('/protected/dashboard')
     }
   }, [user, loading, pathname, router])
