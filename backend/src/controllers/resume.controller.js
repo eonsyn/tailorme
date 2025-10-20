@@ -12,31 +12,31 @@ const generate = async (req, res, next) => {
       return res.status(400).json({ success: false, message: error.details[0].message });
     }
 
-    const { jobDescription ,profile } = value;
+    const { jobDescription, profile } = value;
 
     // 🔹 check user credits
     const user = await User.findById(req.user.userId);
     if (!user) {
       return res.status(404).json({ success: false, message: "User not found" });
     }
-    if(!user.isEmailVerified){
+    if (!user.isEmailVerified) {
       return res.status(404).json({ success: false, message: "Please verify your email first." })
     }
     if (user.credits <= 0) {
       return res.status(400).json({ success: false, message: "Not enough credits" });
     }
 
-    
+
     if (!profile) {
       return res.status(400).json({ success: false, message: "Please complete your profile first" });
     }
- if(profile.completeness<60){
-  return res.status(400).json({
-    success:false,message:"Complete your Profile First."
-  })
- } 
+    if (profile.completeness < 60) {
+      return res.status(400).json({
+        success: false, message: "Complete your Profile First."
+      })
+    }
     // 🔹 Directly call LLM adapter (no queue)
-     let tailoredResume;
+    let tailoredResume;
     try {
       tailoredResume = await LLMAdapter.tailorResume(profile, jobDescription);
     } catch (llmError) {
@@ -46,7 +46,7 @@ const generate = async (req, res, next) => {
         message: "Failed to generate resume. Please try again later.",
       });
     }
-    
+
     // 🔹 Deduct credits
     user.credits -= 1;
     await user.save();
