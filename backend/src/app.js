@@ -54,9 +54,15 @@ app.get('/api/health', (req, res) => {
 
 // API routes
 app.use('/api', routes)
-
+app.use('/check',(req,res)=>{
+  res.json({
+    status:'ok',
+    
+  })
+})
 // Error handling
 app.use(errorHandler)
+
 
 // 404 handler
 app.use('*', (req, res) => {
