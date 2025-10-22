@@ -121,6 +121,15 @@ const signup = async (req, res, next) => {
         message: 'User already exists with this email',
       })
     }
+    const emailToken = jwt.generateEmailToken(user._id, user.email)
+    const verificationUrl = `${env.FRONTEND_URL}/auth/verify-email/${emailToken}`
+
+await axios.post(`${env.EMAIL_HOST}/send-email`, {
+      to: user.email,
+      subject: "Verify your email - Tailor Me",
+      text: `Verify your email here: ${verificationUrl}`,
+      html: EmailVerification(verificationUrl),
+    });
 
     // Referral logic (same as before)
     let referredBy = null
