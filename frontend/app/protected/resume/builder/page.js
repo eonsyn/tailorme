@@ -118,7 +118,7 @@ export default function ResumeBuilderPage() {
     const content = document.getElementById("print-area")?.innerHTML;
     console.log(content)
     if (!content) return;
-    const res = await fetch("https://pdf-704i.onrender.com/generate-pdf-from-html", {
+    const res = await fetch("https://htmltwopdf.vercel.app/generate-pdf-from-html", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ html: content })
