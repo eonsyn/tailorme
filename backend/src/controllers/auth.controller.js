@@ -121,15 +121,7 @@ const signup = async (req, res, next) => {
         message: 'User already exists with this email',
       })
     }
-    const emailToken = jwt.generateEmailToken(user._id, user.email)
-    const verificationUrl = `${env.FRONTEND_URL}/auth/verify-email/${emailToken}`
-
-await axios.post(`${env.EMAIL_HOST}/send-email`, {
-      to: user.email,
-      subject: "Verify your email - Tailor Me",
-      text: `Verify your email here: ${verificationUrl}`,
-      html: EmailVerification(verificationUrl),
-    });
+    
 
     // Referral logic (same as before)
     let referredBy = null
@@ -137,7 +129,7 @@ await axios.post(`${env.EMAIL_HOST}/send-email`, {
       referredBy = await User.findOne({ username: referralCode })
       if (referredBy.deviceFingerprint === deviceFingerprint) {
         return res.status(400).json({
-          sucess: false,
+          success: false,
           message: "Don't missuse refferal"
         })
       }
@@ -157,31 +149,18 @@ await axios.post(`${env.EMAIL_HOST}/send-email`, {
       referral: { referredBy: referredBy?._id },
       isEmailVerified: false
     }) 
-    await user.save()
+    user = await user.save()
 
+ 
+    const emailToken = jwt.generateEmailToken(user._id, user.email)
+    const verificationUrl = `${env.FRONTEND_URL}/auth/verify-email/${emailToken}`
 
-    // Generate email verification token (valid for 1h)
-
-    // const emailToken = jwt.generateEmailToken(user._id.toString(), user.email, { expiresIn: '1h' })
-
-
-    // const verificationUrl = `${env.FRONTEND_URL}/auth/verify-email/${emailToken}`
-
-    // // Setup transporter
-    // const transporter = nodemailer.createTransport({
-    //   host: env.SMTP_HOST,
-    //   port: env.SMTP_PORT,
-    //   secure: false,
-    //   auth: { user: env.SMTP_USER, pass: env.SMTP_PASS },
-    // })
-
-    // // Send verification mail
-    // await transporter.sendMail({
-    //   from: `"Tailor Me" <${env.SMTP_USER}>`,
-    //   to: user.email,
-    //   subject: "Verify your email - Tailor Me",
-    //   html: EmailVerification(verificationUrl),
-    // });
+await axios.post(`${env.EMAIL_HOST}/send-email`, {
+      to: user.email,
+      subject: "Verify your email - Tailor Me",
+      text: `Verify your email here: ${verificationUrl}`,
+      html: EmailVerification(verificationUrl),
+    });
     const accessToken = jwt.generateAccessToken(user._id)
     
 
