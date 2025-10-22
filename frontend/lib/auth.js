@@ -47,7 +47,7 @@ export function AuthProvider({ children }) {
       const response = await api.get('/profile')
       setProfile(response.profile) 
     } catch (err) {
-      console.log(err)
+      console.error(err)
     }finally{
       setProfileLoading(false)
     }
@@ -67,7 +67,7 @@ export function AuthProvider({ children }) {
     return response;
   }
   const signup = async (email, password, name, username, referralCode, deviceFingerprint) => {
-    console.log("referralCode is :", referralCode)
+    
     const response = await api.post('/auth/signup', {
       email,
       password,
@@ -108,7 +108,7 @@ export function AuthProvider({ children }) {
     try {
       setLoading(true);
       const data = await api.get("/dashboard/stats");
-      console.log("Dashboard stats:", data);
+      
       setStats(data);
     } catch (error) {
       console.error("Failed to fetch dashboard stats:", error);

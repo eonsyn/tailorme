@@ -6,6 +6,7 @@ const { resumeValidation } = require('../utils/validators');
 const LLMAdapter = require('../services/llm.adapter');
 
 const generate = async (req, res, next) => {
+ 
   try {
     const { error, value } = resumeValidation.generate.validate(req.body);
     if (error) {
@@ -15,6 +16,7 @@ const generate = async (req, res, next) => {
     const { jobDescription, profile } = value;
 
     // 🔹 check user credits
+    
     const user = await User.findById(req.user.userId);
     if (!user) {
       return res.status(404).json({ success: false, message: "User not found" });

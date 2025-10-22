@@ -10,9 +10,9 @@ const authenticate = async (req, res, next) => {
         message: 'Access token not provided',
       })
     }
-
+ 
     const decoded = jwt.verifyAccessToken(accessToken)
-    req.user = decoded
+    req.user = decoded 
     next()
   } catch (error) {
     if (error.name === 'TokenExpiredError') {

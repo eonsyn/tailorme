@@ -15,7 +15,7 @@ module.exports = function EmailVerification(verificationUrl) {
               
               <tr>
                 <td style="font-size:24px; font-weight:bold; color:#333;">
-                  Welcome to Tailor Me
+                  Welcome to Gpt Resume
                 </td>
               </tr>
               

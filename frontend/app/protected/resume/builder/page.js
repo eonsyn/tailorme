@@ -53,7 +53,7 @@ export default function ResumeBuilderPage() {
     const interval = setInterval(() => {
       progressValue += 1;
       if(progressValue>60){
-        speed=450;
+        speed=200;
       }
       // Cap progress at 90% until the API finishes
       if (progressValue <= 90) {
@@ -200,13 +200,13 @@ export default function ResumeBuilderPage() {
               onChange={(e) => {
                 const input = e.target.value;
                 const nonSpaceLength = input.replace(/\s+/g, '').length;
-                if (nonSpaceLength <= 2000) {
+                if (nonSpaceLength <= 4500) {
                   setJobDescription(input);
                 } else {
                   const allowed = input
                     .split('')
                     .reduce((acc, char) => {
-                      if (acc.replace(/\s+/g, '').length < 2000) {
+                      if (acc.replace(/\s+/g, '').length < 4500) {
                         return acc + char;
                       }
                       return acc;
@@ -221,7 +221,7 @@ export default function ResumeBuilderPage() {
 
             <div className="flex justify-between items-center mt-2">
               <span className="text-sm text-muted-foreground">
-                {jobDescription.replace(/\s+/g, '').length}/2000
+                {jobDescription.replace(/\s+/g, '').length}/4500
               </span>
               <span className='flex items-center space-x-2'>
                 Credits : {user.credits}<Coins className="w-5 ml-1 h-5 mr-2" />

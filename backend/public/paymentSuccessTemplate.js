@@ -15,7 +15,7 @@ module.exports = function paymentSuccessTemplate(user,price, plan, credits) {
       <!-- Header -->
       <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid #e5e7eb; padding-bottom:16px; margin-bottom:24px;">
         <div>
-          <h1 style="font-size:20px; font-weight:bold; color:#111827; margin:0;">TAILOR ME</h1>
+          <h1 style="font-size:20px; font-weight:bold; color:#111827; margin:0;">Gpt Resume</h1>
           <p style="font-size:12px; color:#6b7280; margin:4px 0 0;">Digital Resume Tailoring</p>
         </div>
       </div>
@@ -47,7 +47,7 @@ module.exports = function paymentSuccessTemplate(user,price, plan, credits) {
             <td style="border:1px solid #d1d5db; padding:8px;">Credits Pack - ${price}</td>
             <td style="border:1px solid #d1d5db; padding:8px; text-align:center;">₹${credits}</td>
             <td style="border:1px solid #d1d5db; padding:8px; text-align:center;">${plan}</td>
-            <td style="border:1px solid #d1d5db; padding:8px; text-align:center;">${(user.credits)}</td>
+            <td style="border:1px solid #d1d5db; padding:8px; text-align:center;">${(user.credits - plan)} + ${plan}</td>
           </tr>
         </tbody>
       </table>
@@ -56,8 +56,12 @@ module.exports = function paymentSuccessTemplate(user,price, plan, credits) {
       <div style="display:flex; justify-content:flex-end; margin-bottom:24px;">
         <div style="width:200px;">
           <div style="display:flex; justify-content:space-between; border-top:2px solid #111827; padding-top:8px; font-size:16px; font-weight:bold;">
-            <span>Total:</span>
+            <span>Total Price:</span>
             <span>₹${(plan)}</span>
+          </div>
+          <div style="display:flex; justify-content:space-between;   padding-top:8px; font-size:16px; font-weight:bold;">
+            <span>Total Credits:</span>
+            <span>${(user.credits)}</span>
           </div>
         </div>
       </div>
@@ -66,12 +70,12 @@ module.exports = function paymentSuccessTemplate(user,price, plan, credits) {
       <div style="font-size:14px; color:#374151;">
         <p style="margin:4px 0;">We’ve added <strong>${plan} credits</strong> to your account.</p>
         <p style="margin:4px 0;">You now have a total of <strong>${user.credits}</strong> credits available.</p>
-        <p style="margin-top:16px;">Thank you for choosing <strong>Tailor Me ✨</strong></p>
+        <p style="margin-top:16px;">Thank you for choosing <strong>Gpt Resume ✨</strong></p>
       </div>
 
       <!-- Footer -->
       <div style="border-top:1px solid #e5e7eb; margin-top:24px; padding-top:16px; font-size:12px; color:#6b7280; text-align:center;">
-        <p style="margin:0;">TAILOR ME</p>
+        <p style="margin:0;">Gpt Resume</p>
       </div>
     </div>
   </body>

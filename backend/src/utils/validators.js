@@ -60,7 +60,7 @@ const profileValidation = {
 
 const resumeValidation = {
   generate: Joi.object({
-    jobDescription: Joi.string().min(50).max(2200).required(),
+    jobDescription: Joi.string().min(50).max(5000).required(),
     profile: Joi.object().required(),
 
   }),

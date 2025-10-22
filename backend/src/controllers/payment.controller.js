@@ -1,6 +1,8 @@
 const Razorpay = require("razorpay");
 const crypto = require("crypto");
 const env = require("../config/env");
+
+const Profile = require('../models/Profile');
 const User = require("../models/User");
 const nodemailer = require("nodemailer");
 const paymentSuccessTemplate = require('../../public/paymentSuccessTemplate')
@@ -14,7 +16,18 @@ const CREDIT_PLANS = {
 
 //   Create Payment Order
 const createOrder = async (req, res) => {
+
   try {
+    
+    const user = await User.findById(req.user.userId);
+    
+    if (!user) {
+      return res.status(404).json({ success: false, message: "User not found" });
+    }
+    if (!user.isEmailVerified) {
+      return res.status(404).json({ success: false, message: "Please verify your email first." })
+    }
+
     const razorpay = new Razorpay({
       key_id: env.RAZORPAY_KEY_ID,
       key_secret: env.RAZORPAY_KEY_SECRET,
@@ -64,7 +77,7 @@ const verifyPayment = async (req, res) => {
     if (!user) return res.status(404).json({ success: false, message: "User not found" });
 
     const { credits, price } = CREDIT_PLANS[plan];
-    user.credits += credits; 
+    user.credits += credits;
     // Save payment history (amount stored in paise)
     user.payments.push({
       orderId: razorpay_order_id,
@@ -81,7 +94,8 @@ const verifyPayment = async (req, res) => {
     //   Send Email
     await axios.post(`${env.EMAIL_HOST}/send-email`, {
       to: user.email,
-      subject: "Credits Purchased - Tailor Me",
+      from: "Gpt Resume",
+      subject: "Credits Purchased - Gpt Resume",
       text: `Your purchase of ${credits} credits was successful. Plan: ${plan}, Amount: ₹${price}`,
       html: paymentSuccessTemplate(user, plan, credits, price),
     });

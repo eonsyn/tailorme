@@ -37,7 +37,7 @@ export default function PurchasePage() {
         key: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID,
         amount: order.amount,
         currency: order.currency,
-        name: "Tailor Me",
+        name: "Gpt Resume",
         description: `${planKey.toUpperCase()} Credits Purchase`,
         order_id: order.id,
         handler: async function (response) {
@@ -72,7 +72,12 @@ export default function PurchasePage() {
       razor.open();
     } catch (err) {
       console.error(err);
-      toast.error("Payment failed. Try again.");
+      if(err?.message){
+        toast.error(err.message);
+      }else{
+        toast.error("Payment failed. Try again.");
+      }
+      
     } finally {
       setLoadingPlan(null);
     }
