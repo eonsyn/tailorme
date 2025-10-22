@@ -48,7 +48,7 @@
     res.cookie('accessToken', accessToken, {
       httpOnly: true,
       secure: env.NODE_ENV === 'production',
-      sameSite: 'strict',
+      sameSite: env.NODE_ENV === 'production'? 'none':'lax',
       maxAge: 7 * 24 * 60 * 60 * 1000,  
     })
   }
