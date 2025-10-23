@@ -46,9 +46,9 @@ export default function LoginPage() {
     <div className="text-center mb-8">
       <Link href="/" className="flex items-center justify-center gap-2 mb-6">
         <div className="w-10 h-10 bg-primary rounded-lg flex items-center justify-center">
-          <span className="text-primary-foreground font-bold text-xl">T</span>
+          <span className="text-primary-foreground font-bold text-xl">G</span>
         </div>
-        <span  className="text-2xl font-bold text-foreground">TailorMe</span>
+        <span  className="text-2xl font-bold text-foreground">GptResume</span>
       </Link>
       <h1   className="text-3xl font-bold text-foreground">Welcome back</h1>
        
