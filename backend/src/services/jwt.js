@@ -29,6 +29,9 @@
   const setTokenCookies = (res, accessToken, refreshToken) => {
     const cookieOptions = {
       httpOnly: true,
+       domain: env.NODE_ENV === 'production' ? '.vercel.app' : undefined,
+    
+  path: '/',     
       secure: env.NODE_ENV === 'production',
       sameSite: env.NODE_ENV === 'production'? 'none':'lax',
     }
@@ -56,8 +59,12 @@
   const clearTokenCookies = (res) => {
     const cookieOptions = {
       httpOnly: true,
+
       secure: env.NODE_ENV === 'production',
       sameSite: env.NODE_ENV === 'production' ? 'none' : 'lax',
+     domain: env.NODE_ENV === 'production' ? '.vercel.app' : undefined,
+
+  path: '/',     
     }
 
     res.clearCookie('accessToken', cookieOptions)
