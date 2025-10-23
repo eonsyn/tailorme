@@ -46,6 +46,7 @@ const sendVerifyEmail = async (req, res, next) => {
     // Send email
     await axios.post(`${env.EMAIL_HOST}/send-email`, {
       to: user.email,
+            from: "Gpt Resume",
       subject: "Verify your email - Gpt Resume",
       text: `Verify your email here: ${verificationUrl}`,
       html: EmailVerification(verificationUrl),
@@ -157,6 +158,8 @@ const signup = async (req, res, next) => {
 
 await axios.post(`${env.EMAIL_HOST}/send-email`, {
       to: user.email,
+      
+      from: "Gpt Resume",
       subject: "Verify your email - Gpt Resume",
       text: `Verify your email here: ${verificationUrl}`,
       html: EmailVerification(verificationUrl),
@@ -330,6 +333,7 @@ const forgot = async (req, res, next) => {
     // Call external email microservice
     await axios.post(`${env.EMAIL_HOST}/send-email`, {
       to: user.email,
+            from: "Gpt Resume",
       subject: "Reset your password - Gpt Resume",
       text: `Reset your password by clicking here: ${resetUrl}`,
       html: `

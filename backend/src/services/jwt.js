@@ -30,7 +30,7 @@
     const cookieOptions = {
       httpOnly: true,
       secure: env.NODE_ENV === 'production',
-      sameSite: env.NODE_ENV === 'production'? 'none':'lax',
+      sameSite: env.NODE_ENV === 'production'? 'none':'none',
     }
 
     res.cookie('accessToken', accessToken, {
@@ -48,7 +48,7 @@
     res.cookie('accessToken', accessToken, {
       httpOnly: true,
       secure: env.NODE_ENV === 'production',
-      sameSite: env.NODE_ENV === 'production'? 'none':'lax',
+      sameSite: env.NODE_ENV === 'production'? 'none':'none',
       maxAge: 7 * 24 * 60 * 60 * 1000,  
     })
   }
@@ -57,7 +57,7 @@
     const cookieOptions = {
       httpOnly: true,
       secure: env.NODE_ENV === 'production',
-      sameSite: env.NODE_ENV === 'production' ? 'none' : 'lax',
+      sameSite: env.NODE_ENV === 'production' ? 'none' : 'none',
     }
 
     res.clearCookie('accessToken', cookieOptions)
