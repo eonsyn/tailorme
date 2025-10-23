@@ -1,3 +1,4 @@
+// this is my next.config.mjs file can i write here 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
 
@@ -9,7 +10,7 @@ const nextConfig = {
         pathname: '/**',
       },{
         protocol: 'https',
-        hostname: 'tailor0me.vercel.app',
+        hostname: 'gptresume.vercel.app',
         pathname: '/**',
       },
     ],
