@@ -29,7 +29,7 @@
   const setTokenCookies = (res, accessToken, refreshToken) => {
     const cookieOptions = {
       httpOnly: true,
-       domain: env.NODE_ENV === 'production' ? '.vercel.app' : undefined,
+       domain: undefined,
     
   path: '/',     
       secure: env.NODE_ENV === 'production',
@@ -62,7 +62,7 @@
 
       secure: env.NODE_ENV === 'production',
       sameSite: env.NODE_ENV === 'production' ? 'none' : 'lax',
-     domain: env.NODE_ENV === 'production' ? '.vercel.app' : undefined,
+     domain:undefined,
 
   path: '/',     
     }
