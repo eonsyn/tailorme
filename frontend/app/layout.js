@@ -5,6 +5,9 @@ import { AuthProvider } from "@/lib/auth";
 import Footer from "@/components/Footer";
 import Script from "next/script";
 
+import Telegram from "@/components/socialmedia/Telegram";
+import Whatsapp from "@/components/socialmedia/Whatsapp";
+
 export const metadata = {
   title: 'Gpt Resume - AI-Powered Resume Tailoring',
   description: 'Create job-specific resumes tailored to any job description using AI',
@@ -50,6 +53,8 @@ export default function RootLayout({ children }) {
 
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
         <AuthProvider>
+              <Telegram />
+        <Whatsapp/>
           {children}
           <Toaster
             className="no-print"
