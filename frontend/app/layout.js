@@ -49,6 +49,8 @@ export default function RootLayout({ children }) {
             gtag('config', 'G-QNG4W1PKRF');
           `}
         </Script>
+        <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2404358914933411"
+     crossorigin="anonymous"></script>
       </head>
 
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
