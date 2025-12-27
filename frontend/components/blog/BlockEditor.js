@@ -56,70 +56,44 @@ export default function BlockEditor({
         }
     };
 
-    const handlePaste = async (e, index) => {
-        e.preventDefault();
+   const handlePaste = async (e, index) => {
+  e.preventDefault();
 
-        const items = e.clipboardData.items;
-        for (const item of items) {
-            if (item.type.indexOf("image") === 0) {
-                const file = item.getAsFile();
-                const data = await uploadImage(file);
-                const imageUrl = data.secure_url;
-
-                const newBlocks = [...blocks];
-                newBlocks.splice(index + 1, 0, {
-                    type: "image",
-                    value: imageUrl,
-                    alt: "",
-                    items: [],
-                });
-                setBlocks(newBlocks);
-                return;
-            }
-        }
-
-        // Existing logic for pasting text (markdown, code, etc.)
-        const text = e.clipboardData.getData("text/plain");
-        const lines = text.split("\n").map(line => line.trim()).filter(Boolean);
-        const newBlocks = [];
-        let listBuffer = [], codeBuffer = [];
-        let inCodeBlock = false;
-
-        lines.forEach(line => {
-            if (line.startsWith("```")) {
-                if (inCodeBlock) {
-                    newBlocks.push({ type: "code", value: codeBuffer.join("\n"), items: [] });
-                    codeBuffer = [];
-                    inCodeBlock = false;
-                } else {
-                    inCodeBlock = true;
-                }
-                return;
-            }
-
-            if (inCodeBlock) {
-                codeBuffer.push(line);
-            } else if (/^#{1,6}\s/.test(line)) {
-                const level = line.match(/^#+/)[0].length;
-                newBlocks.push({ type: "heading", level, value: line.replace(/^#{1,6}\s/, ""), items: [] });
-            } else if (/^[-*+]\s+/.test(line)) {
-                listBuffer.push(line.replace(/^[-*+]\s+/, ""));
-            } else {
-                if (listBuffer.length > 0) {
-                    newBlocks.push({ type: "list", value: listBuffer.join("\n"), items: [...listBuffer] });
-                    listBuffer = [];
-                }
-                newBlocks.push({ type: "paragraph", value: line, items: [] });
-            }
-        });
-
-        if (listBuffer.length > 0) newBlocks.push({ type: "list", value: listBuffer.join("\n"), items: [...listBuffer] });
-        if (codeBuffer.length > 0) newBlocks.push({ type: "code", value: codeBuffer.join("\n"), items: [] });
+  // ✅ Image paste (UNCHANGED behavior)
+  const items = e.clipboardData?.items;
+  if (items) {
+    for (const item of items) {
+      if (item.type.startsWith("image/")) {
+        const file = item.getAsFile();
+        const data = await uploadImage(file);
 
         const updated = [...blocks];
-        updated.splice(index, 1, ...newBlocks);
+        updated.splice(index + 1, 0, {
+          type: "image",
+          value: data.secure_url,
+          alt: "",
+          items: [],
+        });
+
         setBlocks(updated);
-    };
+        return;
+      }
+    }
+  }
+
+  // ✅ Markdown text paste (NEW, SAFE)
+  const text = e.clipboardData.getData("text/plain");
+  if (!text.trim()) return;
+
+  const parsedBlocks = await markdownToBlocks(text);
+
+  const updated = [...blocks];
+  updated.splice(index, 1, ...parsedBlocks);
+
+  setBlocks(updated);
+  setEditIndex(index + parsedBlocks.length - 1);
+};
+
 
     const handleAltChange = (index, altText) => {
         const updated = [...blocks];
