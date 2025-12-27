@@ -177,7 +177,7 @@ export default async function BlogPage({ params }) {
       <main className="min-h-screen mb-4 w-full flex bg-[var(--background)] text-[var(--text-primary)]">
         {/* Left Side Ad */}
         <div className="hidden md:block p-2 w-[20%]">
-          <RecentJob />
+        <RightAds />
         </div>
 
         {/* Center Content */}
